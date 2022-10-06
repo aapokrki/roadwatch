@@ -7,10 +7,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class RoadWatch extends Application {
+public class RoadWatchApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(RoadWatch.class.getResource("roadwatch.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(RoadWatchApplication.class.getResource("roadwatch.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("RoadWatch");
         stage.setScene(scene);
