@@ -1,7 +1,7 @@
 module fi.tuni.roadwatch {
     requires javafx.controls;
     requires javafx.fxml;
-
+    requires com.sothawo.mapjfx;
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
 

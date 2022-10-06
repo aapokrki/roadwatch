@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="979.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadWatchController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="979.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadWatchController">
    <children>
-      <BorderPane layoutX="25.0" layoutY="99.0" prefHeight="546.0" prefWidth="470.0" style="-fx-border-color: blue; -fx-border-width: 5;" />
+      <BorderPane fx:id="mapPane" layoutX="25.0" layoutY="99.0" prefHeight="546.0" prefWidth="470.0" style="-fx-border-color: blue; -fx-border-width: 5;" />
       <Line endX="853.0" layoutX="113.0" layoutY="77.0" startX="-100.0" />
       <ButtonBar layoutX="103.0" layoutY="23.0" prefHeight="40.0" prefWidth="458.0">
         <buttons>

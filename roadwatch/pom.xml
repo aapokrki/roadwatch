@@ -12,6 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.1</junit.version>
+        <mapjfx.version>3.1.0</mapjfx.version>
+        <openjfx.version>17.0.0.1</openjfx.version>
     </properties>
 
     <dependencies>
@@ -34,6 +36,11 @@
             <groupId>org.kordamp.bootstrapfx</groupId>
             <artifactId>bootstrapfx-core</artifactId>
             <version>0.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sothawo</groupId>
+            <artifactId>mapjfx</artifactId>
+            <version>${mapjfx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
