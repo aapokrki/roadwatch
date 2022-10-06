@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -20,6 +22,8 @@ public class RoadWatchController {
     private Stage stage;
     private Scene scene;
     public BorderPane mapPane;
+    public BorderPane infoPane;
+
 
     @FXML
     private Button homeButton;
@@ -34,25 +38,14 @@ public class RoadWatchController {
 
     @FXML
     public void initialize(){
-
-
-    }
-    // Actions
-    public void loadHome(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/roadwatch.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
 
     public void loadMap() throws IOException {
-        String mapFxmlFile = "fxml/mapview.fxml";
         FXMLLoader mapFxmlLoader = new FXMLLoader();
-        Parent rootNode = mapFxmlLoader.load(getClass().getResourceAsStream(mapFxmlFile));
+        Parent rootNode = mapFxmlLoader.load(getClass().getResourceAsStream("fxml/mapview.fxml"));
 
         final MapController mapController = mapFxmlLoader.getController();
-        final Projection projection = Projection.WGS_84;
+        final Projection projection = Projection.WEB_MERCATOR;
 //        final Projection projection = getParameters().getUnnamed().contains("wgs84")
 //                ? Projection.WGS_84 : Projection.WEB_MERCATOR;
         mapController.initMapAndControls(projection);
@@ -61,35 +54,57 @@ public class RoadWatchController {
         mapPane.setCenter(mapView);
     }
 
+    // Actions
+    public void loadHome(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/home.fxml")));
+        Pane home = (Pane) root;
+        infoPane.setCenter(home);
+
+//        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.show();
+    }
+
+
     public void loadWeather(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/weather.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Pane weather = (Pane) root;
+        infoPane.setCenter(weather);
+
+//        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     public void loadCombine(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/combine.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Pane combine = (Pane) root;
+        infoPane.setCenter(combine);
+//        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     public void loadPreferences(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/preferences.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Pane preferences = (Pane) root;
+        infoPane.setCenter(preferences);
+//        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     public void loadRoadData(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/roaddata.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Pane roadData = (Pane) root;
+        infoPane.setCenter(roadData);
+//        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.show();
     }
 }
