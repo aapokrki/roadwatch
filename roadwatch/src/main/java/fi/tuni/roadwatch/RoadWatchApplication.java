@@ -12,7 +12,7 @@ public class RoadWatch extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(RoadWatch.class.getResource("roadwatch.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        stage.setTitle("RoadWatch");
         stage.setScene(scene);
         stage.show();
     }
