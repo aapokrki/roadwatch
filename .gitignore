@@ -1,4 +1,4 @@
-.idea
+roadwatch/.idea/
 *.iml
 roadwatch/target/
 roadwatch/*.txt
