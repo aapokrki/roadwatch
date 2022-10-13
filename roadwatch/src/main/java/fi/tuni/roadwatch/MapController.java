@@ -60,16 +60,15 @@ public class MapController {
     /** some coordinates from around town. */
     private static final Coordinate coordHervanta = new Coordinate(61.45, 23.85);
     private static final Coordinate coordKotka = new Coordinate(60.4667,26.9458);
-    private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
-    private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.020035, 8.412975);
-    private static final Coordinate coordKarlsruheUniversity = new Coordinate(49.011809, 8.413639);
-    private static final Extent extentAllLocations = Extent.forCoordinates(coordHervanta, coordKotka, coordKarlsruheStation, coordKarlsruheSoccer);
+    private static final Coordinate coordLahti = new Coordinate(60.983692, 25.650317);
+    private static final Extent extentAllLocations = Extent.forCoordinates(coordHervanta, coordKotka, coordLahti);
 
-    private static final Coordinate coordGermanyNorth = new Coordinate(55.05863889, 8.417527778);
-    private static final Coordinate coordGermanySouth = new Coordinate(47.27166667, 10.17405556);
-    private static final Coordinate coordGermanyWest = new Coordinate(51.0525, 5.866944444);
-    private static final Coordinate coordGermanyEast = new Coordinate(51.27277778, 15.04361111);
-    private static final Extent extentGermany = Extent.forCoordinates(coordGermanyNorth, coordGermanySouth, coordGermanyWest, coordGermanyEast);
+    private static final Coordinate coordNorhWest= new Coordinate(70.31778507753353, 17.503235177994913);
+    private static final Coordinate coordNorthEast = new Coordinate(70.29756318095303, 32.20596093802763);
+    private static final Coordinate coordSouthEast = new Coordinate(59.27583073122375, 31.965916435823015);
+    private static final Coordinate coordSouthWest = new Coordinate(58.99877058368233, 18.94350219122261);
+
+    private static final Extent extentFinland = Extent.forCoordinates(coordNorhWest, coordNorthEast, coordSouthEast, coordSouthWest);
 
     /** default zoom value. */
     private static final int ZOOM_DEFAULT = 14;
@@ -77,18 +76,12 @@ public class MapController {
     /** the markers. */
     private final Marker markerKotka;
     private final Marker markerHervanta;
-    private final Marker markerKaStation;
-    private final Marker markerKaSoccer;
+    private final Marker markerLahti;
     private final Marker markerClick;
 
     /** the labels. */
-    private final MapLabel labelKaUniversity;
     private final MapLabel labelHervanta;
-    private final MapLabel labelKaStation;
     private final MapLabel labelClick;
-
-    // a circle around the castle
-    private final MapCircle circleHervanta;
 
     @FXML
     /** button to set the map's zoom. */
@@ -123,12 +116,10 @@ public class MapController {
     private Button buttonHervanta;
 
     /** button to set the map's center */
-    @FXML
-    private Button buttonKaStation;
 
     /** button to set the map's center */
     @FXML
-    private Button buttonKaSoccer;
+    private Button buttonLahti;
 
     /** button to set the map's extent. */
     @FXML
@@ -137,10 +128,6 @@ public class MapController {
     /** for editing the animation duration */
     @FXML
     private TextField animationDuration;
-
-    /** the BIng Maps API Key. */
-    @FXML
-    private TextField bingMapsApiKey;
 
     /** Label to display the current center */
     @FXML
@@ -166,29 +153,6 @@ public class MapController {
     @FXML
     private RadioButton radioMsSTW;
 
-    /** RadioButton for MapStyle Bing Roads */
-    @FXML
-    private RadioButton radioMsBR;
-
-    /** RadioButton for MapStyle Bing Roads - dark */
-    @FXML
-    private RadioButton radioMsCd;
-
-    /** RadioButton for MapStyle Bing Roads - grayscale */
-    @FXML
-    private RadioButton radioMsCg;
-
-    /** RadioButton for MapStyle Bing Roads - light */
-    @FXML
-    private RadioButton radioMsCl;
-
-    /** RadioButton for MapStyle Bing Aerial */
-    @FXML
-    private RadioButton radioMsBA;
-
-    /** RadioButton for MapStyle Bing Aerial with Label */
-    @FXML
-    private RadioButton radioMsBAwL;
 
     /** RadioButton for MapStyle WMS. */
     @FXML
@@ -210,13 +174,10 @@ public class MapController {
     @FXML
     private CheckBox checkHervantaMarker;
 
-    /** Check button for harbour marker */
-    @FXML
-    private CheckBox checkKaStationMarker;
 
-    /** Check button for soccer marker */
+    /** Check button for Lahti marker */
     @FXML
-    private CheckBox checkKaSoccerMarker;
+    private CheckBox checkLahtiMarker;
 
     /** Check button for click marker */
     @FXML
@@ -242,7 +203,7 @@ public class MapController {
 
     /** Check Button for constraining th extent. */
     @FXML
-    private CheckBox checkConstrainGermany;
+    private CheckBox checkConstrainFinland;
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -261,27 +222,19 @@ public class MapController {
             false);
         markerHervanta = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordHervanta).setVisible(
             false);
-        markerKaStation =
-            Marker.createProvided(Marker.Provided.RED).setPosition(coordKarlsruheStation).setVisible(false);
         // no position for click marker yet
         markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
 
         // a marker with a custom icon
-        markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
+        markerLahti = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordLahti)
             .setVisible(false);
 
-        // the fix label, default style
-        labelKaUniversity = new MapLabel("university").setPosition(coordKarlsruheUniversity).setVisible(true);
         // the attached labels, custom style
         labelHervanta = new MapLabel("hervanta", 10, -10).setVisible(false).setCssClass("green-label");
-        labelKaStation = new MapLabel("station", 10, -10).setVisible(false).setCssClass("red-label");
         labelClick = new MapLabel("click!", 10, -10).setVisible(false).setCssClass("orange-label");
 
         markerHervanta.attachLabel(labelHervanta);
-        markerKaStation.attachLabel(labelKaStation);
         markerClick.attachLabel(labelClick);
-
-        circleHervanta = new MapCircle(coordKarlsruheStation, 1_000).setVisible(true);
     }
 
     /**
@@ -316,15 +269,13 @@ public class MapController {
         // wire up the location buttons
         buttonKotka.setOnAction(event -> mapView.setCenter(coordKotka));
         buttonHervanta.setOnAction(event -> mapView.setCenter(coordHervanta));
-        buttonKaStation.setOnAction(event -> mapView.setCenter(coordKarlsruheStation));
-        buttonKaSoccer.setOnAction(event -> mapView.setCenter(coordKarlsruheSoccer));
+        buttonLahti.setOnAction(event -> mapView.setCenter(coordLahti));
 
         buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
 
         // wire the zoom button and connect the slider to the map's zoom
         buttonZoom.setOnAction(event -> {
             mapView.setZoom(ZOOM_DEFAULT);
-            sessionData.setCurrentCoordinates(currentCoordinate);
         });
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
@@ -358,18 +309,6 @@ public class MapController {
             MapType mapType = MapType.OSM;
             if (newValue == radioMsOSM) {
                 mapType = MapType.OSM;
-            } else if (newValue == radioMsBR) {
-                mapType = MapType.BINGMAPS_ROAD;
-            } else if (newValue == radioMsCd) {
-                mapType = MapType.BINGMAPS_CANVAS_DARK;
-            } else if (newValue == radioMsCg) {
-                mapType = MapType.BINGMAPS_CANVAS_GRAY;
-            } else if (newValue == radioMsCl) {
-                mapType = MapType.BINGMAPS_CANVAS_LIGHT;
-            } else if (newValue == radioMsBA) {
-                mapType = MapType.BINGMAPS_AERIAL;
-            } else if (newValue == radioMsBAwL) {
-                mapType = MapType.BINGMAPS_AERIAL_WITH_LABELS;
             } else if (newValue == radioMsWMS) {
                 mapView.setWMSParam(wmsParam);
                 mapType = MapType.WMS;
@@ -377,7 +316,6 @@ public class MapController {
                 mapView.setXYZParam(xyzParams);
                 mapType = MapType.XYZ;
             }
-            mapView.setBingMapsApiKey(bingMapsApiKey.getText());
             mapView.setMapType(mapType);
         });
         mapTypeGroup.selectToggle(radioMsOSM);
@@ -389,18 +327,15 @@ public class MapController {
             new ImageView(new Image(markerKotka.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkHervantaMarker.setGraphic(
             new ImageView(new Image(markerHervanta.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
-        checkKaStationMarker.setGraphic(
-            new ImageView(new Image(markerKaStation.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
-        checkKaSoccerMarker.setGraphic(
-            new ImageView(new Image(markerKaSoccer.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+        checkLahtiMarker.setGraphic(
+            new ImageView(new Image(markerLahti.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkClickMarker.setGraphic(
             new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
 
         // bind the checkboxes to the markers visibility
         checkKotkaMarker.selectedProperty().bindBidirectional(markerKotka.visibleProperty());
         checkHervantaMarker.selectedProperty().bindBidirectional(markerHervanta.visibleProperty());
-        checkKaStationMarker.selectedProperty().bindBidirectional(markerKaStation.visibleProperty());
-        checkKaSoccerMarker.selectedProperty().bindBidirectional(markerKaSoccer.visibleProperty());
+        checkLahtiMarker.selectedProperty().bindBidirectional(markerLahti.visibleProperty());
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
 
         // load two coordinate lines
@@ -430,13 +365,15 @@ public class MapController {
         checkDrawPolygon.selectedProperty().addListener(polygonListener);
 
         // add the constrain listener
-        checkConstrainGermany.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+        checkConstrainFinland.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
-                mapView.constrainExtent(extentGermany);
+                mapView.constrainExtent(extentFinland);
             } else {
                 mapView.clearConstrainExtent();
             }
         }));
+
+
 
         // finally initialize the map view
         mapView.initialize(Configuration.builder()
@@ -448,13 +385,13 @@ public class MapController {
         new AnimationTimer() {
             @Override
             public void handle(long nanoSecondsNow) {
-                if (markerKaSoccer.getVisible()) {
-                    // every 100ms, increase the rotation of the markerKaSoccer by 9 degrees, make a turn in 4 seconds
+                if (markerLahti.getVisible()) {
+                    // every 100ms, increase the rotation of the markerLahti by 9 degrees, make a turn in 4 seconds
                     long milliSecondsDelta = (nanoSecondsNow - animationStart) / 1_000_000;
                     long numSteps = milliSecondsDelta / 100;
                     int angle = (int) ((numSteps * 9) % 360);
-                    if (markerKaSoccer.getRotation() != angle) {
-                        markerKaSoccer.setRotation(angle);
+                    if (markerLahti.getRotation() != angle) {
+                        markerLahti.setRotation(angle);
                     }
                 }
             }
@@ -595,19 +532,14 @@ public class MapController {
         // add the markers to the map - they are still invisible
         mapView.addMarker(markerKotka);
         mapView.addMarker(markerHervanta);
-        mapView.addMarker(markerKaStation);
-        mapView.addMarker(markerKaSoccer);
+        mapView.addMarker(markerLahti);
         // can't add the markerClick at this moment, it has no position, so it would not be added to the map
-
-        // add the fix label, the other's are attached to markers.
-        mapView.addLabel(labelKaUniversity);
 
         // add the tracks
         mapView.addCoordinateLine(trackMagenta);
         mapView.addCoordinateLine(trackCyan);
 
         // add the circle
-        mapView.addMapCircle(circleHervanta);
 
         // now enable the controls
         setControlsDisable(false);

@@ -60,8 +60,7 @@
                             <children>
                                 <Button fx:id="buttonKotka" text="Kotka" maxWidth="Infinity"/>
                                 <Button fx:id="buttonHervanta" text="Hervanta" maxWidth="Infinity"/>
-                                <Button fx:id="buttonKaStation" text="Karlsruhe station" maxWidth="Infinity"/>
-                                <Button fx:id="buttonKaSoccer" text="KSC soccer stadium" maxWidth="Infinity"/>
+                                <Button fx:id="buttonLahti" text="Lahti" maxWidth="Infinity"/>
                                 <Button fx:id="buttonAllLocations" text="All" maxWidth="Infinity"/>
                             </children>
                         </VBox>
@@ -77,12 +76,6 @@
                                 <RadioButton fx:id="radioMsOSM" text="OSM" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsWMS" text="WMS terrestris OSM" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsXYZ" text="XYZ source" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsBR" text="Bing Roads" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsCd" text="Bing Roads - dark" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsCg" text="Bing Roads - grayscale" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsCl" text="Bing Roads - light" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsBA" text="Bing Aerial" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsBAwL" text="Bing Aerial with Labels" toggleGroup="$mapTypeGroup"/>
                             </children>
                         </VBox>
                     </content>
@@ -91,10 +84,9 @@
                     <content>
                         <VBox spacing="10.0">
                             <children>
-                                <CheckBox fx:id="checkKotkaMarker" text="Karlsruhe harbour" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkKotkaMarker" text="Kotka" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkHervantaMarker" text="Hervanta" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkKaStationMarker" text="Karlsruhe station" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkKaSoccerMarker" text="KSC soccer stadium" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkLahtiMarker" text="Lahti" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkClickMarker" text="click location" maxWidth="Infinity"/>
                             </children>
                         </VBox>
@@ -117,9 +109,7 @@
                             <children>
                                 <Label text="animation duration"/>
                                 <TextField fx:id="animationDuration" prefWidth="120.0" promptText="milliseconds"/>
-                                <Label text="Bing Maps API-Key"/>
-                                <TextField fx:id="bingMapsApiKey" prefWidth="120.0" promptText="API-Key"/>
-                                <CheckBox fx:id="checkConstrainGermany" text="constrain to Germany" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkConstrainFinland" text="constrain to Germany" maxWidth="Infinity"/>
                             </children>
                         </VBox>
                     </content>
