@@ -50,7 +50,12 @@ import java.util.stream.Stream;
  */
 public class MapController {
 
-    /** logger for the class. */
+    // Sessiondata
+    private SessionData sessionData;
+    /**
+     * Previously clicked coordinate
+     */
+    public Coordinate currentCoordinate = new Coordinate(61.45, 23.85);
 
     /** some coordinates from around town. */
     private static final Coordinate coordHervanta = new Coordinate(61.45, 23.85);
@@ -250,6 +255,7 @@ public class MapController {
             "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
 
     public MapController() {
+
         // a couple of markers using the provided ones
         markerKotka = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKotka).setVisible(
             false);
@@ -316,7 +322,10 @@ public class MapController {
         buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
 
         // wire the zoom button and connect the slider to the map's zoom
-        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
+        buttonZoom.setOnAction(event -> {
+            mapView.setZoom(ZOOM_DEFAULT);
+            sessionData.setCurrentCoordinates(currentCoordinate);
+        });
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         // add a listener to the animationDuration field and make sure we only accept int values
@@ -462,8 +471,10 @@ public class MapController {
             final Coordinate newPosition = event.getCoordinate().normalize();
             labelEvent.setText("Event: map clicked at: " + newPosition);
 
+            // Set new current coordinate
             System.out.println(newPosition);
-
+            currentCoordinate = newPosition;
+            sessionData.setCurrentCoordinates(newPosition);
 
             if (checkDrawPolygon.isSelected()) {
                 handlePolygonClick(event);
@@ -623,5 +634,9 @@ public class MapController {
         } catch (IOException | NumberFormatException e) {
         }
         return Optional.empty();
+    }
+
+    public void setSessionData(SessionData sessionData) {
+        this.sessionData = sessionData;
     }
 }

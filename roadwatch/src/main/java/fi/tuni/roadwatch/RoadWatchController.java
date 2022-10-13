@@ -1,5 +1,6 @@
 package fi.tuni.roadwatch;
 
+import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.Projection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +24,8 @@ public class RoadWatchController {
     private Scene scene;
     public BorderPane mapPane;
     public BorderPane infoPane;
-
+    public MapController mapController;
+    private SessionData sessionData;
 
     @FXML
     private Button homeButton;
@@ -40,11 +42,17 @@ public class RoadWatchController {
     public void initialize(){
     }
 
+    public void setSessionData(RoadWatchController roadWatchController){
+        this.sessionData= new SessionData(roadWatchController, mapController);
+        mapController.setSessionData(sessionData);
+
+    }
+
     public void loadMap() throws IOException {
         FXMLLoader mapFxmlLoader = new FXMLLoader();
         Parent rootNode = mapFxmlLoader.load(getClass().getResourceAsStream("fxml/mapview.fxml"));
 
-        final MapController mapController = mapFxmlLoader.getController();
+        mapController = mapFxmlLoader.getController();
         final Projection projection = Projection.WEB_MERCATOR;
 //        final Projection projection = getParameters().getUnnamed().contains("wgs84")
 //                ? Projection.WGS_84 : Projection.WEB_MERCATOR;
@@ -72,6 +80,7 @@ public class RoadWatchController {
         Pane weather = (Pane) root;
         infoPane.setCenter(weather);
 
+
 //        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 //        scene = new Scene(root);
 //        stage.setScene(scene);
@@ -82,6 +91,10 @@ public class RoadWatchController {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/combine.fxml")));
         Pane combine = (Pane) root;
         infoPane.setCenter(combine);
+
+        Label label = (Label) combine.lookup("#combineLabel");
+        label.setText(sessionData.currentCoordinates.toString());
+
 //        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 //        scene = new Scene(root);
 //        stage.setScene(scene);
