@@ -93,7 +93,9 @@ public class RoadWatchController {
         infoPane.setCenter(combine);
 
         Label label = (Label) combine.lookup("#combineLabel");
-        label.setText(sessionData.currentCoordinates.toString());
+        if(sessionData.currentCoordinates != null){
+            label.setText(sessionData.currentCoordinates.toString());
+        }
 
 //        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 //        scene = new Scene(root);
