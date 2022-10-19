@@ -13,13 +13,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package fi.tuni.roadwatch;
+package fi.tuni.roadwatch.controllers;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
+import fi.tuni.roadwatch.SessionData;
 import javafx.animation.AnimationTimer;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;

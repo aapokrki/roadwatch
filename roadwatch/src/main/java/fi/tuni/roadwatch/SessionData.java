@@ -1,16 +1,17 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Coordinate;
+import fi.tuni.roadwatch.controllers.MapController;
 
 public class SessionData {
 
     private RoadWatchController roadWatchController;
-    private  MapController mapController;
+    private MapController mapController;
 
     public Coordinate currentCoordinates;
 
 
-    SessionData(RoadWatchController roadWatchController, MapController mapController){
+    public SessionData(RoadWatchController roadWatchController, MapController mapController){
         this.mapController = mapController;
         this.roadWatchController = roadWatchController;
     }

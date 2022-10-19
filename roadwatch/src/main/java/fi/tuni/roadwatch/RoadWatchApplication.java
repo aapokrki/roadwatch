@@ -1,11 +1,8 @@
 package fi.tuni.roadwatch;
 
-import com.sothawo.mapjfx.Projection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;

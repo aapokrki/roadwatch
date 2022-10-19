@@ -9,4 +9,6 @@ module fi.tuni.roadwatch {
 
     opens fi.tuni.roadwatch to javafx.fxml;
     exports fi.tuni.roadwatch;
+    exports fi.tuni.roadwatch.controllers;
+    opens fi.tuni.roadwatch.controllers to javafx.fxml;
 }

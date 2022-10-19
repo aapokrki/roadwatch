@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <BorderPane  prefHeight="478.0"
             prefWidth="309.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="fi.tuni.roadwatch.MapController">
+            fx:controller="fi.tuni.roadwatch.controllers.MapController">
     <top>
         <HBox fx:id="topControls" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
