@@ -20,6 +20,7 @@ public class RoadWatchApplication extends Application {
         roadWatchController.loadMap();
         roadWatchController.setSessionData(roadWatchController);
         stage.setTitle("RoadWatch");
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
 
