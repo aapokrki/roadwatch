@@ -1,15 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.controllers.RoadController">
+<AnchorPane prefHeight="619.0" prefWidth="727.0" styleClass="background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.controllers.RoadController">
    <children>
-      <Label fx:id="roadLabel" layoutX="206.0" layoutY="174.0" text="ROADDATA">
+      <Label fx:id="roadLabel" layoutX="192.0" layoutY="14.0" text="ROADDATA">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
+      <VBox layoutX="14.0" layoutY="103.0" prefHeight="205.0" prefWidth="219.0" styleClass="backgroundBlue">
+         <children>
+            <Label styleClass="basicHeading" text="SELECT DATA" />
+            <Line endX="40.5" startX="-100.0" />
+            <Label styleClass="basicHeadingGrey" text="ROAD CONDITION" />
+            <Label styleClass="basicTextGrey" text="    VISIBILITY" />
+            <Label styleClass="basicTextGrey" text="    FRICTION" />
+            <Label styleClass="basicTextGrey" text="    PRECIPITATION" />
+            <Label styleClass="basicTextGrey" text="    WINTER SLIPPERINESS" />
+            <Label styleClass="basicTextGrey" text="    OVERALL CONDITION" />
+            <Label styleClass="basicHeadingGrey" text="MAINTENANCE" />
+            <Label styleClass="basicTextGrey" text="    TASKTYPE 1" />
+            <Label styleClass="basicTextGrey" text="    TASKTYPE 2" />
+            <Label styleClass="basicTextGrey" text="    TASKTYPE 3" />
+            <Label styleClass="basicHeadingGrey" text="ALERTS" />
+         </children>
+      </VBox>
+      <Label layoutX="256.0" layoutY="150.0" styleClass="smallHeading" text="VISIBILITY" />
+      <Label layoutX="481.0" layoutY="150.0" styleClass="smallHeading" text="LOCATION" />
+      <Label layoutX="469.0" layoutY="223.0" styleClass="smallText" text="TIMELINE 2H 4H 6H 12H" />
+      <Label layoutX="469.0" layoutY="310.0" styleClass="smallText" text="Time of day" />
+      <Button layoutX="503.0" layoutY="477.0" mnemonicParsing="false" styleClass="basicButton" text="CALCULATE" />
+      <Button layoutX="256.0" layoutY="477.0" mnemonicParsing="false" styleClass="basicButton" text="FETCH DATA" />
+      <MenuButton layoutX="629.0" layoutY="148.0" mnemonicParsing="false" styleClass="menu-bar">
+        <items>
+          <MenuItem mnemonicParsing="false" styleClass="menu-item" text="2H" />
+          <MenuItem mnemonicParsing="false" styleClass="menu-item" text="4H" />
+           <MenuItem mnemonicParsing="false" styleClass="menu-item" text="6H" />
+            <MenuItem mnemonicParsing="false" styleClass="menu-item" text="12H" />
+        </items>
+      </MenuButton>
    </children>
 </AnchorPane>

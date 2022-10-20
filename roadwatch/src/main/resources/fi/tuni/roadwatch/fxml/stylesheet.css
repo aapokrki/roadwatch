@@ -40,10 +40,24 @@
     -fx-font-weight: bold;
 }
 
+.valueText {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 40px;
+    -fx-text-fill: #78C2E2;
+    -fx-font-weight: bold;
+}
+
 .basicHeading {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 32px;
     -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+}
+
+.basicHeadingGrey {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 32px;
+    -fx-text-fill: #434343;
     -fx-font-weight: bold;
 }
 
@@ -65,14 +79,64 @@
     -fx-background-color: #434343;
 }
 
+.backgroundBlue {
+    -fx-background-color: #78C2E2;
+    -fx-background-radius: 15px;
+}
+
 .basicButton {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-background-color: #78C2E2;
     -fx-text-fill: white;
+    -fx-background-radius: 15px;
 }
 
-.lineChart {
-    -fx-background-color: white;
+.menu-bar {
+    -fx-background-color: black ;
+    -fx-opacity: 0.5;
+    -fx-border-width: 2.0;
+    -fx-background-radius: 10px;
+}
+
+.menu-bar .label {
+    -fx-font-size: 14.0 pt;
+    -fx-font-family: "Ubuntu";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10.0px;
+
+}
+.menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
+    -fx-background: black ;
+    -fx-opacity: 0.5;
+    -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-padding: 0.0em 0.0em 0.0em 0.0em;
+    -fx-text-fill: black;
+    -fx-background: darkgray ;
+}
+.menu-item .label{
+    -fx-font-size: 14.0 pt;
+    -fx-text-fill: black;
+}
+.menu-item .label:hover{
+    -fx-font-size: 14.0 pt;
+    -fx-background: black ;
+    -fx-text-fill: white;
+}
+.context-menu {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
+    -fx-background-color:white ;
+    -fx-border-width: 0.2px;
+    -fx-border-color: black;
+}
+.check-box {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 20px;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
 }
