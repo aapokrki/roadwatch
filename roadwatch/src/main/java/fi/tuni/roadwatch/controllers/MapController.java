@@ -77,7 +77,6 @@ public class MapController {
     /** the markers. */
     private final Marker markerKotka;
     private final Marker markerHervanta;
-    private final Marker markerLahti;
     private final Marker markerClick;
 
     /** the labels. */
@@ -220,15 +219,11 @@ public class MapController {
 
         // a couple of markers using the provided ones
         markerKotka = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKotka).setVisible(
-            false);
+                true);
         markerHervanta = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordHervanta).setVisible(
-            false);
+                true);
         // no position for click marker yet
         markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
-
-        // a marker with a custom icon
-        markerLahti = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordLahti)
-            .setVisible(false);
 
         // the attached labels, custom style
         labelHervanta = new MapLabel("hervanta", 10, -10).setVisible(false).setCssClass("green-label");
@@ -306,20 +301,23 @@ public class MapController {
         });
 
         // observe the map type radiobuttons
-        mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            MapType mapType = MapType.OSM;
-            if (newValue == radioMsOSM) {
-                mapType = MapType.OSM;
-            } else if (newValue == radioMsWMS) {
-                mapView.setWMSParam(wmsParam);
-                mapType = MapType.WMS;
-            } else if (newValue == radioMsXYZ) {
-                mapView.setXYZParam(xyzParams);
-                mapType = MapType.XYZ;
-            }
-            mapView.setMapType(mapType);
-        });
-        mapTypeGroup.selectToggle(radioMsOSM);
+//        mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+//            MapType mapType = MapType.OSM;
+//            if (newValue == radioMsOSM) {
+//                mapType = MapType.OSM;
+//            } else if (newValue == radioMsWMS) {
+//                mapView.setWMSParam(wmsParam);
+//                mapType = MapType.WMS;
+//            } else if (newValue == radioMsXYZ) {
+//                mapView.setXYZParam(xyzParams);
+//                mapType = MapType.XYZ;
+//            }
+//            mapView.setMapType(mapType);
+//        });
+//        mapTypeGroup.selectToggle(radioMsOSM);
+
+        // Set map type
+        mapView.setMapType(MapType.OSM);
 
         setupEventHandlers();
 
@@ -328,16 +326,15 @@ public class MapController {
             new ImageView(new Image(markerKotka.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkHervantaMarker.setGraphic(
             new ImageView(new Image(markerHervanta.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
-        checkLahtiMarker.setGraphic(
-            new ImageView(new Image(markerLahti.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+
         checkClickMarker.setGraphic(
             new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
 
         // bind the checkboxes to the markers visibility
         checkKotkaMarker.selectedProperty().bindBidirectional(markerKotka.visibleProperty());
         checkHervantaMarker.selectedProperty().bindBidirectional(markerHervanta.visibleProperty());
-        checkLahtiMarker.selectedProperty().bindBidirectional(markerLahti.visibleProperty());
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
+        checkClickMarker.setSelected(true);
 
         // load two coordinate lines
         trackMagenta = loadCoordinateLine(getClass().getResource("/M1.csv")).orElse(new CoordinateLine
@@ -346,6 +343,7 @@ public class MapController {
             ()).setColor(Color.CYAN).setWidth(7);
         checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
         checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
+
         // get the extent of both tracks
         Extent tracksExtent = Extent.forCoordinates(
             Stream.concat(trackMagenta.getCoordinateStream(), trackCyan.getCoordinateStream())
@@ -382,21 +380,21 @@ public class MapController {
             .showZoomControls(false)
             .build());
 
-        long animationStart = System.nanoTime();
-        new AnimationTimer() {
-            @Override
-            public void handle(long nanoSecondsNow) {
-                if (markerLahti.getVisible()) {
-                    // every 100ms, increase the rotation of the markerLahti by 9 degrees, make a turn in 4 seconds
-                    long milliSecondsDelta = (nanoSecondsNow - animationStart) / 1_000_000;
-                    long numSteps = milliSecondsDelta / 100;
-                    int angle = (int) ((numSteps * 9) % 360);
-                    if (markerLahti.getRotation() != angle) {
-                        markerLahti.setRotation(angle);
-                    }
-                }
-            }
-        }.start();
+//        long animationStart = System.nanoTime();
+//        new AnimationTimer() {
+//            @Override
+//            public void handle(long nanoSecondsNow) {
+//                if (markerLahti.getVisible()) {
+//                    // every 100ms, increase the rotation of the markerLahti by 9 degrees, make a turn in 4 seconds
+//                    long milliSecondsDelta = (nanoSecondsNow - animationStart) / 1_000_000;
+//                    long numSteps = milliSecondsDelta / 100;
+//                    int angle = (int) ((numSteps * 9) % 360);
+//                    if (markerLahti.getRotation() != angle) {
+//                        markerLahti.setRotation(angle);
+//                    }
+//                }
+//            }
+//        }.start();
     }
 
     /**
@@ -533,7 +531,6 @@ public class MapController {
         // add the markers to the map - they are still invisible
         mapView.addMarker(markerKotka);
         mapView.addMarker(markerHervanta);
-        mapView.addMarker(markerLahti);
         // can't add the markerClick at this moment, it has no position, so it would not be added to the map
 
         // add the tracks

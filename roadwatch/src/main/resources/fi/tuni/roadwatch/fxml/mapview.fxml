@@ -66,20 +66,6 @@
                         </VBox>
                     </content>
                 </TitledPane>
-                <TitledPane fx:id="optionsMapType" animated="true" text="map style">
-                    <content>
-                        <VBox spacing="10.0">
-                            <fx:define>
-                                <ToggleGroup fx:id="mapTypeGroup"/>
-                            </fx:define>
-                            <children>
-                                <RadioButton fx:id="radioMsOSM" text="OSM" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsWMS" text="WMS terrestris OSM" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsXYZ" text="XYZ source" toggleGroup="$mapTypeGroup"/>
-                            </children>
-                        </VBox>
-                    </content>
-                </TitledPane>
                 <TitledPane fx:id="optionsMarkers" animated="true" text="markers">
                     <content>
                         <VBox spacing="10.0">
