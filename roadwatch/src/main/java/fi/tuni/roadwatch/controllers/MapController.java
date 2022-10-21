@@ -51,6 +51,7 @@ import java.util.stream.Stream;
  */
 public class MapController {
 
+    public Button addButton;
     // Sessiondata
     private SessionData sessionData;
     /**
@@ -183,18 +184,6 @@ public class MapController {
     @FXML
     private CheckBox checkClickMarker;
 
-    /** the first CoordinateLine */
-    private CoordinateLine trackMagenta;
-    /** Check button for first track */
-    @FXML
-    private CheckBox checkTrackMagenta;
-
-    /** the second CoordinateLine */
-    private CoordinateLine trackCyan;
-    /** Check button for first track */
-    @FXML
-    private CheckBox checkTrackCyan;
-
     /** Coordinateline for polygon drawing. */
     private CoordinateLine polygonLine;
     /** Check Button for polygon drawing mode. */
@@ -219,9 +208,9 @@ public class MapController {
 
         // a couple of markers using the provided ones
         markerKotka = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKotka).setVisible(
-                true);
+                false);
         markerHervanta = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordHervanta).setVisible(
-                true);
+                false);
         // no position for click marker yet
         markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
 
@@ -274,6 +263,12 @@ public class MapController {
             mapView.setZoom(ZOOM_DEFAULT);
         });
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
+
+        //wire the add button
+        addButton.setOnAction(event -> {
+            sessionData.calculateMinMaxCoordinates();
+
+        });
 
         // add a listener to the animationDuration field and make sure we only accept int values
         animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -334,24 +329,9 @@ public class MapController {
         checkKotkaMarker.selectedProperty().bindBidirectional(markerKotka.visibleProperty());
         checkHervantaMarker.selectedProperty().bindBidirectional(markerHervanta.visibleProperty());
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
-        checkClickMarker.setSelected(true);
+        //checkClickMarker.setSelected(true);
 
         // load two coordinate lines
-        trackMagenta = loadCoordinateLine(getClass().getResource("/M1.csv")).orElse(new CoordinateLine
-            ()).setColor(Color.MAGENTA);
-        trackCyan = loadCoordinateLine(getClass().getResource("/M2.csv")).orElse(new CoordinateLine
-            ()).setColor(Color.CYAN).setWidth(7);
-        checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
-        checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
-
-        // get the extent of both tracks
-        Extent tracksExtent = Extent.forCoordinates(
-            Stream.concat(trackMagenta.getCoordinateStream(), trackCyan.getCoordinateStream())
-                .collect(Collectors.toList()));
-        ChangeListener<Boolean> trackVisibleListener =
-            (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
-        trackMagenta.visibleProperty().addListener(trackVisibleListener);
-        trackCyan.visibleProperty().addListener(trackVisibleListener);
 
         // add the polygon check handler
         ChangeListener<Boolean> polygonListener =
@@ -359,9 +339,11 @@ public class MapController {
                 if (!newValue && polygonLine != null) {
                     mapView.removeCoordinateLine(polygonLine);
                     polygonLine = null;
+                    sessionData.polyCoordinates.clear();
                 }
             };
         checkDrawPolygon.selectedProperty().addListener(polygonListener);
+        checkDrawPolygon.setSelected(true);
 
         // add the constrain listener
         checkConstrainFinland.selectedProperty().addListener(((observable, oldValue, newValue) -> {
@@ -408,7 +390,7 @@ public class MapController {
             labelEvent.setText("Event: map clicked at: " + newPosition);
 
             // Set new current coordinate
-            System.out.println(newPosition);
+            System.out.println("["+newPosition.getLatitude() + ", " + newPosition.getLongitude()+"]");
             currentCoordinate = newPosition;
             sessionData.setCurrentCoordinates(newPosition);
 
@@ -500,6 +482,7 @@ public class MapController {
             polygonLine.getCoordinateStream().forEach(coordinates::add);
             mapView.removeCoordinateLine(polygonLine);
             polygonLine = null;
+
         }
         coordinates.add(event.getCoordinate());
         polygonLine = new CoordinateLine(coordinates)
@@ -508,6 +491,8 @@ public class MapController {
             .setClosed(true);
         mapView.addCoordinateLine(polygonLine);
         polygonLine.setVisible(true);
+        //System.out.println(coordinates);
+        sessionData.setPolygonCoordinates(coordinates);
     }
 
     /**
@@ -532,12 +517,6 @@ public class MapController {
         mapView.addMarker(markerKotka);
         mapView.addMarker(markerHervanta);
         // can't add the markerClick at this moment, it has no position, so it would not be added to the map
-
-        // add the tracks
-        mapView.addCoordinateLine(trackMagenta);
-        mapView.addCoordinateLine(trackCyan);
-
-        // add the circle
 
         // now enable the controls
         setControlsDisable(false);
