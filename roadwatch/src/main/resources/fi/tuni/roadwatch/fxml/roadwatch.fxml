@@ -5,26 +5,29 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<?import javafx.scene.layout.HBox?>
 <VBox fx:id="root" prefHeight="745.0" prefWidth="1304.0" spacing="10.0" styleClass="background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadWatchController">
    <children>
-      <HBox >
-         <Label styleClass="logo" text="roadwatch" />
-         <ButtonBar fx:id="buttonBar" buttonMinWidth="0.0" prefHeight="50.0" prefWidth="1257.0">
+      <HBox nodeOrientation="LEFT_TO_RIGHT">
+         <Label prefHeight="58.0" prefWidth="412.0" styleClass="logo" text="roadwatch" />
+         <ButtonBar fx:id="buttonBar" buttonMinWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="1257.0">
             <buttons>
-               <Button fx:id="homeButton" ButtonBar.buttonData="LEFT"  minHeight="-Infinity" minWidth="26.0" mnemonicParsing="false" onAction="#loadHome" prefHeight="25.0" styleClass="homeIcon" />
-               <Button fx:id="weatherButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadWeather" prefHeight="51.0" styleClass="weatherIcon" />
-               <Button fx:id="combineButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadCombine" prefHeight="97.0" prefWidth="190.0" styleClass="combineIcon" />
-               <Button fx:id="preferencesButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadPreferences" styleClass="preferencesIcon" />
-               <Button fx:id="roadDataButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadRoadData" prefHeight="51.0" prefWidth="97.0" styleClass="roadDataIcon" />
+               <Button fx:id="homeButton" minHeight="-Infinity" minWidth="26.0" mnemonicParsing="false" onAction="#loadHome" prefHeight="25.0" styleClass="homeIcon" ButtonBar.buttonData="LEFT" />
+               <Button fx:id="weatherButton" mnemonicParsing="false" onAction="#loadWeather" prefHeight="51.0" styleClass="weatherIcon" ButtonBar.buttonData="LEFT" />
+               <Button fx:id="combineButton" mnemonicParsing="false" onAction="#loadCombine" prefHeight="97.0" prefWidth="190.0" styleClass="combineIcon" ButtonBar.buttonData="LEFT" />
+               <Button fx:id="preferencesButton" mnemonicParsing="false" onAction="#loadPreferences" styleClass="preferencesIcon" ButtonBar.buttonData="LEFT" />
+               <Button fx:id="roadDataButton" mnemonicParsing="false" onAction="#loadRoadData" prefHeight="51.0" prefWidth="97.0" styleClass="roadDataIcon" ButtonBar.buttonData="LEFT" />
             </buttons>
             <opaqueInsets>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </opaqueInsets>
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
          </ButtonBar>
       </HBox>
       <Line endX="870.0" startX="-386.0" stroke="#78c2e2" styleClass="backgroundBlue" />
