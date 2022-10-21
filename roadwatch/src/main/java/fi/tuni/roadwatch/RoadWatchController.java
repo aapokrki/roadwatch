@@ -5,12 +5,13 @@ import fi.tuni.roadwatch.controllers.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
@@ -26,6 +27,8 @@ public class RoadWatchController {
     // Components
     private Stage stage;
     private Scene scene;
+    public VBox root;
+    public StackPane contentPane;
     public BorderPane mapPane;
     public BorderPane infoPane;
     public MapController mapController;
@@ -49,6 +52,8 @@ public class RoadWatchController {
 
     //MAINWINDOW
     @FXML
+    private ButtonBar buttonBar;
+    @FXML
     private Button homeButton;
     @FXML
     private Button weatherButton;
@@ -58,12 +63,13 @@ public class RoadWatchController {
     private Button preferencesButton;
     @FXML
     private Button roadDataButton;
+    @FXML
+    private Label siteLabel;
 
 
     public void setSessionData(RoadWatchController roadWatchController){
         this.sessionData= new SessionData(roadWatchController, mapController);
         mapController.setSessionData(sessionData);
-
     }
 
     public void loadMap() throws IOException {
@@ -92,6 +98,9 @@ public class RoadWatchController {
         }
 
         infoPane.setCenter(home);
+        siteLabel.setText("HOME");
+        StackPane.setAlignment(infoPane, Pos.CENTER_RIGHT);
+        mapPane.setVisible(true);
     }
 
 
@@ -106,6 +115,9 @@ public class RoadWatchController {
         }
 
         infoPane.setCenter(weather);
+        siteLabel.setText("WEATHER");
+        StackPane.setAlignment(infoPane, Pos.CENTER_RIGHT);
+        mapPane.setVisible(true);
 
     }
 
@@ -124,9 +136,8 @@ public class RoadWatchController {
             combineController.setCoordinates();
         }
         infoPane.setCenter(combine);
-
-
-
+        siteLabel.setText("COMBINE");
+        mapPane.setVisible(false);
     }
 
     public void loadPreferences(ActionEvent event) throws IOException {
@@ -138,7 +149,8 @@ public class RoadWatchController {
             preferences = (Pane) rootNode;
         }
         infoPane.setCenter(preferences);
-
+        siteLabel.setText("PREFERENCES");
+        mapPane.setVisible(false);
     }
 
     public void loadRoadData(ActionEvent event) throws IOException {
@@ -150,6 +162,9 @@ public class RoadWatchController {
             roadController.setSessionData(sessionData);
             road = (Pane) rootNode;
         }
+        mapPane.setVisible(false);
         infoPane.setCenter(road);
+        StackPane.setAlignment(infoPane, Pos.CENTER);
+        siteLabel.setText("ROAD DATA");
     }
 }
