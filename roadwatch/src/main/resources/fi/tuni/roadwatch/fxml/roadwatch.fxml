@@ -1,26 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Point3D?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1280" styleClass="background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadWatchController">
-    <children>
-      <BorderPane fx:id="mapPane" layoutY="100.0" maxHeight="620.0" maxWidth="440.0" minHeight="620.0" minWidth="440.0" prefHeight="620.0" prefWidth="440.0" style="-fx-border-color: blue; -fx-border-width: 5;" />
-      <Line endX="870.0" layoutX="399.0" layoutY="88.0" startX="-386.0" />
-      <ButtonBar layoutX="133.0" layoutY="24.0" prefHeight="51.0" prefWidth="1120.0">
-        <buttons>
-            <Button fx:id="homeButton" mnemonicParsing="false" onAction="#loadHome" styleClass="basicButton" text="HOME" />
-          <Button fx:id="weatherButton" mnemonicParsing="false" onAction="#loadWeather" styleClass="basicButton" text="WEATHER" />
-            <Button fx:id="combineButton" mnemonicParsing="false" onAction="#loadCombine" styleClass="basicButton" text="COMBINE" />
-            <Button fx:id="preferencesButton" mnemonicParsing="false" onAction="#loadPreferences" styleClass="basicButton" text="PREFERENCES" />
-            <Button fx:id="roadDataButton" mnemonicParsing="false" onAction="#loadRoadData" prefHeight="51.0" prefWidth="97.0" styleClass="basicButton" text="ROAD DATA" />
-        </buttons>
-      </ButtonBar>
-      <BorderPane fx:id="infoPane" layoutX="440.0" layoutY="100.0" maxHeight="620.0" maxWidth="840.0" minHeight="620.0" minWidth="840.0" prefHeight="620.0" prefWidth="840.0" style="-fx-border-color: orange; -fx-border-width: 5;" />
+<?import javafx.scene.layout.HBox?>
+<VBox fx:id="root" prefHeight="745.0" prefWidth="1304.0" spacing="10.0" styleClass="background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadWatchController">
+   <children>
+      <HBox >
+         <Label styleClass="logo" text="roadwatch" />
+         <ButtonBar fx:id="buttonBar" buttonMinWidth="0.0" prefHeight="50.0" prefWidth="1257.0">
+            <buttons>
+               <Button fx:id="homeButton" ButtonBar.buttonData="LEFT"  minHeight="-Infinity" minWidth="26.0" mnemonicParsing="false" onAction="#loadHome" prefHeight="25.0" styleClass="homeIcon" />
+               <Button fx:id="weatherButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadWeather" prefHeight="51.0" styleClass="weatherIcon" />
+               <Button fx:id="combineButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadCombine" prefHeight="97.0" prefWidth="190.0" styleClass="combineIcon" />
+               <Button fx:id="preferencesButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadPreferences" styleClass="preferencesIcon" />
+               <Button fx:id="roadDataButton" ButtonBar.buttonData="LEFT"  mnemonicParsing="false" onAction="#loadRoadData" prefHeight="51.0" prefWidth="97.0" styleClass="roadDataIcon" />
+            </buttons>
+            <opaqueInsets>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </opaqueInsets>
+         </ButtonBar>
+      </HBox>
+      <Line endX="870.0" startX="-386.0" stroke="#78c2e2" styleClass="backgroundBlue" />
+      <Label fx:id="siteLabel" styleClass="bigHeading" text="HOME" />
+      <StackPane fx:id="contentPane" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <BorderPane fx:id="mapPane" maxHeight="620.0" maxWidth="440.0" minHeight="566.0" minWidth="440.0" prefHeight="566.0" prefWidth="440.0" style="-fx-border-color: blue; -fx-border-width: 5;" StackPane.alignment="CENTER_LEFT" />
+            <BorderPane fx:id="infoPane" maxHeight="620.0" maxWidth="840.0" minHeight="0" minWidth="0" prefHeight="566.0" prefWidth="820.0" style="-fx-border-color: orange; -fx-border-width: 5;" StackPane.alignment="CENTER_RIGHT" />
+         </children>
+      </StackPane>
    </children>
-</AnchorPane>
+   <opaqueInsets>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>
