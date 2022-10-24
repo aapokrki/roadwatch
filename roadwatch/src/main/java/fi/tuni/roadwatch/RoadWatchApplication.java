@@ -3,9 +3,11 @@ package fi.tuni.roadwatch;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class RoadWatchApplication extends Application {
 

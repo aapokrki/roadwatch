@@ -39,8 +39,8 @@ public class RoadWatchController {
     public Pane weather;
     public WeatherController weatherController;
 
-    public Pane combine;
-    public CombineController combineController;
+    public Pane quickView;
+    public QuickViewController quickViewController;
 
     public Pane preferences;
     public PreferencesController preferencesController;
@@ -52,13 +52,15 @@ public class RoadWatchController {
 
     //MAINWINDOW
     @FXML
+    private Label logo;
+    @FXML
     private ButtonBar buttonBar;
     @FXML
     private Button homeButton;
     @FXML
     private Button weatherButton;
     @FXML
-    private Button combineButton;
+    private Button quickViewButton;
     @FXML
     private Button preferencesButton;
     @FXML
@@ -121,23 +123,22 @@ public class RoadWatchController {
 
     }
 
-    public void loadCombine(ActionEvent event) throws IOException {
-
-        if(combineController == null){
-            FXMLLoader combineFxmlLoader = new FXMLLoader();
-            Parent rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));
-            combineController = combineFxmlLoader.getController();
-            combineController.setSessionData(sessionData);
-            combine = (Pane) rootNode;
+    public void loadQuickView(ActionEvent event) throws IOException {
+        if(quickViewController == null){
+            FXMLLoader quickViewFxmlLoader = new FXMLLoader();
+            Parent rootNode = quickViewFxmlLoader.load(getClass().getResourceAsStream("fxml/quickview.fxml"));
+            quickViewController = quickViewFxmlLoader.getController();
+            quickViewController.setSessionData(sessionData);
+            quickViewController.setData(mapPane, infoPane, siteLabel);
+            quickView = (Pane) rootNode;
         }
 
         // Test output of setting coordinates to a view
         if(sessionData.currentCoordinates != null){
-            combineController.setCoordinates();
+            quickViewController.setCoordinates();
         }
-        infoPane.setCenter(combine);
-        siteLabel.setText("COMBINE");
-        mapPane.setVisible(false);
+        infoPane.setCenter(quickView);
+        siteLabel.setText("QUICK VIEW");
     }
 
     public void loadPreferences(ActionEvent event) throws IOException {
@@ -148,9 +149,10 @@ public class RoadWatchController {
             preferencesController.setSessionData(sessionData);
             preferences = (Pane) rootNode;
         }
-        infoPane.setCenter(preferences);
-        siteLabel.setText("PREFERENCES");
         mapPane.setVisible(false);
+        infoPane.setCenter(preferences);
+        StackPane.setAlignment(infoPane, Pos.CENTER);
+        siteLabel.setText("PREFERENCES");
     }
 
     public void loadRoadData(ActionEvent event) throws IOException {
@@ -166,5 +168,12 @@ public class RoadWatchController {
         infoPane.setCenter(road);
         StackPane.setAlignment(infoPane, Pos.CENTER);
         siteLabel.setText("ROAD DATA");
+    }
+
+    void onButtonClick(ActionEvent event, Button btn, String oldIcon, String newIcon) {
+        btn.setOnAction((ActionEvent e) -> {
+            btn.getStyleClass().removeAll(oldIcon);
+            btn.getStyleClass().add(newIcon);
+        });
     }
 }

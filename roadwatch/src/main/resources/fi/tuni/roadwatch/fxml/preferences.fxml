@@ -2,14 +2,14 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.controllers.PreferencesController">
+<AnchorPane prefHeight="542.0" prefWidth="1250.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.controllers.PreferencesController">
    <children>
-      <Label fx:id="preferencesLabel" layoutX="189.0" layoutY="174.0" text="PREFERENCES">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
+      <Label layoutX="58.0" layoutY="50.0" styleClass="smallHeading" text="LOCATION" />
+      <Label layoutX="58.0" layoutY="140.0" styleClass="smallHeading" text="WEATHER DATA" />
+      <Label layoutX="58.0" layoutY="222.0" styleClass="smallHeading" text="ROAD DATA" />
+      <Label layoutX="303.0" layoutY="50.0" styleClass="basicTextWhite" text="Kotka" />
+      <Label layoutX="303.0" layoutY="140.0" styleClass="basicTextWhite" text="Temperature" />
+      <Label layoutX="303.0" layoutY="222.0" styleClass="basicTextWhite" text="Friction" />
    </children>
 </AnchorPane>

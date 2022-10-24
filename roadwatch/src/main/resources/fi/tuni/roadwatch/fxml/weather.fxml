@@ -7,18 +7,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="513.0" prefWidth="605.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.controllers.WeatherController">
+<AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.controllers.WeatherController">
    <children>
       <Label fx:id="weatherLabel" layoutX="43.0" layoutY="29.0" styleClass="basicText" text="WEATHER City Date">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Label layoutX="23.0" layoutY="99.0" prefHeight="17.0" prefWidth="269.0" styleClass="basicHeading" text="NOW 2H 4H 6H 12H" />
-      <Label layoutX="43.0" layoutY="338.0" prefHeight="35.0" prefWidth="88.0" styleClass="smallHeading" text="WIND  " />
-      <Button layoutX="431.0" layoutY="175.0" mnemonicParsing="false" styleClass="basicButton" text="AVERAGE TEMP" />
-      <Button layoutX="428.0" layoutY="257.0" mnemonicParsing="false" styleClass="basicButton" text="MIN-MAX TEMP" />
-      <MenuButton layoutX="554.0" layoutY="95.0" mnemonicParsing="false" styleClass="menu-bar">
+      <Label layoutX="43.0" layoutY="98.0" prefHeight="47.0" prefWidth="435.0" styleClass="basicHeading" text="NOW 2H 4H 6H 12H" />
+      <Label layoutX="43.0" layoutY="431.0" prefHeight="35.0" prefWidth="88.0" styleClass="smallHeading" text="WIND  " />
+      <Button layoutX="614.0" layoutY="121.0" mnemonicParsing="false" styleClass="basicButton" text="AVERAGE TEMP" />
+      <Button layoutX="611.0" layoutY="204.0" mnemonicParsing="false" styleClass="basicButton" text="MIN-MAX TEMP" />
+      <MenuButton layoutX="760.0" layoutY="27.0" mnemonicParsing="false" styleClass="menu-bar">
         <items>
           <MenuItem mnemonicParsing="false" styleClass="menu-item" text="2H" />
           <MenuItem mnemonicParsing="false" styleClass="menu-item" text="4H" />
@@ -26,9 +26,9 @@
             <MenuItem mnemonicParsing="false" text="12H" />
         </items>
       </MenuButton>
-      <Label layoutX="358.0" layoutY="99.0" styleClass="basicTextWhite" text="Choose timeline" />
-      <Label layoutX="43.0" layoutY="381.0" styleClass="valueText" text="X m/s" />
-      <Label layoutX="233.0" layoutY="381.0" styleClass="valueText" text="Y km" />
-      <Label layoutX="222.0" layoutY="338.0" styleClass="smallHeading" text="VISIBILITY" />
+      <Label layoutX="552.0" layoutY="30.0" styleClass="basicTextWhite" text="Choose timeline" />
+      <Label layoutX="43.0" layoutY="504.0" styleClass="valueText" text="X m/s" />
+      <Label layoutX="275.0" layoutY="504.0" styleClass="valueText" text="Y km" />
+      <Label layoutX="275.0" layoutY="431.0" styleClass="smallHeading" text="VISIBILITY" />
    </children>
 </AnchorPane>
