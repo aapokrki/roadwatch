@@ -13,17 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package fi.tuni.roadwatch.controllers;
+package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.*;
-import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
-import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
 import fi.tuni.roadwatch.SessionData;
-import javafx.animation.AnimationTimer;
 import javafx.animation.Transition;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -51,7 +47,9 @@ import java.util.stream.Stream;
  */
 public class MapController {
 
-    public Button addButton;
+    public Button buttonAddPolygon;
+    public Button buttonClearPolygon;
+    public ChoiceBox locationMenu;
     // Sessiondata
     private SessionData sessionData;
     /**
@@ -108,21 +106,28 @@ public class MapController {
     @FXML
     private TitledPane optionsLocations;
 
-    /** button to set the map's center */
+
+//    @FXML
+//    private Button buttonKotka;
+//
+//    @FXML
+//    private Button buttonHervanta;
+//
+//    @FXML
+//    private Button buttonLahti;
+//
+//    @FXML
+//    private Button buttonAllLocations;
+
     @FXML
     private Button buttonKotka;
 
-    /** button to set the map's center */
     @FXML
     private Button buttonHervanta;
 
-    /** button to set the map's center */
-
-    /** button to set the map's center */
     @FXML
     private Button buttonLahti;
 
-    /** button to set the map's extent. */
     @FXML
     private Button buttonAllLocations;
 
@@ -236,6 +241,7 @@ public class MapController {
         setControlsDisable(true);
 
         // wire up the location buttons
+
         buttonKotka.setOnAction(event -> mapView.setCenter(coordKotka));
         buttonHervanta.setOnAction(event -> mapView.setCenter(coordHervanta));
         buttonLahti.setOnAction(event -> mapView.setCenter(coordLahti));
@@ -249,24 +255,34 @@ public class MapController {
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         //wire the add button
-        addButton.setOnAction(event -> {
+        buttonAddPolygon.setOnAction(event -> {
             sessionData.calculateMinMaxCoordinates();
 
         });
-
-        // add a listener to the animationDuration field and make sure we only accept int values
-        animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                mapView.setAnimationDuration(0);
-            } else {
-                try {
-                    mapView.setAnimationDuration(Integer.parseInt(newValue));
-                } catch (NumberFormatException e) {
-                    animationDuration.setText(oldValue);
-                }
+        //wire the clear button
+        buttonClearPolygon.setOnAction(event -> {
+            if(polygonLine != null){
+                mapView.removeCoordinateLine(polygonLine);
+                polygonLine = null;
+                sessionData.polyCoordinates.clear();
             }
+
         });
-        animationDuration.setText("500");
+
+
+//        // add a listener to the animationDuration field and make sure we only accept int values
+//        animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue.isEmpty()) {
+//                mapView.setAnimationDuration(0);
+//            } else {
+//                try {
+//                    mapView.setAnimationDuration(Integer.parseInt(newValue));
+//                } catch (NumberFormatException e) {
+//                    animationDuration.setText(oldValue);
+//                }
+//            }
+//        });
+//        animationDuration.setText("500");
 
 
         // watch the MapView's initialized property to finish initialization
@@ -276,25 +292,8 @@ public class MapController {
             }
         });
 
-        // observe the map type radiobuttons
-//        mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-//            MapType mapType = MapType.OSM;
-//            if (newValue == radioMsOSM) {
-//                mapType = MapType.OSM;
-//            } else if (newValue == radioMsWMS) {
-//                mapView.setWMSParam(wmsParam);
-//                mapType = MapType.WMS;
-//            } else if (newValue == radioMsXYZ) {
-//                mapView.setXYZParam(xyzParams);
-//                mapType = MapType.XYZ;
-//            }
-//            mapView.setMapType(mapType);
-//        });
-//        mapTypeGroup.selectToggle(radioMsOSM);
-
         // Set map type
         mapView.setMapType(MapType.OSM);
-
         setupEventHandlers();
 
         // add the graphics to the checkboxes
@@ -343,21 +342,6 @@ public class MapController {
             .showZoomControls(false)
             .build());
 
-//        long animationStart = System.nanoTime();
-//        new AnimationTimer() {
-//            @Override
-//            public void handle(long nanoSecondsNow) {
-//                if (markerLahti.getVisible()) {
-//                    // every 100ms, increase the rotation of the markerLahti by 9 degrees, make a turn in 4 seconds
-//                    long milliSecondsDelta = (nanoSecondsNow - animationStart) / 1_000_000;
-//                    long numSteps = milliSecondsDelta / 100;
-//                    int angle = (int) ((numSteps * 9) % 360);
-//                    if (markerLahti.getRotation() != angle) {
-//                        markerLahti.setRotation(angle);
-//                    }
-//                }
-//            }
-//        }.start();
     }
 
     /**

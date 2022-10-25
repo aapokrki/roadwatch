@@ -1,9 +1,7 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Coordinate;
-import fi.tuni.roadwatch.controllers.MapController;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -56,14 +54,20 @@ public class SessionData {
     public void calculateMinMaxCoordinates() {
 
         // TODO: Make more efficient
-        Double maxLongtitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
-        Double maxLatitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLatitude)).get().getLatitude();
+        if(polyCoordinates != null){
+            if(!polyCoordinates.isEmpty()){
+                Double maxLongtitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
+                Double maxLatitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLatitude)).get().getLatitude();
 
-        Double minLongtitude = polyCoordinates.stream().min(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
-        Double minLatitude = polyCoordinates.stream().min(Comparator.comparing(Coordinate::getLatitude)).get().getLatitude();
+                Double minLongtitude = polyCoordinates.stream().min(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
+                Double minLatitude = polyCoordinates.stream().min(Comparator.comparing(Coordinate::getLatitude)).get().getLatitude();
 
-        coordinateConstraints = new CoordinateConstraints(minLongtitude, minLatitude, maxLongtitude, maxLatitude);
-        System.out.println(coordinateConstraints.getAsString());
+                coordinateConstraints = new CoordinateConstraints(minLongtitude, minLatitude, maxLongtitude, maxLatitude);
+                System.out.println(coordinateConstraints.getAsString());
+            }
+
+        }
+
 
 
 

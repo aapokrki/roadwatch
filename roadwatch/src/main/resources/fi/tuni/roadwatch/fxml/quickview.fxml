@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.controllers.QuickViewController">
+<AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.QuickViewController">
    <children>
       <Label layoutX="53.0" layoutY="108.0" prefHeight="47.0" prefWidth="435.0" styleClass="basicHeading" text="NOW 2H 4H 6H 12H" />
       <Label fx:id="weatherLabel" layoutX="53.0" layoutY="39.0" styleClass="basicText" text="WEATHER City Date">

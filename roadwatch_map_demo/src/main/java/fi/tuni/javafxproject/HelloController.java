@@ -59,4 +59,7 @@ public class HelloController {
     void initializeMap(Pane view){
         mapPane.setCenter(view);
     }
+
+    public void onLahtiSelect(ActionEvent actionEvent) {
+    }
 }

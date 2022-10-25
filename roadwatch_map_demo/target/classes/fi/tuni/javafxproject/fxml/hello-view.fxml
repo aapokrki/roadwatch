@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.collections.FXCollections?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="983.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.javafxproject.HelloController">
    <children>
       <Label fx:id="logoLabel" layoutX="41.0" layoutY="33.0" text="roadwatch">
@@ -17,26 +19,7 @@
       </Label>
       <Separator layoutX="14.0" layoutY="83.0" prefHeight="5.0" prefWidth="952.0" />
       <AnchorPane fx:id="dataPane" layoutX="492.0" layoutY="100.0" maxWidth="474.0" minWidth="450.0" prefHeight="478.0" prefWidth="474.0" style="-fx-border-color: black;">
-         <children>
-            <AnchorPane fx:id="weatherPane" layoutX="28.0" layoutY="14.0" prefHeight="200.0" prefWidth="418.0" style="-fx-border-color: orange; -fx-border-width: 5;">
-               <children>
-                  <Label fx:id="logoLabel1" layoutX="126.0" layoutY="82.0" text="WEATHER">
-                     <font>
-                        <Font name="DejaVu Sans Bold" size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="roadPane" layoutX="28.0" layoutY="264.0" prefHeight="200.0" prefWidth="418.0" style="-fx-border-color: GREY; -fx-border-width: 5;">
-               <children>
-                  <Label fx:id="logoLabel11" layoutX="168.0" layoutY="82.0" text="ROAD">
-                     <font>
-                        <Font name="DejaVu Sans Bold" size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-         </children>
+
       </AnchorPane>
       <ButtonBar layoutX="440.0" layoutY="31.0" prefHeight="40.0" prefWidth="200.0">
         <buttons>

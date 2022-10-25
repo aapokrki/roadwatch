@@ -1,7 +1,6 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Projection;
-import fi.tuni.roadwatch.controllers.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,13 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.Objects;
-
-
-/** TODO: Pitää uudelleen miettiä fxml:ät ja controllerit
- *  TODO: Joko ikkunalla yksi fxml jonka tietoja sit muutellaan ja sille oma controller joka muuttelee
- *  TODO: Tai Useampi fxml eri näkymille ja niille kaikille controllerit tai näin mutta jpku hassu kikka ilman kontrollereita
- */
 
 
 public class RoadWatchController {
@@ -134,11 +126,10 @@ public class RoadWatchController {
         }
 
         // Test output of setting coordinates to a view
-        if(sessionData.currentCoordinates != null){
-            quickViewController.setCoordinates();
-        }
         infoPane.setCenter(quickView);
         siteLabel.setText("QUICK VIEW");
+        StackPane.setAlignment(infoPane, Pos.CENTER_RIGHT);
+        mapPane.setVisible(true);
     }
 
     public void loadPreferences(ActionEvent event) throws IOException {

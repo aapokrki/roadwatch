@@ -1,13 +1,13 @@
-package fi.tuni.roadwatch.controllers;
+package fi.tuni.roadwatch;
 
 import fi.tuni.roadwatch.SessionData;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class RoadController {
+public class PreferencesController {
 
     @FXML
-    private Label roadLabel;
+    private Label preferencesLabel;
     private SessionData sessionData;
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;

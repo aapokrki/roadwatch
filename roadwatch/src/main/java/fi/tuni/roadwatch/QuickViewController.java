@@ -1,5 +1,6 @@
-package fi.tuni.roadwatch.controllers;
+package fi.tuni.roadwatch;
 
+import fi.tuni.roadwatch.CombineController;
 import fi.tuni.roadwatch.SessionData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +24,6 @@ public class QuickViewController {
     @FXML
     private Button combinePageButton;
     @FXML
-    private Label combineLabel;
     public Pane combine;
     public CombineController combineController;
 
@@ -37,31 +37,28 @@ public class QuickViewController {
         this.siteLabel = siteLabel;
     }
 
-    public void setCoordinates(){combineLabel.setText(sessionData.currentCoordinates.toString());
-    }
-
     public void loadCombine(ActionEvent event) throws IOException {
-        //TODO: ei toimi
+        //TODO: toimii mut kai tän voi tehä paremmi i guess
         combinePageButton.setOnAction((ActionEvent e) -> {
-//            if(combineController == null){
-//                FXMLLoader combineFxmlLoader = new FXMLLoader();
-//                Parent rootNode = null;
-//                try {
-//                    rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                }
-//                combineController = combineFxmlLoader.getController();
-//                combineController.setSessionData(sessionData);
-//                combine = (Pane) rootNode;
-//            }
-//
-//            // Test output of setting coordinates to a view
-//            if(sessionData.currentCoordinates != null){
-//                combineController.setCoordinates();
-//            }
+            if(combineController == null){
+                FXMLLoader combineFxmlLoader = new FXMLLoader();
+                Parent rootNode = null;
+                try {
+                    rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                combineController = combineFxmlLoader.getController();
+                combineController.setSessionData(sessionData);
+                combine = (Pane) rootNode;
+            }
+
+            // Test output of setting coordinates to a view
+            if(sessionData.currentCoordinates != null){
+                combineController.setCoordinates();
+            }
             mapPane.setVisible(false);
-//            infoPane.setCenter(combine);
+            infoPane.setCenter(combine);
             StackPane.setAlignment(infoPane, Pos.CENTER);
             siteLabel.setText("COMBINE");
         });

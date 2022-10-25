@@ -1,4 +1,4 @@
-package fi.tuni.roadwatch.controllers;
+package fi.tuni.roadwatch;
 
 import fi.tuni.roadwatch.SessionData;
 import javafx.event.ActionEvent;
