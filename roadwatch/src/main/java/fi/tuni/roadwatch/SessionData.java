@@ -7,8 +7,8 @@ import java.util.List;
 
 public class SessionData {
 
-    private RoadWatchController roadWatchController;
-    private MapController mapController;
+//    private RoadWatchController roadWatchController;
+//    private MapController mapController;
 
     public Coordinate currentCoordinates;
     public List<Coordinate> polyCoordinates;
@@ -29,22 +29,20 @@ public class SessionData {
         private final Double maxLon;
         private final Double maxLat;
 
-        public String getAsString(){
-            return minLon + "/" + minLat +"/" + maxLon +"/" + maxLat;
+        public String getAsString(Character c){
+            return ""+minLon + c + minLat + c + maxLon + c + maxLat;
         }
     }
 
     public CoordinateConstraints coordinateConstraints;
 
 
-    public SessionData(RoadWatchController roadWatchController, MapController mapController){
-        this.mapController = mapController;
-        this.roadWatchController = roadWatchController;
+    public SessionData(){
+
     }
 
     public void setCurrentCoordinates(Coordinate newCoordinate){
         currentCoordinates = newCoordinate;
-//        roadWatchController.loadCombine();
     }
 
     public void setPolygonCoordinates(List<Coordinate> polyCoordinates){
@@ -63,7 +61,7 @@ public class SessionData {
                 Double minLatitude = polyCoordinates.stream().min(Comparator.comparing(Coordinate::getLatitude)).get().getLatitude();
 
                 coordinateConstraints = new CoordinateConstraints(minLongtitude, minLatitude, maxLongtitude, maxLatitude);
-                System.out.println(coordinateConstraints.getAsString());
+                System.out.println(coordinateConstraints.getAsString('/'));
             }
 
         }

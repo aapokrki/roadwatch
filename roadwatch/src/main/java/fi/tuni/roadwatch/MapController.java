@@ -49,7 +49,6 @@ public class MapController {
 
     public Button buttonAddPolygon;
     public Button buttonClearPolygon;
-    public ChoiceBox locationMenu;
     // Sessiondata
     private SessionData sessionData;
     /**
@@ -131,31 +130,6 @@ public class MapController {
     @FXML
     private Button buttonAllLocations;
 
-    /** for editing the animation duration */
-    @FXML
-    private TextField animationDuration;
-
-    /** RadioButton for MapStyle OSM */
-    @FXML
-    private RadioButton radioMsOSM;
-
-    /** RadioButton for MapStyle Stamen Watercolor */
-    @FXML
-    private RadioButton radioMsSTW;
-
-
-    /** RadioButton for MapStyle WMS. */
-    @FXML
-    private RadioButton radioMsWMS;
-
-    /** RadioButton for MapStyle XYZ */
-    @FXML
-    private RadioButton radioMsXYZ;
-
-    /** ToggleGroup for the MapStyle radios */
-    @FXML
-    private ToggleGroup mapTypeGroup;
-
     /** Check button for harbour marker */
     @FXML
     private CheckBox checkKotkaMarker;
@@ -220,18 +194,6 @@ public class MapController {
      */
     public void initMapAndControls(Projection projection) {
 
-        // init MapView-Cache
-        final OfflineCache offlineCache = mapView.getOfflineCache();
-        final String cacheDir = System.getProperty("java.io.tmpdir") + "/mapjfx-cache";
-//        logger.info("using dir for cache: " + cacheDir);
-//        try {
-//            Files.createDirectories(Paths.get(cacheDir));
-//            offlineCache.setCacheDirectory(cacheDir);
-//            offlineCache.setActive(true);
-//        } catch (IOException e) {
-//            logger.warn("could not activate offline cache", e);
-//        }
-
         // set the custom css file for the MapView
         mapView.setCustomMapviewCssURL(getClass().getResource("/custom_mapview.css"));
 
@@ -256,7 +218,7 @@ public class MapController {
 
         //wire the add button
         buttonAddPolygon.setOnAction(event -> {
-            sessionData.calculateMinMaxCoordinates();
+            this.sessionData.calculateMinMaxCoordinates();
 
         });
         //wire the clear button
@@ -268,22 +230,6 @@ public class MapController {
             }
 
         });
-
-
-//        // add a listener to the animationDuration field and make sure we only accept int values
-//        animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue.isEmpty()) {
-//                mapView.setAnimationDuration(0);
-//            } else {
-//                try {
-//                    mapView.setAnimationDuration(Integer.parseInt(newValue));
-//                } catch (NumberFormatException e) {
-//                    animationDuration.setText(oldValue);
-//                }
-//            }
-//        });
-//        animationDuration.setText("500");
-
 
         // watch the MapView's initialized property to finish initialization
         mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {

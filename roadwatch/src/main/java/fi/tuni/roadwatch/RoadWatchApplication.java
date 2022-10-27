@@ -17,9 +17,10 @@ public class RoadWatchApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(RoadWatchApplication.class.getResource("fxml/roadwatch.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         final RoadWatchController roadWatchController = fxmlLoader.getController();
-
+        SessionData sessionData = new SessionData();
+        roadWatchController.setSessionData(sessionData);
         roadWatchController.loadMap();
-        roadWatchController.setSessionData(roadWatchController);
+
 
         stage.setTitle("RoadWatch");
         stage.setResizable(false);
