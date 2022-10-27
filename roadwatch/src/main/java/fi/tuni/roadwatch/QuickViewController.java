@@ -53,10 +53,6 @@ public class QuickViewController {
                 combine = (Pane) rootNode;
             }
 
-            // Test output of setting coordinates to a view
-            if(sessionData.currentCoordinates != null){
-                combineController.setCoordinates();
-            }
             mapPane.setVisible(false);
             infoPane.setCenter(combine);
             StackPane.setAlignment(infoPane, Pos.CENTER);

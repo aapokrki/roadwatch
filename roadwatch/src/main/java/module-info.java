@@ -6,6 +6,7 @@ module fi.tuni.roadwatch {
     requires org.kordamp.bootstrapfx.core;
     requires com.fasterxml.jackson.dataformat.xml;
     requires com.fasterxml.jackson.databind;
+    requires java.xml;
 
     opens fi.tuni.roadwatch to javafx.fxml;
     exports fi.tuni.roadwatch;

@@ -61,9 +61,8 @@ public class RoadWatchController {
     private Label siteLabel;
 
 
-    public void setSessionData(RoadWatchController roadWatchController){
-        this.sessionData= new SessionData(roadWatchController, mapController);
-        mapController.setSessionData(sessionData);
+    public void setSessionData(SessionData sessionData){
+        this.sessionData = sessionData;
     }
 
     public void loadMap() throws IOException {
@@ -72,9 +71,11 @@ public class RoadWatchController {
 
         mapController = mapFxmlLoader.getController();
         final Projection projection = Projection.WEB_MERCATOR;
-//        final Projection projection = getParameters().getUnnamed().contains("wgs84")
-//                ? Projection.WGS_84 : Projection.WEB_MERCATOR;
+
+        // init map controls and set sessiondata
+        mapController.setSessionData(sessionData);
         mapController.initMapAndControls(projection);
+
         Pane mapView = (Pane) rootNode;
 
         mapPane.setCenter(mapView);

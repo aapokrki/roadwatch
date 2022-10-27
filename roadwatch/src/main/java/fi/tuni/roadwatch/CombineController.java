@@ -15,7 +15,7 @@ public class CombineController {
         this.sessionData = sessionData;
     }
 
-    public void setCoordinates(){
-        combineLabel.setText(sessionData.currentCoordinates.toString());
-    }
+//    public void setCoordinates(){
+//        combineLabel.setText(sessionData.currentCoordinates.toString());
+//    }
 }
