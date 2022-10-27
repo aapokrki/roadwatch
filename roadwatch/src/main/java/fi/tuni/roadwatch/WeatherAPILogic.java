@@ -1,27 +1,206 @@
 package fi.tuni.roadwatch;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class WeatherAPILogic {
-    ObjectMapper weather_mapper = new XmlMapper();
+    private double currentTemp;
+    private double currentWind;
+    private double currentCloud;
 
-    String urlstring = "https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&bbox=23,61,24,62&timestep=30&parameters=t2m,ws_10min,n_man";
-    URL url = new URL(urlstring);
+    private Date dateAndTime = Calendar.getInstance().getTime();
+
+    private final ArrayList<WeatherData> weatherpast12 = new ArrayList<>();
 
 
-
-   WeatherData testdata = weather_mapper.readValue(url, WeatherData.class);
-
-   WeatherData wd = new WeatherData(2.0, 2.9, 3.2);
-
-    double tempereature = wd.getTemperature();
-    public WeatherAPILogic() throws IOException {
+    // Changes date in to string 8601Format to use in urlstring
+    public String timeAndDateToIso8601Format(Date date){
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                .format(date);
     }
 
+    // Changes date String in to string 8601Format to use in urlstring
+    public Date timeAndDateAsDate(String datestring) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
+    }
+
+    // Creates URL String based on given parameters to be used in creating API document
+    public String createURLString(String coordinates, String forecastORobservation, String startime, String endtime){
+        StringBuilder str = new StringBuilder();
+        if(forecastORobservation.equals("forecast")){
+            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(coordinates)
+                    .append("&timestep=120&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
+        }
+        else{
+            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&latlonx=").append(coordinates)
+                    .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&timestep=120&parameters=t2m,ws_10min,n_man");
+        }
+
+        return str.toString();
+
+    }
+
+    // Creates Document element based on given url. Used in creadingWeatherData
+    public Document GetApiDocument(String url) throws ParserConfigurationException, IOException, SAXException {
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(new URL(url).openStream());
+        doc.getDocumentElement().normalize();
+
+        return doc;
+    }
+
+    // Creates observations weather data. Has to be different function due to different parameter names versus forecast
+    public void creatingWeatherObservations(Document doc) throws ParseException {
+        NodeList nList = doc.getElementsByTagName("wfs:member");
+        int counter = 0;
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            counter ++;
+            Node nNode = nList.item(temp);
+            Element eElement = (Element) nNode;
+            String currentTime = eElement.getElementsByTagName("BsWfs:Time")
+                    .item(0).getTextContent();
+            Date currentDate = timeAndDateAsDate(currentTime);
+
+            String currentCoordinates = eElement.getElementsByTagName("gml:pos")
+                    .item(0).getTextContent();
+
+
+            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                if (currentTime.equals(eElement.getElementsByTagName("BsWfs:Time")
+                        .item(0).getTextContent()) ){
+
+                    String paramName = eElement.getElementsByTagName("BsWfs:ParameterName")
+                            .item(0).getTextContent();
+                    if( paramName.equals("t2m") ){
+                        this.currentTemp = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+                    if( paramName.equals("ws_10min") ){
+                        this.currentWind = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+                    if( paramName.equals("n_man") ){
+                        this.currentCloud = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+
+                    // Saves all weatherdata members to arraylist of weatherdata
+                    if(counter % 3 == 0){
+                        WeatherData savetemp = new WeatherData(currentTemp, currentWind, currentCloud,currentDate , currentCoordinates);
+                        if(!weatherpast12.contains(savetemp)){
+                            weatherpast12.add(savetemp);
+                        }
+                    }
+
+
+                }
+
+            }
+        }
+    }
+
+    // Creates forecast weather data. Has to be different function due to different parameter names versus observations
+    public void creatingWeatherForecast(Document doc) throws ParseException {
+        NodeList nList = doc.getElementsByTagName("wfs:member");
+        int counter = 0;
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            counter ++;
+            Node nNode = nList.item(temp);
+            Element eElement = (Element) nNode;
+            String currentTime = eElement.getElementsByTagName("BsWfs:Time")
+                    .item(0).getTextContent();
+            Date currentDate = timeAndDateAsDate(currentTime);
+
+            String currentCoordinates = eElement.getElementsByTagName("gml:pos")
+                    .item(0).getTextContent();
+
+
+            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                if (currentTime.equals(eElement.getElementsByTagName("BsWfs:Time")
+                        .item(0).getTextContent()) ){
+
+                    String paramName = eElement.getElementsByTagName("BsWfs:ParameterName")
+                            .item(0).getTextContent();
+                    if( paramName.equals("temperature") ){
+                        this.currentTemp = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+                    if( paramName.equals("windspeedms") ){
+                        this.currentWind = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+
+                    if(counter % 2 == 0){
+                        WeatherData savetemp = new WeatherData(currentTemp, currentWind, currentCloud,currentDate , currentCoordinates);
+                        if(!weatherpast12.contains(savetemp)){
+                            weatherpast12.add(savetemp);
+                        }
+                    }
+
+
+                }
+
+            }
+        }
+    }
+
+    // Function to find Weather Data object with the closest date
+    public Date getClosestDate(){
+        ArrayList<Date> alldates = new ArrayList<>();
+        for (WeatherData wd : weatherpast12){
+            alldates.add(wd.getDate());
+        }
+
+        Date closest = Collections.min(alldates, new Comparator<Date>() {
+            @Override
+            public int compare(Date o1, Date o2) {
+                long diff1 = Math.abs(o1.getTime() - dateAndTime.getTime());
+                long diff2 = Math.abs(o2.getTime() - dateAndTime.getTime());
+                return diff1 < diff2 ? -1:1;
+            }
+        });
+        return closest;
+    }
+
+    /*
+    public void actionbutton(ActionEvent actionEvent) throws ParseException {
+        WeatherData wantedData = null;
+        Date wanted = getClosestDate();
+        for(WeatherData wd : weatherpast12){
+            if (wd.getDate().toString().equals(wanted.toString())){
+                wantedData = wd;
+            }
+        }
+
+        assert wantedData != null;
+        lämpölabel2.setText(String.valueOf(wantedData.getTemperature()));
+        aikalabel2.setText(String.valueOf(wantedData.getDate()));
+        coordinateslabel.setText(String.valueOf(wantedData.getCoordinates()));
+        tuulilabel2.setText(String.valueOf(wantedData.getWind()));
+        sumulabel2.setText(String.valueOf(wantedData.getCloudiness()));
+
+
+
+
+
+    }
+     */
 
 
 }
