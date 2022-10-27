@@ -3,32 +3,41 @@ package fi.tuni.roadwatch;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+import java.util.Date;
+
 public class WeatherData {
 
-    @JsonProperty("ParameterName")
+    private Date dateAndTime;
+
+    private String coordinates;
+
     private double temperature;
 
+    private double cloudiness;
 
-    private double observed_windspeed;
+    private double wind;
 
 
-    private double observed_cloudiness;
 
-    WeatherData(double temperature, double observed_windspeed, double observed_cloudiness){
+    public WeatherData(double temperature, double wind, double cloudiness, Date dateAndTime,
+                       String coordinates){
         this.temperature = temperature;
-        this.observed_windspeed = observed_windspeed;
-        this.observed_cloudiness = observed_cloudiness;
+        this.wind = wind;
+        this.cloudiness = cloudiness;
+        this.coordinates = coordinates;
+        this.dateAndTime = dateAndTime;
     }
 
-    public double getTemperature(){
-        return this.temperature;
-    }
 
-    public double getObserved_windspeed(){
-        return this.observed_windspeed;
-    }
 
-    public double getObserved_cloudiness(){
-        return this.observed_cloudiness;
-    }
+
+    public Date getDate(){return this.dateAndTime;}
+
+    public String getCoordinates(){return this.coordinates;}
+
+    public double getCloudiness(){return this.cloudiness;}
+
+    public double getWind(){return this.wind;}
+
+    public double getTemperature(){return this.temperature;}
 }
