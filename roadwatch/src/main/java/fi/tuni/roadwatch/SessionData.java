@@ -101,7 +101,7 @@ public class SessionData {
         return this.WantedWeatherData;
     }
 
-
+    // Helper function to get the closest date to current
     public Date getClosestDate(){
         ArrayList<Date> alldates = new ArrayList<>();
         for (WeatherData wd : this.WantedWeatherData){
