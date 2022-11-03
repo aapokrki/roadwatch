@@ -17,7 +17,7 @@ import java.util.Objects;
 public class RoadWatchApplication extends Application {
 
     @Override
-    public void start(Stage stage) throws IOException, ParserConfigurationException, ParseException, SAXException {
+    public void start(Stage stage) throws IOException {
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         FXMLLoader fxmlLoader = new FXMLLoader(RoadWatchApplication.class.getResource("fxml/roadwatch.fxml"));
