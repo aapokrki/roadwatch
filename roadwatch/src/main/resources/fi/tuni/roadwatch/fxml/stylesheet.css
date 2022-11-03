@@ -44,6 +44,13 @@
     -fx-font-weight: bold;
 }
 
+.basicTextBlue {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 24px;
+    -fx-text-fill: #487AD9;
+    -fx-font-weight: bold;
+}
+
 .smallText {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 20px;
@@ -72,10 +79,31 @@
     -fx-font-weight: bold;
 }
 
+.basicHeadingGreen {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 32px;
+    -fx-text-fill: #78e2a2;
+    -fx-font-weight: bold;
+}
+
 .basicHeadingGrey {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 32px;
     -fx-text-fill: #434343;
+    -fx-font-weight: bold;
+}
+
+.basicHeadingBlue {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 32px;
+    -fx-text-fill: #487AD9;
+    -fx-font-weight: bold;
+}
+
+.basicHeadingWhite {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 32px;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
@@ -111,6 +139,74 @@
     -fx-background-radius: 15px;
 }
 
+.combo-box {
+    -fx-background-color: black;
+    -fx-opacity: 0.5;
+    -fx-border-width: 2.0;
+    -fx-background-radius: 10px;
+}
+
+.combo-box .label {
+    -fx-font-size: 14.0 pt;
+    -fx-font-family: "Ubuntu";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10.0px;
+}
+
+.combo-box .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
+    -fx-background: black ;
+    -fx-opacity: 0.5;
+    -fx-font-family: "Ubuntu";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.combo-box .list-cell
+{
+    -fx-background-color: black;
+    -fx-font-family: "Ubuntu";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em;
+    -fx-border-width: 2.0;
+    -fx-background-radius: 10px;
+}
+
+.combo-box-popup .list-view
+{
+    -fx-background-color: #78e2a2;
+    -fx-background-insets: 0, 1;
+}
+
+.combo-box-popup .list-view .list-cell
+{
+    -fx-padding: 4 0 4 5;
+    -fx-background-color: #78e2a2;
+}
+
+.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
+{
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover
+{
+    -fx-background-color: #71C091;
+    -fx-text-fill: white;
+}
+
+.combo-box-base
+{
+    -fx-background-color: black ;
+    -fx-opacity: 0.5;
+    -fx-border-width: 2.0;
+    -fx-background-radius: 10px;
+}
+
 .menu-bar {
     -fx-background-color: black ;
     -fx-opacity: 0.5;
@@ -124,8 +220,8 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 10.0px;
-
 }
+
 .menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
     -fx-background: black ;
     -fx-opacity: 0.5;
@@ -134,12 +230,13 @@
 
 .menu-item {
     -fx-padding: 0.0em 0.0em 0.0em 0.0em;
-    -fx-text-fill: black;
-    -fx-background: darkgray ;
+    -fx-text-fill: white;
+    -fx-background: #78C2E2 ;
 }
 .menu-item .label{
+    -fx-background: #78C2E2 ;
     -fx-font-size: 14.0 pt;
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 }
 .menu-item .label:hover{
     -fx-font-size: 14.0 pt;
@@ -147,10 +244,9 @@
     -fx-text-fill: white;
 }
 .context-menu {
-    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
-    -fx-background-color:white ;
+    -fx-background-color: #78e2a2;
     -fx-border-width: 0.2px;
-    -fx-border-color: black;
+    -fx-border-color: #434343;
 }
 .check-box {
     -fx-font-family: "Ubuntu";

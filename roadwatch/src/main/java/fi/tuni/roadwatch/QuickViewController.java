@@ -39,24 +39,22 @@ public class QuickViewController {
 
     public void loadCombine(ActionEvent event) throws IOException {
         //TODO: toimii mut kai tän voi tehä paremmi i guess
-        combinePageButton.setOnAction((ActionEvent e) -> {
-            if(combineController == null){
-                FXMLLoader combineFxmlLoader = new FXMLLoader();
-                Parent rootNode = null;
-                try {
-                    rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                combineController = combineFxmlLoader.getController();
-                combineController.setSessionData(sessionData);
-                combine = (Pane) rootNode;
+        if(combineController == null){
+            FXMLLoader combineFxmlLoader = new FXMLLoader();
+            Parent rootNode = null;
+            try {
+                rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
+            combineController = combineFxmlLoader.getController();
+            combineController.setSessionData(sessionData);
+            combine = (Pane) rootNode;
+        }
 
-            mapPane.setVisible(false);
-            infoPane.setCenter(combine);
-            StackPane.setAlignment(infoPane, Pos.CENTER);
-            siteLabel.setText("COMBINE");
-        });
+        mapPane.setVisible(false);
+        infoPane.setCenter(combine);
+        StackPane.setAlignment(infoPane, Pos.CENTER);
+        siteLabel.setText("COMBINE");
     }
 }

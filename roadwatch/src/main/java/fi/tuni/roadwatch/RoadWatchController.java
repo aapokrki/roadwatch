@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,9 +19,10 @@ import java.io.IOException;
 
 public class RoadWatchController {
     // Components
+    private Rectangle2D screen;
     private Stage stage;
     private Scene scene;
-    public VBox root;
+    public GridPane root;
     public StackPane contentPane;
     public BorderPane mapPane;
     public BorderPane infoPane;
@@ -60,6 +63,18 @@ public class RoadWatchController {
     @FXML
     private Label siteLabel;
 
+    public void setScreenBounds(Rectangle2D screenBounds) {
+        this.screen = screenBounds;
+    }
+
+    public void setScreenSize() {
+//        root.minWidth(screen.getMinX());
+//        root.minHeight(screen.getMinY());
+//        root.maxWidth(screen.getMaxX());
+//        root.maxHeight(screen.getMaxY());
+//        root.prefWidth(screen.getWidth());
+//        root.prefHeight(screen.getHeight());
+    }
 
     public void setSessionData(SessionData sessionData){
         this.sessionData = sessionData;
@@ -82,7 +97,7 @@ public class RoadWatchController {
     }
 
     // Actions
-    public void loadHome(ActionEvent event) throws IOException {
+    public void loadHome() throws IOException {
 
         if(homeController == null){
             FXMLLoader homeFxmlLoader = new FXMLLoader();
@@ -99,7 +114,7 @@ public class RoadWatchController {
     }
 
 
-    public void loadWeather(ActionEvent event) throws IOException {
+    public void loadWeather() throws IOException {
 
         if(weatherController == null){
             FXMLLoader weatherFxmlLoader = new FXMLLoader();
@@ -113,10 +128,9 @@ public class RoadWatchController {
         siteLabel.setText("WEATHER");
         StackPane.setAlignment(infoPane, Pos.CENTER_RIGHT);
         mapPane.setVisible(true);
-
     }
 
-    public void loadQuickView(ActionEvent event) throws IOException {
+    public void loadQuickView() throws IOException {
         if(quickViewController == null){
             FXMLLoader quickViewFxmlLoader = new FXMLLoader();
             Parent rootNode = quickViewFxmlLoader.load(getClass().getResourceAsStream("fxml/quickview.fxml"));
@@ -133,7 +147,7 @@ public class RoadWatchController {
         mapPane.setVisible(true);
     }
 
-    public void loadPreferences(ActionEvent event) throws IOException {
+    public void loadPreferences() throws IOException {
         if(preferencesController == null){
             FXMLLoader preferencesFxmlLoader = new FXMLLoader();
             Parent rootNode = preferencesFxmlLoader.load(getClass().getResourceAsStream("fxml/preferences.fxml"));
@@ -147,7 +161,7 @@ public class RoadWatchController {
         siteLabel.setText("PREFERENCES");
     }
 
-    public void loadRoadData(ActionEvent event) throws IOException {
+    public void loadRoadData() throws IOException {
 
         if(roadController == null){
             FXMLLoader roadFxmlLoader = new FXMLLoader();
@@ -162,10 +176,12 @@ public class RoadWatchController {
         siteLabel.setText("ROAD DATA");
     }
 
-    void onButtonClick(ActionEvent event, Button btn, String oldIcon, String newIcon) {
-        btn.setOnAction((ActionEvent e) -> {
-            btn.getStyleClass().removeAll(oldIcon);
-            btn.getStyleClass().add(newIcon);
-        });
+    void onButtonClick(Button selected, String oldIcon, String newIcon, Button b2, Button b3, Button b4,
+                       String ni2, String ni3, String ni4) {
+        selected.getStyleClass().removeAll(oldIcon);
+        selected.getStyleClass().add(newIcon);
+        b2.getStyleClass().add(ni2);
+        b3.getStyleClass().add(ni3);
+        b4.getStyleClass().add(ni4);
     }
 }
