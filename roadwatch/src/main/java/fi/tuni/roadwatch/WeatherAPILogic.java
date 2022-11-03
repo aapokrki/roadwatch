@@ -20,6 +20,7 @@ public class WeatherAPILogic {
     private double currentWind;
     private double currentCloud;
 
+
     private Date dateAndTime = Calendar.getInstance().getTime();
 
     private final ArrayList<WeatherData> weatherpast12 = new ArrayList<>();
@@ -41,6 +42,7 @@ public class WeatherAPILogic {
         String coordinates = latitude.toString() + "," + longitude.toString();
         StringBuilder str = new StringBuilder();
 
+        // Compares given starttime date to current time to see if forecast or observation
         if(timeAndDateAsDate(startime).after(dateAndTime)){
             str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(coordinates)
                     .append("&timestep=120&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
