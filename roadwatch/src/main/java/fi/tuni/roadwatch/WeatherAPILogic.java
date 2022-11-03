@@ -1,6 +1,5 @@
 package fi.tuni.roadwatch;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.sothawo.mapjfx.Coordinate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,7 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,14 +37,21 @@ public class WeatherAPILogic {
     }
 
     // Creates URL String based on given parameters to be used in creating API document
-    public String createURLString(String coordinates, String forecastORobservation, String startime, String endtime){
+    public String createURLString(Double latitude, Double longitude, String startime, String endtime) throws ParseException {
+        String coordinates = latitude.toString() + "," + longitude.toString();
         StringBuilder str = new StringBuilder();
-        if(forecastORobservation.equals("forecast")){
+
+        if(timeAndDateAsDate(startime).after(dateAndTime)){
             str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(coordinates)
                     .append("&timestep=120&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
         }
         else{
-            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&latlonx=").append(coordinates)
+            double longitude2 = longitude +1;
+            double latitude2 = latitude+1;
+            String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
+
+
+            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&bbox=").append(coordinateBbox)
                     .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&timestep=120&parameters=t2m,ws_10min,n_man");
         }
 
@@ -66,7 +71,7 @@ public class WeatherAPILogic {
     }
 
     // Creates observations weather data. Has to be different function due to different parameter names versus forecast
-    public void creatingWeatherObservations(Document doc) throws ParseException {
+    public ArrayList<WeatherData> creatingWeatherObservations(Document doc) throws ParseException {
         NodeList nList = doc.getElementsByTagName("wfs:member");
         int counter = 0;
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -113,10 +118,11 @@ public class WeatherAPILogic {
 
             }
         }
+        return weatherpast12;
     }
 
     // Creates forecast weather data. Has to be different function due to different parameter names versus observations
-    public void creatingWeatherForecast(Document doc) throws ParseException {
+    public ArrayList<WeatherData> creatingWeatherForecast(Document doc) throws ParseException {
         NodeList nList = doc.getElementsByTagName("wfs:member");
         int counter = 0;
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -158,49 +164,11 @@ public class WeatherAPILogic {
 
             }
         }
+        return weatherpast12;
     }
 
-    // Function to find Weather Data object with the closest date
-    public Date getClosestDate(){
-        ArrayList<Date> alldates = new ArrayList<>();
-        for (WeatherData wd : weatherpast12){
-            alldates.add(wd.getDate());
-        }
-
-        Date closest = Collections.min(alldates, new Comparator<Date>() {
-            @Override
-            public int compare(Date o1, Date o2) {
-                long diff1 = Math.abs(o1.getTime() - dateAndTime.getTime());
-                long diff2 = Math.abs(o2.getTime() - dateAndTime.getTime());
-                return diff1 < diff2 ? -1:1;
-            }
-        });
-        return closest;
-    }
-
-    /*
-    public void actionbutton(ActionEvent actionEvent) throws ParseException {
-        WeatherData wantedData = null;
-        Date wanted = getClosestDate();
-        for(WeatherData wd : weatherpast12){
-            if (wd.getDate().toString().equals(wanted.toString())){
-                wantedData = wd;
-            }
-        }
-
-        assert wantedData != null;
-        lämpölabel2.setText(String.valueOf(wantedData.getTemperature()));
-        aikalabel2.setText(String.valueOf(wantedData.getDate()));
-        coordinateslabel.setText(String.valueOf(wantedData.getCoordinates()));
-        tuulilabel2.setText(String.valueOf(wantedData.getWind()));
-        sumulabel2.setText(String.valueOf(wantedData.getCloudiness()));
 
 
-
-
-
-    }
-     */
 
 
 }

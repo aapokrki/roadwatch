@@ -1,9 +1,13 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Coordinate;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
-import java.util.Comparator;
-import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
 
 public class SessionData {
 
@@ -12,6 +16,14 @@ public class SessionData {
 
     public Coordinate currentCoordinates;
     public List<Coordinate> polyCoordinates;
+    private Date dateAndTime = Calendar.getInstance().getTime();
+
+    private ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
+
+    // Used in creation of wantedWeatherData
+    private double currentTemp;
+    private double currentWind;
+    private double currentCloud;
 
     public static class CoordinateConstraints{
 
@@ -37,7 +49,7 @@ public class SessionData {
     public CoordinateConstraints coordinateConstraints;
 
 
-    public SessionData(){
+    public SessionData() {
 
     }
 
@@ -65,10 +77,48 @@ public class SessionData {
             }
 
         }
-
-
-
-
     }
+
+    // WeatherData creation to sessionData
+    public ArrayList<WeatherData> createWeatherData(Date startime) throws ParserConfigurationException, IOException, SAXException, ParseException {
+        WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
+        // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
+        // than creates the document used to create the arraylist of WeatherData
+        String urlstring = weatherAPILogic.createURLString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(), "2022-11-01T15:40:10Z" , "2022-11-02T20:15:10Z");
+
+
+       //Test to see what api is found with parameters
+        System.out.println(urlstring);
+
+
+        Document doc = weatherAPILogic.GetApiDocument(urlstring);
+        // Compares current date to startime to know if we want to create a weatherforecast or weather
+        // observation
+        if(startime.after(dateAndTime)){
+            this.WantedWeatherData = weatherAPILogic.creatingWeatherForecast(doc);
+        }
+        this.WantedWeatherData = weatherAPILogic.creatingWeatherObservations(doc);
+        return this.WantedWeatherData;
+    }
+
+
+    public Date getClosestDate(){
+        ArrayList<Date> alldates = new ArrayList<>();
+        for (WeatherData wd : this.WantedWeatherData){
+            alldates.add(wd.getDate());
+        }
+
+        Date closest = Collections.min(alldates, new Comparator<Date>() {
+            @Override
+            public int compare(Date o1, Date o2) {
+                long diff1 = Math.abs(o1.getTime() - dateAndTime.getTime());
+                long diff2 = Math.abs(o2.getTime() - dateAndTime.getTime());
+                return diff1 < diff2 ? -1:1;
+            }
+        });
+        return closest;
+    }
+
+
 
 }

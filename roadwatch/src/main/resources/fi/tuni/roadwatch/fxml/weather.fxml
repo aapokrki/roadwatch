@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
@@ -8,7 +9,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
    <children>
       <Label fx:id="weatherLabel" layoutX="43.0" layoutY="29.0" styleClass="basicText" text="WEATHER City Date">
          <font>
@@ -23,6 +29,7 @@
       <Label layoutX="43.0" layoutY="504.0" styleClass="valueText" text="X m/s" />
       <Label layoutX="275.0" layoutY="504.0" styleClass="valueText" text="Y km" />
       <Label layoutX="275.0" layoutY="431.0" styleClass="smallHeading" text="VISIBILITY" />
+
       <Label fx:id="label2" layoutX="144.0" layoutY="98.0" prefHeight="47.0" prefWidth="52.0" styleClass="basicHeading" text="2H" />
       <Label fx:id="label4" layoutX="216.0" layoutY="98.0" prefHeight="47.0" prefWidth="52.0" styleClass="basicHeading" text="4H" />
       <Label fx:id="label6" layoutX="282.0" layoutY="98.0" prefHeight="47.0" prefWidth="52.0" styleClass="basicHeading" text="6H" />
@@ -38,5 +45,13 @@
            </FXCollections>
        </items>
       </ComboBox>
+
+      <Button fx:id="getweatherdatabutton" layoutX="437.0" layoutY="271.0" mnemonicParsing="false" onAction="#calculateData" text="GetWeatherData" />
+      <Label fx:id="Windlabel" layoutX="45.0" layoutY="475.0" text="Wind" />
+      <Label fx:id="VisibilityLabel" layoutX="275.0" layoutY="475.0" text="Visibility" />
+      <Label fx:id="temperaturelabel" layoutX="45.0" layoutY="187.0" text="Temperature" />
+      <Label fx:id="coordinatesLabel" layoutX="420.0" layoutY="156.0" text="coordinates" />
+      <Label fx:id="dateandTimeLabel" layoutX="247.0" layoutY="156.0" text="date" />
+
    </children>
 </AnchorPane>

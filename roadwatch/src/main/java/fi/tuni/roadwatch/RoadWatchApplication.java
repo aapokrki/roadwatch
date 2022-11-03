@@ -7,16 +7,19 @@ import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Objects;
 
 public class RoadWatchApplication extends Application {
 
     @Override
-    public void start(Stage stage) throws IOException {
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+    public void start(Stage stage) throws IOException, ParserConfigurationException, ParseException, SAXException {
 
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         FXMLLoader fxmlLoader = new FXMLLoader(RoadWatchApplication.class.getResource("fxml/roadwatch.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         final RoadWatchController roadWatchController = fxmlLoader.getController();
@@ -30,6 +33,8 @@ public class RoadWatchApplication extends Application {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
+
+
     }
 
     public static void main(String[] args) {
