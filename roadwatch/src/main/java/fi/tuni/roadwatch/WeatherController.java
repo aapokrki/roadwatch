@@ -104,6 +104,8 @@ public class WeatherController {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
     }
 
+
+    //Test to check if apiread works and gets data to weather controller
     @FXML
     private void calculateData(ActionEvent actionEvent) throws ParserConfigurationException, IOException, ParseException, SAXException {
         Date datestarttime = timeAndDateAsDate("2022-11-01T15:40:10Z");
