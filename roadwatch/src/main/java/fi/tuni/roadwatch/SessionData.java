@@ -80,7 +80,7 @@ public class SessionData {
     }
 
     // WeatherData creation to sessionData
-    public ArrayList<WeatherData> createWeatherData(Date startime) throws ParserConfigurationException, IOException, SAXException, ParseException {
+    public ArrayList<WeatherData> createWeatherData(Date starTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
         WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
@@ -92,9 +92,9 @@ public class SessionData {
 
 
         Document doc = weatherAPILogic.GetApiDocument(urlstring);
-        // Compares current date to startime to know if we want to create a weatherforecast or weather
+        // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation
-        if(startime.after(dateAndTime)){
+        if(starTime.after(dateAndTime)){
             this.WantedWeatherData = weatherAPILogic.creatingWeatherForecast(doc);
         }
         this.WantedWeatherData = weatherAPILogic.creatingWeatherObservations(doc);
