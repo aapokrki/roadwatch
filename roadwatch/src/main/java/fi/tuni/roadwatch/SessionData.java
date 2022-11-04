@@ -80,11 +80,13 @@ public class SessionData {
     }
 
     // WeatherData creation to sessionData
-    public ArrayList<WeatherData> createWeatherData(Date starTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
+    public ArrayList<WeatherData> createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
         WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
-        String urlstring = weatherAPILogic.createURLString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(), "2022-11-01T15:40:10Z" , "2022-11-02T20:15:10Z");
+        String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
+        String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
+        String urlstring = weatherAPILogic.createURLString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(),  startTimeString, endTimeString);
 
 
        //Test to see what api is found with parameters
@@ -94,7 +96,7 @@ public class SessionData {
         Document doc = weatherAPILogic.GetApiDocument(urlstring);
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation
-        if(starTime.after(dateAndTime)){
+        if(startTime.after(dateAndTime)){
             this.WantedWeatherData = weatherAPILogic.creatingWeatherForecast(doc);
         }
         this.WantedWeatherData = weatherAPILogic.creatingWeatherObservations(doc);
