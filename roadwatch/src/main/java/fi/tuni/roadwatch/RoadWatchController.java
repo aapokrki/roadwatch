@@ -14,7 +14,10 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.controlsfx.control.spreadsheet.Grid;
+
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class RoadWatchController {
@@ -126,8 +129,8 @@ public class RoadWatchController {
 
         infoPane.setCenter(weather);
         siteLabel.setText("WEATHER");
-        StackPane.setAlignment(infoPane, Pos.CENTER_RIGHT);
-        mapPane.setVisible(true);
+        changeLayout("NORMAL");
+
     }
 
     public void loadQuickView() throws IOException {
@@ -139,12 +142,10 @@ public class RoadWatchController {
             quickViewController.setData(mapPane, infoPane, siteLabel);
             quickView = (Pane) rootNode;
         }
-
-        // Test output of setting coordinates to a view
         infoPane.setCenter(quickView);
         siteLabel.setText("QUICK VIEW");
-        StackPane.setAlignment(infoPane, Pos.CENTER_RIGHT);
-        mapPane.setVisible(true);
+        changeLayout("NORMAL");
+
     }
 
     public void loadPreferences() throws IOException {
@@ -155,10 +156,10 @@ public class RoadWatchController {
             preferencesController.setSessionData(sessionData);
             preferences = (Pane) rootNode;
         }
-        mapPane.setVisible(false);
         infoPane.setCenter(preferences);
-        StackPane.setAlignment(infoPane, Pos.CENTER);
         siteLabel.setText("PREFERENCES");
+        changeLayout("WIDE");
+
     }
 
     public void loadRoadData() throws IOException {
@@ -170,10 +171,26 @@ public class RoadWatchController {
             roadController.setSessionData(sessionData);
             road = (Pane) rootNode;
         }
-        mapPane.setVisible(false);
         infoPane.setCenter(road);
-        StackPane.setAlignment(infoPane, Pos.CENTER);
         siteLabel.setText("ROAD DATA");
+        changeLayout("WIDE");
+
+    }
+
+    void changeLayout(String viewType){
+
+        if(Objects.equals(viewType, "NORMAL")){
+            mapPane.setVisible(true);
+            GridPane.setConstraints(infoPane,1,3);
+            GridPane.setColumnSpan(infoPane,2);
+
+        }
+
+        if(Objects.equals(viewType, "WIDE")){
+            mapPane.setVisible(false);
+            GridPane.setConstraints(infoPane,0,3);
+            GridPane.setColumnSpan(infoPane,3);
+        }
     }
 
     void onButtonClick(Button selected, String oldIcon, String newIcon, Button b2, Button b3, Button b4,

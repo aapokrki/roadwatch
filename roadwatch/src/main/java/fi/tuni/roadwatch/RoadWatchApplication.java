@@ -26,11 +26,11 @@ public class RoadWatchApplication extends Application {
         SessionData sessionData = new SessionData();
         roadWatchController.setSessionData(sessionData);
         roadWatchController.loadMap();
-        roadWatchController.setScreenBounds(screenBounds);
-        roadWatchController.setScreenSize();
+        //roadWatchController.setScreenBounds(screenBounds);
+        //roadWatchController.setScreenSize();
 
         stage.setTitle("RoadWatch");
-        stage.setResizable(false);
+        //stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
