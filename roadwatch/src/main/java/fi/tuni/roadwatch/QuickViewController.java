@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -53,8 +54,12 @@ public class QuickViewController {
         }
 
         mapPane.setVisible(false);
-        infoPane.setCenter(combine);
-        StackPane.setAlignment(infoPane, Pos.CENTER);
+        GridPane.setConstraints(infoPane,0,3);
+        GridPane.setColumnSpan(infoPane,3);
+
         siteLabel.setText("COMBINE");
+        infoPane.setCenter(combine);
+
+
     }
 }
