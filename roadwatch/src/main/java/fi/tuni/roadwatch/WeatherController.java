@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TreeMap;
 
 
 public class WeatherController {
@@ -42,6 +43,10 @@ public class WeatherController {
     private Label weatherLabel;
 
     private ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
+    private TreeMap<Date, Double> temperature_time_map = new TreeMap<Date, Double>();
+    private TreeMap<Date, Double> wind_time_map = new TreeMap<Date, Double>();
+    private TreeMap<Date, Double> visibility_time_map = new TreeMap<Date, Double>();
+
     @FXML
     private Label Windlabel;
     @FXML
@@ -95,6 +100,21 @@ public class WeatherController {
                 //timeAndDateAsDate("2022-11-01T15:40:10Z");
         wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
         WeatherData wantedData = null;
+
+        /*
+        // example making chart series
+        Date wanted = sessionData.getClosestDate();
+        for(WeatherData wd : wantedWeatherData){
+            temperature_time_map.put(wd.getDate(), wd.getTemperature());
+            wind_time_map.put(wd.getDate(), wd.getTemperature());
+        }
+        XYChart.Series temperature_time_series = new XYChart.Series();
+        for(Map.Entry<Date, Double> entry : temperature_time_map.entrySet()){
+            Date key = entry.getKey();
+            Double value = entry.getValue();
+            temperature_time_series.getData().add(new XYChart.Data(value, key ));
+        }
+         */
 
         // Saves the most current lates information to the date closest to current date
         Date wanted = sessionData.getClosestDate();
