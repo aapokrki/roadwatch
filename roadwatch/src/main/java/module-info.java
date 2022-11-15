@@ -11,6 +11,7 @@ module fi.tuni.roadwatch {
     requires org.apache.httpcomponents.core5.httpcore5;
     requires org.apache.commons.io;
     requires java.xml;
+    requires org.slf4j;
 
     opens fi.tuni.roadwatch to javafx.fxml;
     exports fi.tuni.roadwatch;
