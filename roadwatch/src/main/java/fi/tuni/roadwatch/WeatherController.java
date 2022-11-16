@@ -4,9 +4,12 @@ import fi.tuni.roadwatch.SessionData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import org.apache.hc.client5.http.utils.DateUtils;
 import org.controlsfx.control.action.Action;
 import org.xml.sax.SAXException;
 
@@ -15,6 +18,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,69 +28,77 @@ import java.util.TreeMap;
 
 
 public class WeatherController {
-    private Integer timeline = 0;
+
+    enum Datatype {
+        TEMPERATURE,
+        WIND,
+        VISIBILITY
+    }
+    private final Integer timeline = 0;
+    private Datatype datatype = Datatype.TEMPERATURE;
+    private SessionData sessionData;
+    private ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
+    private LocalDateTime currentDate = LocalDateTime.now();
 
     @FXML
     private ComboBox<String> comboBox;
     @FXML
-    private DatePicker startTimeDP;
-    @FXML
-    private DatePicker endTimeDP;
-    @FXML
-    private Label label2;
-    @FXML
-    private Label label4;
-    @FXML
-    private Label label6;
-    @FXML
-    private Label label12;
+    private Label datatypeLabel;
 
-    private Label weatherLabel;
-
-    private ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
-    private TreeMap<Date, Double> temperature_time_map = new TreeMap<Date, Double>();
-    private TreeMap<Date, Double> wind_time_map = new TreeMap<Date, Double>();
-    private TreeMap<Date, Double> visibility_time_map = new TreeMap<Date, Double>();
-
+    // Temperature components
+    private TreeMap<Date, Double> temperatureTimeMap = new TreeMap<Date, Double>();
     @FXML
-    private Label Windlabel;
+    private AnchorPane temperaturePane;
     @FXML
-    private Label  VisibilityLabel ;
+    private  Label cityLabel;
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private Label nowLabel;
+    @FXML
+    private Label tomorrowLabel;
+    @FXML
+    private Label dATomorrowLabel;
+    @FXML
+    private Button avgTempButton;
+    @FXML
+    private Button minMaxTempButton;
 
-    private SessionData sessionData;
+    // Wind components
+    private TreeMap<Date, Double> windTimeMap = new TreeMap<Date, Double>();
+    @FXML
+    private Label windLabel;
+    @FXML
+    private LineChart<Integer, Integer> windChart;
+
+    // Visibility components
+    private TreeMap<Date, Double> visibilityTimeMap = new TreeMap<Date, Double>();
+    @FXML
+    private Label  visibilityLabel ;
+    @FXML
+    private LineChart<Integer, Integer> visibilityChart;
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
     }
 
-
      @FXML
-     private void test() {
-        timeline = Integer.parseInt(comboBox.getValue().replace("H", ""));
-        if(timeline == 2) {
-            changeTimeColors(label2, label4, label6, label12);
+     private void changeDatatype() {
+        if(comboBox.getValue().equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
+            datatype = Datatype.TEMPERATURE;
+            datatypeLabel.setText(datatype.toString());
+            setTemperature();
         }
-        else if (timeline == 4) {
-            changeTimeColors(label4, label2, label6, label12);
-        }
-        else if (timeline == 6) {
-            changeTimeColors(label6, label2, label4, label12);
+        else if(comboBox.getValue().equalsIgnoreCase(Datatype.WIND.toString())) {
+            datatype = Datatype.WIND;
+            datatypeLabel.setText(datatype.toString());
+            temperaturePane.setVisible(false);
         } else {
-            changeTimeColors(label12, label2, label4, label6);
+            datatype = Datatype.VISIBILITY;
+            datatypeLabel.setText(datatype.toString());
+            temperaturePane.setVisible(false);
         }
      }
-
-     @FXML
-    private void changeTimeColors(Label selected, Label l2, Label l3, Label l4) {
-        selected.getStyleClass().add("basicHeadingGreen");
-        l2.getStyleClass().removeAll("basicHeadingGreen");
-        l2.getStyleClass().add("basicHeading");
-        l3.getStyleClass().removeAll("basicHeadingGreen");
-        l3.getStyleClass().add("basicHeading");
-        l4.getStyleClass().removeAll("basicHeadingGreen");
-        l4.getStyleClass().add("basicHeading");
-    }
-
 
     // Changes date String in to string 8601Format to use in urlstring
     public Date timeAndDateAsDate(String datestring) throws ParseException {
@@ -95,8 +108,9 @@ public class WeatherController {
     //Test to check if apiread works and gets data to weather controller
     @FXML
     private void calculateData() throws ParserConfigurationException, IOException, ParseException, SAXException {
-        Date startTime = Date.from(Instant.from(startTimeDP.getValue().atStartOfDay(ZoneId.systemDefault())));
-        Date endTime = Date.from(Instant.from(endTimeDP.getValue().atStartOfDay(ZoneId.systemDefault())));
+        Date startTime = Date.from(currentDate.atZone(ZoneId.systemDefault()).toInstant());
+        var endLDate = LocalDate.parse(startTime.toString()).plusDays(timeline); // TODO: day amount
+        Date endTime = Date.from(Date.from(Instant.from(endLDate)).toInstant());
                 //timeAndDateAsDate("2022-11-01T15:40:10Z");
         wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
         WeatherData wantedData = null;
@@ -125,7 +139,48 @@ public class WeatherController {
         }
 
         assert wantedData != null;
-        Windlabel.setText(wantedData.getWind() + "m/s");
-        VisibilityLabel.setText(wantedData.getCloudiness() + "km") ;
+        windLabel.setText(wantedData.getWind() + "m/s");
+        visibilityLabel.setText(wantedData.getCloudiness() + "km") ;
+    }
+
+    // Temperature actions
+    @FXML
+    private void setTemperature() {
+        temperaturePane.setVisible(true);
+        dateLabel.setText(currentDate.getDayOfMonth() + "." + currentDate.getMonthValue() + "." + currentDate.getYear());
+    }
+
+    @FXML
+    private void onNowClick() {
+        changeTimeColors(nowLabel, tomorrowLabel, dATomorrowLabel);
+    }
+
+    @FXML
+    private void onTomorrowClick() {
+        changeTimeColors(tomorrowLabel, nowLabel, dATomorrowLabel);
+    }
+
+    @FXML
+    private void onDATomorrowClick() {
+        changeTimeColors(dATomorrowLabel, nowLabel, tomorrowLabel);
+    }
+
+    @FXML
+    private void changeTimeColors(Label selected, Label l2, Label l3) {
+        selected.getStyleClass().add("basicHeadingGreen");
+        l2.getStyleClass().removeAll("basicHeadingGreen");
+        l2.getStyleClass().add("basicHeading");
+        l3.getStyleClass().removeAll("basicHeadingGreen");
+        l3.getStyleClass().add("basicHeading");
+    }
+
+    @FXML
+    private void onAvgBtnClick() {
+
+    }
+
+    @FXML
+    private void onMinMaxBtnClick() {
+
     }
 }

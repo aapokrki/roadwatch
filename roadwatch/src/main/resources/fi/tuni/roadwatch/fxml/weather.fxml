@@ -4,48 +4,36 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
    <children>
-      <Label fx:id="weatherLabel" layoutX="43.0" layoutY="29.0" styleClass="basicText" text="WEATHER City Date">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <Label layoutX="43.0" layoutY="98.0" prefHeight="47.0" prefWidth="101.0" styleClass="basicHeading" text="NOW" />
-      <Label layoutX="43.0" layoutY="431.0" prefHeight="35.0" prefWidth="88.0" styleClass="smallHeading" text="WIND  " />
-      <Button layoutX="611.0" layoutY="197.0" mnemonicParsing="false" styleClass="basicButton" text="AVERAGE TEMP" />
-      <Button layoutX="608.0" layoutY="269.0" mnemonicParsing="false" styleClass="basicButton" text="MIN-MAX TEMP" />
-      <Label layoutX="542.0" layoutY="28.0" styleClass="basicTextWhite" text="Choose timeline" />
-      <Label layoutX="275.0" layoutY="431.0" styleClass="smallHeading" text="VISIBILITY" />
-
-      <Label fx:id="label2" layoutX="144.0" layoutY="98.0" prefHeight="47.0" prefWidth="52.0" styleClass="basicHeading" text="2H" />
-      <Label fx:id="label4" layoutX="216.0" layoutY="98.0" prefHeight="47.0" prefWidth="52.0" styleClass="basicHeading" text="4H" />
-      <Label fx:id="label6" layoutX="282.0" layoutY="98.0" prefHeight="47.0" prefWidth="52.0" styleClass="basicHeading" text="6H" />
-      <Label fx:id="label12" layoutX="347.0" layoutY="98.0" prefHeight="47.0" prefWidth="65.0" styleClass="basicHeading" text="12H" />
-      <Label fx:id="test" layoutX="261.0" layoutY="272.0" styleClass="bigText" />
-      <ComboBox fx:id="comboBox" layoutX="745.0" layoutY="28.0" onAction="#test" prefHeight="35.0" prefWidth="72.0" styleClass="combo-box">
+      <Label layoutX="35.0" layoutY="38.0" styleClass="basicTextWhite" text="Choose datatype" />
+      <ComboBox fx:id="comboBox" layoutX="289.0" layoutY="38.0" onAction="#changeDatatype" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">
        <items>
            <FXCollections fx:factory="observableArrayList">
-               <String fx:id="item2" fx:value="2H" />
-               <String fx:id="item4" fx:value="4H" />
-               <String fx:id="item6" fx:value="6H" />
-               <String fx:id="item12" fx:value="12H" />
+               <String fx:id="temperatureItem" fx:value="TEMPERATURE" />
+               <String fx:id="windItem" fx:value="WIND" />
+               <String fx:id="visibilityItem" fx:value="VISIBILITY" />
            </FXCollections>
        </items>
       </ComboBox>
+       <Button fx:id="getweatherdatabutton" layoutX="518.0" layoutY="392.0" mnemonicParsing="false" onAction="#calculateData" styleClass="basicButton" text="GetWeatherData" />
+       <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
+       <Label fx:id="visibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
+       <Label fx:id="datatypeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="451.0" layoutY="32.0" prefHeight="70.0" prefWidth="381.0" styleClass="basicHeadingBlue" />
 
-      <Button fx:id="getweatherdatabutton" layoutX="570.0" layoutY="525.0" mnemonicParsing="false" onAction="#calculateData" styleClass="basicButton" text="GetWeatherData" />
-      <Label fx:id="Windlabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-      <Label fx:id="VisibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-      <DatePicker fx:id="startTimeDP" layoutX="666.0" layoutY="77.0" />
-      <DatePicker fx:id="endTimeDP" layoutX="666.0" layoutY="115.0" />
-      <Label layoutX="542.0" layoutY="72.0" prefHeight="35.0" prefWidth="138.0" styleClass="basicTextWhite" text="Start time" />
-      <Label layoutX="542.0" layoutY="110.0" prefHeight="35.0" prefWidth="138.0" styleClass="basicTextWhite" text="End time" />
-
+       <AnchorPane fx:id="temperaturePane">
+           <Label fx:id="weatherLabel" layoutX="43.0" layoutY="129.0" styleClass="basicText" text="WEATHER "/>
+           <Label fx:id="cityLabel" layoutX="171.0" layoutY="129.0" prefHeight="35.0" prefWidth="139.0" styleClass="basicText" text="City" />
+           <Label fx:id="dateLabel" layoutX="325.0" layoutY="129.0" prefHeight="35.0" prefWidth="498.0" styleClass="basicText" />
+           <Label fx:id="nowLabel" layoutX="54.0" layoutY="174.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="101.0" styleClass="basicHeading" text="NOW" />
+           <Label fx:id="tomorrowLabel" layoutX="183.0" layoutY="174.0" onMouseClicked="#onTomorrowClick" prefHeight="47.0" prefWidth="212.0" styleClass="basicHeading" text="TOMORROW" />
+           <Label fx:id="dATomorrowLabel" layoutX="420.0" layoutY="174.0" onMouseClicked="#onDATomorrowClick" prefHeight="47.0" prefWidth="381.0" styleClass="basicHeading" text="DAY AFTER TOMORROW" />
+           <Button fx:id="avgTempButton" layoutX="98.0" layoutY="497.0" mnemonicParsing="false" onAction="#onAvgBtnClick" styleClass="basicButton" text="AVERAGE TEMP" />
+           <Button fx:id="minMaxTempButton" layoutX="521.0" layoutY="500.0" mnemonicParsing="false" onAction="#onMinMaxBtnClick" styleClass="basicButton" text="MIN-MAX TEMP" />
+       </AnchorPane>
    </children>
 </AnchorPane>
