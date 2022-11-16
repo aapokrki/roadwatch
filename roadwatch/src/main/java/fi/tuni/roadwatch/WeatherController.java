@@ -35,7 +35,7 @@ public class WeatherController {
         VISIBILITY
     }
     private final Integer timeline = 0;
-    private Datatype datatype = Datatype.TEMPERATURE;
+    private Datatype datatype;
     private SessionData sessionData;
     private ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
     private LocalDateTime currentDate = LocalDateTime.now();
@@ -67,6 +67,8 @@ public class WeatherController {
     // Wind components
     private TreeMap<Date, Double> windTimeMap = new TreeMap<Date, Double>();
     @FXML
+    private AnchorPane windPane;
+    @FXML
     private Label windLabel;
     @FXML
     private LineChart<Integer, Integer> windChart;
@@ -74,12 +76,18 @@ public class WeatherController {
     // Visibility components
     private TreeMap<Date, Double> visibilityTimeMap = new TreeMap<Date, Double>();
     @FXML
+    private AnchorPane visibilityPane;
+    @FXML
     private Label  visibilityLabel ;
     @FXML
     private LineChart<Integer, Integer> visibilityChart;
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
+        datatype = Datatype.TEMPERATURE;
+        // TODO: enemmän enum tyyppien hyödynnystä?
+        visibilityPane.setVisible(false);
+        windPane.setVisible(false);
     }
 
      @FXML
@@ -88,15 +96,21 @@ public class WeatherController {
             datatype = Datatype.TEMPERATURE;
             datatypeLabel.setText(datatype.toString());
             setTemperature();
+            visibilityPane.setVisible(false);
+            windPane.setVisible(false);
         }
         else if(comboBox.getValue().equalsIgnoreCase(Datatype.WIND.toString())) {
             datatype = Datatype.WIND;
             datatypeLabel.setText(datatype.toString());
             temperaturePane.setVisible(false);
+            visibilityPane.setVisible(true);
+            windPane.setVisible(false);
         } else {
             datatype = Datatype.VISIBILITY;
             datatypeLabel.setText(datatype.toString());
             temperaturePane.setVisible(false);
+            visibilityPane.setVisible(false);
+            windPane.setVisible(true);
         }
      }
 

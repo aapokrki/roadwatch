@@ -100,6 +100,13 @@
     -fx-font-weight: bold;
 }
 
+.basicHeadingLightBlue {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 32px;
+    -fx-text-fill: #487AD9;
+    -fx-font-weight: bold;
+}
+
 .basicHeadingWhite {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 32px;

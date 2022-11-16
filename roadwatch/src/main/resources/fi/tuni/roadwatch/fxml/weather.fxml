@@ -2,11 +2,13 @@
 
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
    <children>
@@ -20,20 +22,40 @@
            </FXCollections>
        </items>
       </ComboBox>
-       <Button fx:id="getweatherdatabutton" layoutX="518.0" layoutY="392.0" mnemonicParsing="false" onAction="#calculateData" styleClass="basicButton" text="GetWeatherData" />
-       <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-       <Label fx:id="visibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-       <Label fx:id="datatypeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="451.0" layoutY="32.0" prefHeight="70.0" prefWidth="381.0" styleClass="basicHeadingBlue" />
+       <Button fx:id="getweatherdatabutton" layoutX="317.0" layoutY="537.0" mnemonicParsing="false" onAction="#calculateData" prefHeight="58.0" prefWidth="221.0" styleClass="basicButton" text="GetWeatherData" />
+       <Label fx:id="datatypeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="451.0" layoutY="32.0" prefHeight="70.0" prefWidth="381.0" styleClass="basicHeadingLightBlue" />
 
-       <AnchorPane fx:id="temperaturePane">
-           <Label fx:id="weatherLabel" layoutX="43.0" layoutY="129.0" styleClass="basicText" text="WEATHER "/>
-           <Label fx:id="cityLabel" layoutX="171.0" layoutY="129.0" prefHeight="35.0" prefWidth="139.0" styleClass="basicText" text="City" />
-           <Label fx:id="dateLabel" layoutX="325.0" layoutY="129.0" prefHeight="35.0" prefWidth="498.0" styleClass="basicText" />
-           <Label fx:id="nowLabel" layoutX="54.0" layoutY="174.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="101.0" styleClass="basicHeading" text="NOW" />
-           <Label fx:id="tomorrowLabel" layoutX="183.0" layoutY="174.0" onMouseClicked="#onTomorrowClick" prefHeight="47.0" prefWidth="212.0" styleClass="basicHeading" text="TOMORROW" />
-           <Label fx:id="dATomorrowLabel" layoutX="420.0" layoutY="174.0" onMouseClicked="#onDATomorrowClick" prefHeight="47.0" prefWidth="381.0" styleClass="basicHeading" text="DAY AFTER TOMORROW" />
-           <Button fx:id="avgTempButton" layoutX="98.0" layoutY="497.0" mnemonicParsing="false" onAction="#onAvgBtnClick" styleClass="basicButton" text="AVERAGE TEMP" />
-           <Button fx:id="minMaxTempButton" layoutX="521.0" layoutY="500.0" mnemonicParsing="false" onAction="#onMinMaxBtnClick" styleClass="basicButton" text="MIN-MAX TEMP" />
+       <AnchorPane fx:id="temperaturePane" layoutX="3.0" layoutY="62.0" prefHeight="450.0" prefWidth="823.0">
+           <Label fx:id="weatherLabel" layoutX="43.0" layoutY="29.0" styleClass="basicText" text="WEATHER " />
+           <Label fx:id="cityLabel" layoutX="171.0" layoutY="29.0" prefHeight="35.0" prefWidth="139.0" styleClass="basicText" text="City" />
+           <Label fx:id="dateLabel" layoutX="325.0" layoutY="29.0" prefHeight="35.0" prefWidth="498.0" styleClass="basicText" />
+           <Label fx:id="nowLabel" layoutX="54.0" layoutY="74.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="101.0" styleClass="basicHeading" text="NOW" />
+           <Label fx:id="tomorrowLabel" layoutX="183.0" layoutY="74.0" onMouseClicked="#onTomorrowClick" prefHeight="47.0" prefWidth="212.0" styleClass="basicHeading" text="TOMORROW" />
+           <Label fx:id="dATomorrowLabel" layoutX="420.0" layoutY="74.0" onMouseClicked="#onDATomorrowClick" prefHeight="47.0" prefWidth="381.0" styleClass="basicHeading" text="DAY AFTER TOMORROW" />
+           <Button fx:id="avgTempButton" layoutX="98.0" layoutY="397.0" mnemonicParsing="false" onAction="#onAvgBtnClick" styleClass="basicButton" text="AVERAGE TEMP" />
+           <Button fx:id="minMaxTempButton" layoutX="521.0" layoutY="400.0" mnemonicParsing="false" onAction="#onMinMaxBtnClick" styleClass="basicButton" text="MIN-MAX TEMP" />
+       </AnchorPane>
+       <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="62.0" prefHeight="450.0" prefWidth="823.0">
+           <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
+           <LineChart fx:id="windChart" layoutX="162.0" layoutY="14.0">
+               <xAxis>
+                   <CategoryAxis side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                   <NumberAxis side="LEFT" />
+               </yAxis>
+           </LineChart>
+       </AnchorPane>
+       <AnchorPane fx:id="visibilityPane" layoutX="3.0" layoutY="62.0" prefHeight="450.0" prefWidth="823.0">
+           <Label fx:id="visibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
+            <LineChart fx:id="visibilityChart" layoutX="162.0" layoutY="14.0">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT" />
+                </yAxis>
+            </LineChart>
        </AnchorPane>
    </children>
 </AnchorPane>
