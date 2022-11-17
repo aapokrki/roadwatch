@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -28,6 +29,7 @@ public class WeatherController {
     private Datatype datatype;
     private SessionData sessionData;
     private ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
+    private ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMINMAXData = new ArrayList<>();
     private LocalDateTime currentDate = LocalDateTime.now();
 
     @FXML
@@ -55,13 +57,26 @@ public class WeatherController {
     private Button minMaxTempButton;
 
 
-    // MUN TESTI LABELIT TEE NÄISTÄ HIENOI RONJA
+    // ONNIN TESTI LABELIT TEE NÄISTÄ HIENOI RONJA
+    private Date savedDate;
+
+    @FXML
+    private Label maxlabel;
+    @FXML
+    private Label minlabel;
+    @FXML
+    private Label avglabel;
+
+    @FXML
+    private DatePicker chooseDay;
+
     @FXML
     private Label tempRightNowLabel;
     @FXML
     private Label tempMaxLabel;
     @FXML
     private Label tempMinLabel;
+
 
 
     // Wind components
@@ -126,6 +141,14 @@ public class WeatherController {
 
     }
 
+    @FXML
+    private void saveDate() throws ParseException {
+        LocalDate localDate = chooseDay.getValue();
+        Instant instant = Instant.from(localDate.atStartOfDay(ZoneOffset.UTC));
+        savedDate = Date.from(instant);
+
+    }
+
     // Temperature actions
     @FXML
     private void setTemperature() {
@@ -135,8 +158,8 @@ public class WeatherController {
 
     // Changes temperature labels according to which day you want to see
     private void changeTempLabels(String nowOrNot){
-        double min = 0.0;
-        double max = 0.0;
+        double min = wantedWeatherData.get(0).getTemperature();
+        double max = wantedWeatherData.get(0).getTemperature();
         tempRightNowLabel.setVisible(false);
 
         //Sets min max and now labels according to newest weather information
@@ -242,13 +265,50 @@ public class WeatherController {
         l3.getStyleClass().add("basicHeading");
     }
 
+
+    // Counts the average temperature of a certain day in certain month and year
+    // at certain location
     @FXML
-    private void onAvgBtnClick() {
+    private void onAvgBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
+        Date startTime = savedDate;
+        Date endTime = trimToEnd(savedDate,0);
+
+        wantedWeatherAVGMINMAXData = sessionData.createAvgMinMax(startTime, endTime);
+
+        double average = wantedWeatherAVGMINMAXData.get(0).getTempAverage();;
+        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMINMAXData){
+            average += wd.getTempAverage();
+        }
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        average = average/wantedWeatherAVGMINMAXData.size();
+
+        avglabel.setText(df.format(average));
 
     }
 
+    // Counts the min and max temperature of a certain day in certain month and year
+    // at certain location
     @FXML
-    private void onMinMaxBtnClick() {
+    private void onMinMaxBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
+        Date startTime = savedDate;
+        Date endTime = trimToEnd(savedDate,0);
 
+        wantedWeatherAVGMINMAXData = sessionData.createAvgMinMax(startTime, endTime);
+
+        double min = wantedWeatherAVGMINMAXData.get(0).getTempMIN();
+        double max = wantedWeatherAVGMINMAXData.get(0).getTempMAX();
+
+        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMINMAXData){
+            if(wd.getTempMIN() <= min){
+                min = wd.getTempMIN();
+            }
+            if(wd.getTempMAX() >= max){
+                max = wd.getTempMAX();
+            }
+        }
+
+        minlabel.setText(String.valueOf(min));
+        maxlabel.setText(String.valueOf(max));
     }
 }

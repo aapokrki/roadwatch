@@ -26,6 +26,7 @@
            <Label fx:id="cityLabel" layoutX="171.0" layoutY="29.0" prefHeight="35.0" prefWidth="139.0" styleClass="basicText" text="City" />
            <Label fx:id="dateLabel" layoutX="325.0" layoutY="29.0" prefHeight="35.0" prefWidth="498.0" styleClass="basicText" />
            <Label fx:id="nowLabel" layoutX="54.0" layoutY="74.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="101.0" styleClass="basicHeading" text="NOW" />
+         <Label fx:id="minlabel" layoutX="521.0" layoutY="460.0" prefHeight="17.0" prefWidth="100.0" text="minlabel" />
            <Label fx:id="tomorrowLabel" layoutX="183.0" layoutY="74.0" onMouseClicked="#onTomorrowClick" prefHeight="47.0" prefWidth="212.0" styleClass="basicHeading" text="TOMORROW" />
            <Label fx:id="dATomorrowLabel" layoutX="420.0" layoutY="74.0" onMouseClicked="#onDATomorrowClick" prefHeight="47.0" prefWidth="381.0" styleClass="basicHeading" text="DAY AFTER TOMORROW" />
            <Button fx:id="avgTempButton" layoutX="98.0" layoutY="397.0" mnemonicParsing="false" onAction="#onAvgBtnClick" styleClass="basicButton" text="AVERAGE TEMP" />
@@ -33,6 +34,9 @@
             <Label fx:id="tempMinLabel" layoutX="51.0" layoutY="137.0" prefHeight="35.0" prefWidth="103.0" text="Temperature min" />
             <Label fx:id="tempMaxLabel" layoutX="51.0" layoutY="223.0" prefHeight="47.0" prefWidth="90.0" text="Temperature max" />
             <Label fx:id="tempRightNowLabel" layoutX="51.0" layoutY="189.0" prefHeight="35.0" prefWidth="103.0" text="temprightnow" />
+         <Label fx:id="maxlabel" layoutX="521.0" layoutY="490.0" prefHeight="17.0" prefWidth="100.0" text="maxlabel" />
+         <DatePicker fx:id="chooseDay" layoutX="300.0" layoutY="400.0" onAction="#saveDate" promptText="chooseDay" />
+         <Label fx:id="avglabel" layoutX="98.0" layoutY="490.0" prefHeight="17.0" prefWidth="113.0" text="avglabel" />
        </AnchorPane>
        <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="62.0" prefHeight="450.0" prefWidth="823.0">
            <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />

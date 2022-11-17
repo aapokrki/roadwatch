@@ -19,6 +19,7 @@ public class SessionData {
     private Date dateAndTime = Calendar.getInstance().getTime();
 
     private ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
+    private ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
 
     // Used in creation of wantedWeatherData
     private double currentTemp;
@@ -77,6 +78,20 @@ public class SessionData {
             }
 
         }
+    }
+
+    public ArrayList<WeatherDataMinMaxAvg> createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
+        WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
+        // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
+        // than creates the document used to create the arraylist of WeatherData
+        String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
+        String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
+        String urlstring = weatherAPILogic.createAVGMINMAXurlString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(),  startTimeString, endTimeString);
+
+        Document doc = weatherAPILogic.GetApiDocument(urlstring);
+        wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(doc);
+
+        return wantedWeatherAVGMinMax;
     }
 
     // WeatherData creation to sessionData
