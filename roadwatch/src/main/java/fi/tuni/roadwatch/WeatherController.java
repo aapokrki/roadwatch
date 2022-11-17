@@ -1,7 +1,5 @@
 package fi.tuni.roadwatch;
 
-import fi.tuni.roadwatch.SessionData;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.chart.LineChart;
@@ -9,22 +7,14 @@ import javafx.scene.control.*;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import org.apache.hc.client5.http.utils.DateUtils;
-import org.controlsfx.control.action.Action;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TreeMap;
+import java.time.*;
+import java.util.*;
 
 
 public class WeatherController {
@@ -63,6 +53,16 @@ public class WeatherController {
     private Button avgTempButton;
     @FXML
     private Button minMaxTempButton;
+
+
+    // MUN TESTI LABELIT TEE NÄISTÄ HIENOI RONJA
+    @FXML
+    private Label tempRightNowLabel;
+    @FXML
+    private Label tempMaxLabel;
+    @FXML
+    private Label tempMinLabel;
+
 
     // Wind components
     private TreeMap<Date, Double> windTimeMap = new TreeMap<Date, Double>();
@@ -119,42 +119,11 @@ public class WeatherController {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
     }
 
+    // DONT DELETE YET HAJOTTAA SOFTAN ENNE KUN POISTAA FXML ton napin
     //Test to check if apiread works and gets data to weather controller
     @FXML
     private void calculateData() throws ParserConfigurationException, IOException, ParseException, SAXException {
-        Date startTime = Date.from(currentDate.atZone(ZoneId.systemDefault()).toInstant());
-        var endLDate = LocalDate.parse(startTime.toString()).plusDays(timeline); // TODO: day amount
-        Date endTime = Date.from(Date.from(Instant.from(endLDate)).toInstant());
-                //timeAndDateAsDate("2022-11-01T15:40:10Z");
-        wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
-        WeatherData wantedData = null;
 
-        /*
-        // example making chart series
-        Date wanted = sessionData.getClosestDate();
-        for(WeatherData wd : wantedWeatherData){
-            temperature_time_map.put(wd.getDate(), wd.getTemperature());
-            wind_time_map.put(wd.getDate(), wd.getTemperature());
-        }
-        XYChart.Series temperature_time_series = new XYChart.Series();
-        for(Map.Entry<Date, Double> entry : temperature_time_map.entrySet()){
-            Date key = entry.getKey();
-            Double value = entry.getValue();
-            temperature_time_series.getData().add(new XYChart.Data(value, key ));
-        }
-         */
-
-        // Saves the most current lates information to the date closest to current date
-        Date wanted = sessionData.getClosestDate();
-        for(WeatherData wd : wantedWeatherData){
-            if (wd.getDate().toString().equals(wanted.toString())){
-                wantedData = wd;
-            }
-        }
-
-        assert wantedData != null;
-        windLabel.setText(wantedData.getWind() + "m/s");
-        visibilityLabel.setText(wantedData.getCloudiness() + "km") ;
     }
 
     // Temperature actions
@@ -164,19 +133,104 @@ public class WeatherController {
         dateLabel.setText(currentDate.getDayOfMonth() + "." + currentDate.getMonthValue() + "." + currentDate.getYear());
     }
 
+    // Changes temperature labels according to which day you want to see
+    private void changeTempLabels(String nowOrNot){
+        double min = 0.0;
+        double max = 0.0;
+        tempRightNowLabel.setVisible(false);
+
+        //Sets min max and now labels according to newest weather information
+        for(WeatherData wd : wantedWeatherData){
+            if(wd.getTemperature() <= min){
+                min = wd.getTemperature();
+            }
+            if(wd.getTemperature() >= max){
+                max = wd.getTemperature();
+            }
+            if(Objects.equals(wd.getDate(), sessionData.getClosestDate())){
+                if(nowOrNot.equals("now")){
+                    tempRightNowLabel.setVisible(true);
+                    tempRightNowLabel.setText(String.valueOf(wd.getTemperature()));
+                }
+
+            }
+        }
+        // TEST LABELS
+        // RONJA SITKU TEET NE SUN LABELIT NII VAIHA VAA NE TÄHÄN NIIN NE TOIMII
+        // TEIN NYT MYÖS LABELIN JOKA NÄYTTÄÄ SEN PÄIVÄN MIN JA MAX LÄMPÖTILAN LISÄKSI MYÖS LÄMPÖTILAN JUST NYT
+        // tai no 10 minuttii tulevaisuudessa. Laitoin sen tohon ylös if lauseesee niin näkyy vain now tabis
+        tempMinLabel.setText(String.valueOf(min));
+        tempMaxLabel.setText(String.valueOf(max));
+    }
+
+    // Helper function to set the time of day to 00:00:00, also can add days to date
+    private Date trimToStart(Date date, int Days){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, Days);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+
+        return cal.getTime();
+    }
+
+    // Helper function to set the time of day to 23:59:59, also can add days to date
+    private Date trimToEnd(Date date, int Days){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, Days);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND,59);
+
+        return cal.getTime();
+    }
+
     @FXML
-    private void onNowClick() {
+    private void onNowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         changeTimeColors(nowLabel, tomorrowLabel, dATomorrowLabel);
+
+        // Gets the date right now and adds a few seconds to get forecast from API
+        // Also getting the date and the end of day
+        Calendar cal = Calendar.getInstance();
+        long timeInSecs = cal.getTimeInMillis();
+        Date startTime = new Date(timeInSecs + (10*60*10));
+        Date endTime = timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
+
+        // Creates weather data according to new start and end time
+        wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
+
+        changeTempLabels("now");
     }
 
     @FXML
-    private void onTomorrowClick() {
+    private void onTomorrowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         changeTimeColors(tomorrowLabel, nowLabel, dATomorrowLabel);
+
+        // Sets the date to the next day to hours 00 - 24
+        Date now = Calendar.getInstance().getTime();
+        Date startTime = trimToStart(now,1);
+        Date endTime = trimToEnd(now, 1);
+
+        // Creates weather data according to new start and end time
+        wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
+        changeTempLabels("not");
+
     }
 
     @FXML
-    private void onDATomorrowClick() {
+    private void onDATomorrowClick() throws ParserConfigurationException, IOException, ParseException, SAXException {
         changeTimeColors(dATomorrowLabel, nowLabel, tomorrowLabel);
+
+        // Sets the date to the next day to hours 00 - 24
+        Date now = Calendar.getInstance().getTime();
+        Date startTime = trimToStart(now,2);
+        Date endTime = trimToEnd(now, 2);
+
+        // Creates weather data according to new start and end time
+        wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
+        changeTempLabels("not");
     }
 
     @FXML

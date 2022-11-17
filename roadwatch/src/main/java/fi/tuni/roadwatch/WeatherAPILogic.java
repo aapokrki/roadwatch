@@ -45,7 +45,7 @@ public class WeatherAPILogic {
         // Compares given starttime date to current time to see if forecast or observation
         if(timeAndDateAsDate(startime).after(dateAndTime)){
             str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(coordinates)
-                    .append("&timestep=120&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
+                    .append("&timestep=10&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
         }
         else{
             double longitude2 = longitude +1;
