@@ -17,8 +17,6 @@ package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapViewEvent;
-import com.sothawo.mapjfx.offline.OfflineCache;
-import fi.tuni.roadwatch.SessionData;
 import javafx.animation.Transition;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -35,6 +33,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,6 +45,7 @@ import java.util.stream.Stream;
  * @author P.J. Meisch (pj.meisch@sothawo.com).
  */
 public class MapController {
+    String road4SmallSegment= "https://tie.digitraffic.fi/api/v3/data/road-conditions/25.576224325490955/60.87613246629303/25.600831158395405/60.89857163657564";
 
     public Button buttonAddPolygon;
     public Button buttonClearPolygon;
@@ -69,6 +69,32 @@ public class MapController {
 
     private static final Extent extentFinland = Extent.forCoordinates(coordNorhWest, coordNorthEast, coordSouthEast, coordSouthWest);
 
+
+    private static final ArrayList<Coordinate> coordSmallRoadSegment = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(60.87613246629303, 25.582678576744584),
+                            new Coordinate(60.87704865972839, 25.576224325490955),
+                            new Coordinate(60.89857163657564, 25.596931714929674),
+                            new Coordinate(60.89817925024559, 25.600831158395405))
+    );
+
+    private static final ArrayList<Coordinate> coordMediumRoadSegment = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(60.50156645624125, 26.847317797691495),
+                    new Coordinate(60.50429554964796, 26.81313801316007),
+                    new Coordinate(60.50838875892538, 26.765101559224036),
+                    new Coordinate(60.50429554964796, 26.69027554443904),
+                    new Coordinate(60.49747238526555, 26.629306199058682),
+                    new Coordinate(60.488827648425996, 26.58958374676542))
+    );
+
+
+    private static final ArrayList<Coordinate> coordLargeRoadSegment = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(65.04267096153495, 25.65218096901351),
+                    new Coordinate(65.34545645158161, 27.160031899047087),
+                    new Coordinate(65.59691857097374, 28.435905762921653),
+                    new Coordinate(65.91969438346197, 29.118949346612077),
+                    new Coordinate(65.51158585366903, 27.31468327648643),
+                    new Coordinate(65.14037262699148, 25.613518124653677))
+    );
     /** default zoom value. */
     private static final int ZOOM_DEFAULT = 14;
 
@@ -105,19 +131,6 @@ public class MapController {
     @FXML
     private TitledPane optionsLocations;
 
-
-//    @FXML
-//    private Button buttonKotka;
-//
-//    @FXML
-//    private Button buttonHervanta;
-//
-//    @FXML
-//    private Button buttonLahti;
-//
-//    @FXML
-//    private Button buttonAllLocations;
-
     @FXML
     private Button buttonKotka;
 
@@ -128,7 +141,16 @@ public class MapController {
     private Button buttonLahti;
 
     @FXML
-    private Button buttonAllLocations;
+    private Button buttonExtentFinland;
+
+    @FXML
+    private Button buttonSmallRoad;
+
+    @FXML
+    private Button buttonMediumRoad;
+
+    @FXML
+    private Button buttonLargeRoad;
 
     /** Check button for harbour marker */
     @FXML
@@ -204,11 +226,83 @@ public class MapController {
 
         // wire up the location buttons
 
-        buttonKotka.setOnAction(event -> mapView.setCenter(coordKotka));
+        buttonKotka.setOnAction(event -> {
+            mapView.setCenter(coordKotka);
+        });
         buttonHervanta.setOnAction(event -> mapView.setCenter(coordHervanta));
         buttonLahti.setOnAction(event -> mapView.setCenter(coordLahti));
 
-        buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
+        buttonExtentFinland.setOnAction(event -> mapView.setExtent(extentFinland));
+
+        // Small segment preset
+        buttonSmallRoad.setOnAction(event -> {
+
+            buttonClearPolygon.fire(); //Clear any previous polygons from map
+
+
+            // Draw new polygon for said location
+            polygonLine = new CoordinateLine(coordSmallRoadSegment)
+                    .setColor(Color.DODGERBLUE)
+                    .setFillColor(Color.web("lawngreen", 0.4))
+                    .setClosed(true);
+            mapView.addCoordinateLine(polygonLine);
+            polygonLine.setVisible(true);
+
+            // Set polygon data to sessiondata for weather and roaddata
+            sessionData.setPolygonCoordinates(coordSmallRoadSegment);
+            sessionData.calculateMinMaxCoordinates();
+
+            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
+            mapView.setExtent(extent);// Set mapview to location
+
+        });
+        // Medium segment preset
+        buttonMediumRoad.setOnAction(event -> {
+
+            buttonClearPolygon.fire(); //Clear any previous polygons from map
+
+
+            // Draw new polygon for said location
+
+            polygonLine = new CoordinateLine(coordMediumRoadSegment)
+                    .setColor(Color.DODGERBLUE)
+                    .setFillColor(Color.web("lawngreen", 0.4))
+                    .setClosed(true);
+            mapView.addCoordinateLine(polygonLine);
+            polygonLine.setVisible(true);
+
+            // Set polygon data to sessiondata for weather and roaddata
+            sessionData.setPolygonCoordinates(coordMediumRoadSegment);
+            sessionData.calculateMinMaxCoordinates();
+
+            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
+            mapView.setExtent(extent);// Set mapview to location
+
+        });
+
+        // Large segment preset
+        buttonLargeRoad.setOnAction(event -> {
+
+            buttonClearPolygon.fire(); //Clear any previous polygons from map
+
+            // Draw new polygon for said location
+
+            polygonLine = new CoordinateLine(coordLargeRoadSegment)
+                    .setColor(Color.DODGERBLUE)
+                    .setFillColor(Color.web("lawngreen", 0.4))
+                    .setClosed(true);
+            mapView.addCoordinateLine(polygonLine);
+            polygonLine.setVisible(true);
+
+            // Set polygon data to sessiondata for weather and roaddata
+            sessionData.setPolygonCoordinates(coordLargeRoadSegment);
+            sessionData.calculateMinMaxCoordinates();
+
+            // Set mapview to location
+            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates);
+            mapView.setExtent(extent);// Set mapview to location
+
+        });
 
         // wire the zoom button and connect the slider to the map's zoom
         buttonZoom.setOnAction(event -> {
@@ -218,7 +312,7 @@ public class MapController {
 
         //wire the add button
         buttonAddPolygon.setOnAction(event -> {
-            this.sessionData.calculateMinMaxCoordinates();
+            sessionData.calculateMinMaxCoordinates();
 
         });
         //wire the clear button
@@ -228,7 +322,6 @@ public class MapController {
                 polygonLine = null;
                 sessionData.polyCoordinates.clear();
             }
-
         });
 
         // watch the MapView's initialized property to finish initialization
@@ -257,7 +350,6 @@ public class MapController {
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
         //checkClickMarker.setSelected(true);
 
-        // load two coordinate lines
 
         // add the polygon check handler
         ChangeListener<Boolean> polygonListener =
@@ -279,7 +371,6 @@ public class MapController {
                 mapView.clearConstrainExtent();
             }
         }));
-
 
 
         // finally initialize the map view

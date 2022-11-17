@@ -56,7 +56,13 @@
                                 <Button fx:id="buttonKotka" maxWidth="Infinity" text="Kotka" />
                                 <Button fx:id="buttonHervanta" maxWidth="Infinity" text="Hervanta" />
                                 <Button fx:id="buttonLahti" maxWidth="Infinity" text="Lahti" />
-                                <Button fx:id="buttonAllLocations" maxWidth="Infinity" text="All" />
+                                <Button fx:id="buttonSmallRoad" maxWidth="Infinity" text="SmaRoadSegment"/>
+                                <Button fx:id="buttonMediumRoad" maxWidth="Infinity" text="MedRoadSegment"/>
+                                <Button fx:id="buttonLargeRoad" maxWidth="Infinity" text="LargeRoadSegment"/>
+                                <Button fx:id="buttonExtentFinland" maxWidth="Infinity" text="ZoomoutFinland" />
+
+
+
                             </children>
                         </VBox>
                     </content>

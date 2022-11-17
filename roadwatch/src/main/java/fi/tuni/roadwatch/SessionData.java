@@ -15,7 +15,7 @@ public class SessionData {
 //    private MapController mapController;
 
     public Coordinate currentCoordinates;
-    public List<Coordinate> polyCoordinates;
+    public List<Coordinate> polyCoordinates = new ArrayList<>();
     private Date dateAndTime = Calendar.getInstance().getTime();
 
     private ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
@@ -59,7 +59,7 @@ public class SessionData {
     }
 
     public void setPolygonCoordinates(List<Coordinate> polyCoordinates){
-        this.polyCoordinates = polyCoordinates;
+        this.polyCoordinates.addAll(polyCoordinates);
     }
 
     public void calculateMinMaxCoordinates() {
