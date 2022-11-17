@@ -12,6 +12,7 @@ module fi.tuni.roadwatch {
     requires org.apache.commons.io;
     requires java.xml;
     requires org.slf4j;
+    requires java.sql;
 
     opens fi.tuni.roadwatch to javafx.fxml;
     exports fi.tuni.roadwatch;

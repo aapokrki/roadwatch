@@ -30,7 +30,6 @@ public class WeatherData {
 
 
 
-
     public Date getDate(){return this.dateAndTime;}
 
     public String getCoordinates(){return this.coordinates;}

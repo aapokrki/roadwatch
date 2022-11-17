@@ -20,10 +20,16 @@ public class WeatherAPILogic {
     private double currentWind;
     private double currentCloud;
 
+    private double tempAverage;
+    private double tempMIN;
+    private double tempMAX;
+
 
     private Date dateAndTime = Calendar.getInstance().getTime();
 
     private final ArrayList<WeatherData> weatherpast12 = new ArrayList<>();
+    private final ArrayList<WeatherDataMinMaxAvg> weatherAVGMinMax = new ArrayList<>();
+
 
 
     // Changes date in to string 8601Format to use in urlstring
@@ -45,7 +51,7 @@ public class WeatherAPILogic {
         // Compares given starttime date to current time to see if forecast or observation
         if(timeAndDateAsDate(startime).after(dateAndTime)){
             str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(coordinates)
-                    .append("&timestep=120&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
+                    .append("&timestep=10&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
         }
         else{
             double longitude2 = longitude +1;
@@ -59,6 +65,66 @@ public class WeatherAPILogic {
 
         return str.toString();
 
+    }
+
+    public String createAVGMINMAXurlString(Double latitude, Double longitude, String startime, String endtime){
+        String coordinates = latitude.toString() + "," + longitude.toString();
+        StringBuilder str = new StringBuilder();
+        double longitude2 = longitude +1;
+        double latitude2 = latitude+1;
+        String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
+
+        str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=").append(coordinateBbox)
+                .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
+
+        return str.toString();
+
+    }
+
+    public ArrayList<WeatherDataMinMaxAvg> creatingAvgMinMax(Document doc) throws ParseException {
+        NodeList nList = doc.getElementsByTagName("wfs:member");
+        int counter = 0;
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            counter++;
+            Node nNode = nList.item(temp);
+            Element eElement = (Element) nNode;
+            String currentTime = eElement.getElementsByTagName("BsWfs:Time")
+                    .item(0).getTextContent();
+            Date currentDate = timeAndDateAsDate(currentTime);
+
+            String currentCoordinates = eElement.getElementsByTagName("gml:pos")
+                    .item(0).getTextContent();
+
+            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                if (currentTime.equals(eElement.getElementsByTagName("BsWfs:Time")
+                        .item(0).getTextContent()) ){
+
+                    String paramName = eElement.getElementsByTagName("BsWfs:ParameterName")
+                            .item(0).getTextContent();
+                    if( paramName.equals("TA_PT1H_AVG") ){
+                        this.tempAverage = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+                    if( paramName.equals("TA_PT1H_MIN") ){
+                        this.tempMIN = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+                    if( paramName.equals("TA_PT1H_MAX") ){
+                        this.tempMAX = Double.parseDouble(eElement.getElementsByTagName("BsWfs:ParameterValue")
+                                .item(0).getTextContent());
+                    }
+                    // Saves all weatherdata members to arraylist of weatherdata
+                    if(counter % 3 == 0){
+                        WeatherDataMinMaxAvg savetemp = new WeatherDataMinMaxAvg(currentDate , currentCoordinates, tempAverage, tempMIN, tempMAX);
+                        if(!weatherAVGMinMax.contains(savetemp)){
+                            weatherAVGMinMax.add(savetemp);
+                        }
+                    }
+                }
+
+            }
+        }
+        return weatherAVGMinMax;
     }
 
     // Creates Document element based on given url. Used in creadingWeatherData
