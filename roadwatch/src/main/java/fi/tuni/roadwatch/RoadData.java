@@ -12,7 +12,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-//@JsonDeserialize(using = RoadAPILogic.RoadDataDeserializer.class)
 public class RoadData {
 
     public Date dataUpdatedTime;
@@ -43,14 +42,15 @@ public class RoadData {
         public String roadCondition;
     }
 
-    public RoadData(JsonNode json) throws IOException, ParseException {
+    // Constructor with parsing
+    public RoadData(JsonNode json) throws ParseException {
         ObjectMapper mapper = new ObjectMapper();
-        //RoadData rd = mapper.readTree(json.toString()).traverse(mapper).readValueAs(RoadData.class);
         this.dataUpdatedTime = stringToDate(json.get("dataUpdatedTime").asText());
         this.weatherData = readWeatherData(json.get("weatherData"));
         System.out.println("RoadData created");
     }
 
+    // Parsing each weatherData
     private ArrayList<WeatherData> readWeatherData(JsonNode weatherData) {
         ArrayList<WeatherData> wd = new ArrayList<>();
         for (JsonNode node : weatherData) {
@@ -62,6 +62,7 @@ public class RoadData {
         return wd;
     }
 
+    // Parsing each roadCondition
     private ArrayList<RoadCondition> readRoadConditions(JsonNode roadConditions) {
         ArrayList<RoadCondition> rc = new ArrayList<>();
         for (JsonNode node : roadConditions) {
@@ -87,50 +88,21 @@ public class RoadData {
                 continue;
             }
 
-
             rc.add(r);
         }
         return rc;
     }
 
+    // Parsing forecastConditionReason
     private ForecastConditionReason readForecastConditionReason(JsonNode forecastConditionReason) {
         ForecastConditionReason fcr = new ForecastConditionReason();
         fcr.precipitationCondition = forecastConditionReason.get("precipitationCondition").asText();
         fcr.roadCondition = forecastConditionReason.get("roadCondition").asText();
         return fcr;
     }
-    /*
-    private boolean unpackWeatherData() {
-        int i = 0;
-        for (WeatherData wd : weatherData){
-            int j = 0;
-            for (RoadCondition rc : wd.roadConditions){
-                unpackRoadCondition(rc, i, j);
-                j++;
-            }
-            i++;
-        }
-        return true;
-    }
 
-    private boolean unpackRoadCondition(RoadCondition rc, int i, int j){
-        this.weatherData.get(i).roadConditions.get(j).time = rc.time;
-        this.weatherData.get(i).roadConditions.get(j).type = rc.type;
-        this.weatherData.get(i).roadConditions.get(j).forecastName = rc.forecastName;
-        this.weatherData.get(i).roadConditions.get(j).daylight = rc.daylight;
-        this.weatherData.get(i).roadConditions.get(j).roadTemperature = rc.roadTemperature;
-        this.weatherData.get(i).roadConditions.get(j).temperature = rc.temperature;
-        this.weatherData.get(i).roadConditions.get(j).windSpeed = rc.windSpeed;
-        this.weatherData.get(i).roadConditions.get(j).windDirection = rc.windDirection;
-        this.weatherData.get(i).roadConditions.get(j).overallRoadCondition = rc.overallRoadCondition;
-        this.weatherData.get(i).roadConditions.get(j).weatherSymbol = rc.weatherSymbol;
-        this.weatherData.get(i).roadConditions.get(j).reliability = rc.reliability;
-        this.weatherData.get(i).roadConditions.get(j).forecastConditionReason = rc.forecastConditionReason;
-
-        return true;
-    }
-    */
-    Date stringToDate(String s) throws ParseException {
+    // Assistant function for parsing date
+    private Date stringToDate(String s) throws ParseException {
         try {
             return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(s);
         }
@@ -139,7 +111,5 @@ public class RoadData {
         }
 
     }
-
-
 
 }
