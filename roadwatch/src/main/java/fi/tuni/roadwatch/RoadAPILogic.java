@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -61,7 +62,7 @@ public class RoadAPILogic {
 
     //ObjectMapper roadMapper = new JsonMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    public RoadAPILogic() throws URISyntaxException, IOException {
+    public RoadAPILogic() throws URISyntaxException, IOException, ParseException {
         System.out.println("MAINTENANCE API-LINK: \n"+uriMaintenance.toString());
         System.out.println("ROAD-CONDITION API-LINK: \n"+uriRoadCondition.toString());
         System.out.println("TRAFFIC-MESSAGES API-LINK: \n"+uriTrafficMessage.toString());
@@ -73,7 +74,7 @@ public class RoadAPILogic {
         // TODO:Required recursive functions must be done to extract needed data for RoadData
 
         // Construct RoadData
-        RoadData roadData = new RoadData();
+        RoadData roadData = new RoadData(roadConditionNode);
         // Fill roadData with data from road-condition API for now
         roadConditionRec(roadConditionNode, roadData);
 
