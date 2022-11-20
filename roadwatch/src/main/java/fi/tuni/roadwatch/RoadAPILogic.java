@@ -47,8 +47,7 @@ public class RoadAPILogic {
     String yMax = "62";
 
 
-    URI uriTrafficMessage = new URI("https://tie.digitraffic.fi/api/traffic-message/v1/messages?inactiveHours=0&includeAreaGeometry=false&" +
-            "situationType=" + situationType + "&");
+    URI uriTrafficMessage = new URI("https://tie.digitraffic.fi/api/traffic-message/v1/messages?inactiveHours=0&includeAreaGeometry=false&situationType=TRAFFIC_ANNOUNCEMENT&situationType=EXEMPTED_TRANSPORT&situationType=WEIGHT_RESTRICTION&situationType=ROAD_WORK&");
 
     URI uriRoadCondition = new URI("https://tie.digitraffic.fi/api/v3/data/road-conditions/" +
             xMin + "/" + yMin + "/" + xMax + "/" + yMax);
@@ -85,69 +84,15 @@ public class RoadAPILogic {
     }
 
     // Construct traffic messages
-    public ArrayList<TrafficMessage> getTrafficMessages() throws IOException, URISyntaxException {
+    public TrafficMessage getTrafficMessages() throws IOException, URISyntaxException {
         System.out.println("TRAFFIC-MESSAGES API-LINK: \n"+uriTrafficMessage.toString());
-        JsonNode trafficMessagesNode = retrieveData(uriTrafficMessage);
 
-        ArrayList<TrafficMessage> trafficMessages = new ArrayList<>();
-
-        if(trafficMessagesNode.get("type").asText().equals("FeatureCollection")){
-
-            JsonNode features = trafficMessagesNode.get("features");
-            for(JsonNode feature : features){
-
-                TrafficMessage trafficMessage = createTrafficMessage(feature);
-                trafficMessages.add(trafficMessage);
-                System.out.println(trafficMessage.title);
-            }
-        }
-        return trafficMessages;
-    }
-    private TrafficMessage createTrafficMessage(JsonNode dataNode){
-
+        JsonNode trafficMessageNode = retrieveData(uriTrafficMessage);
         TrafficMessage trafficMessage = new TrafficMessage();
-
-        if(!dataNode.get("geometry").isNull()){
-            JsonNode coordinates = dataNode.get("geometry").get("coordinates");
-            ArrayList<Coordinate> coordinateArrayList = new ArrayList<>();
-            for(JsonNode coordinate : coordinates.get(0)){
-                coordinateArrayList.add(new Coordinate(coordinate.get(0).asDouble(), coordinate.get(1).asDouble()));
-            }
-            trafficMessage.setCoordinates(coordinateArrayList);
-        }
-
-        if(dataNode.get("type").asText().equals("Feature")){
-            JsonNode properties = dataNode.get("properties");
-            trafficMessage.setTrafficAnnouncementType(properties.get("trafficAnnouncementType").asText());
-            trafficMessage.setDate(properties.get("dataUpdatedTime").asText());
-            JsonNode announcements = properties.get("announcements");
-            for(JsonNode announcement : announcements){
-
-                // Title of the announcement, usually contains location and situation
-                JsonNode title = announcement.get("title");
-
-                // More accurate information about the location
-                JsonNode description = announcement.get("location").get("description");
-
-                // List of the situations eg. "Tie suljettu". Can be empty
-                JsonNode situations = announcement.get("features");
-                JsonNode comment = announcement.get("comment");
-
-                if(title != null){
-                    trafficMessage.setTitle(title.asText());
-                }
-                if(description != null){
-                    trafficMessage.setDescription(description.asText());
-                }
-                if(situations != null && !situations.isEmpty()){
-                    JsonNode situation = situations.get(0).get("name");
-                    trafficMessage.setSituation(situation.asText());
-                }
-                if(comment != null){
-                    trafficMessage.setComment(comment.asText());
-                }
-            }
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        trafficMessage = mapper.treeToValue(trafficMessageNode, TrafficMessage.class);
         return trafficMessage;
     }
 
@@ -160,9 +105,6 @@ public class RoadAPILogic {
         maintenance = mapper.treeToValue(roadMaintenanceNode, Maintenance.class);
         return maintenance;
     }
-
-
-
 
 
     // Retrieves a specified dataset from the API

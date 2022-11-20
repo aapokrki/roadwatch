@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SessionData {
 
@@ -22,7 +23,7 @@ public class SessionData {
     public ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
 
-    public ArrayList<TrafficMessage> trafficMessages = new ArrayList<>();
+    public TrafficMessage trafficMessage = new TrafficMessage();
 
     // Used in creation of wantedWeatherData
     private double currentTemp;
@@ -59,7 +60,7 @@ public class SessionData {
     public SessionData() throws URISyntaxException, IOException {
         roadAPILogic = new RoadAPILogic();
         weatherAPILogic = new WeatherAPILogic();
-        trafficMessages = roadAPILogic.getTrafficMessages();
+        trafficMessage = roadAPILogic.getTrafficMessages();
 
     }
 
@@ -85,8 +86,39 @@ public class SessionData {
                 coordinateConstraints = new CoordinateConstraints(minLongtitude, minLatitude, maxLongtitude, maxLatitude);
                 System.out.println(coordinateConstraints.getAsString('/'));
             }
-
+            // TODO: ADD THIS TO ROADDATA CONSTRUCTOR
+            // TODO: Make nicer maybe
+            // Checks the traffic messages in a given area
+            ArrayList<TrafficMessage.Feature> messagesInArea = new ArrayList<>();
+            for (TrafficMessage.Feature feature : trafficMessage.features){
+                if(feature.geometry != null){
+                    for (ArrayList<ArrayList<Double>> coordinates : feature.geometry.coordinates) {
+                        for (ArrayList<Double> coordinate : coordinates) {
+                            if(coordinate.size() == 2){
+                                if(coordinate.get(0) > coordinateConstraints.minLon &&
+                                        coordinate.get(0) < coordinateConstraints.maxLon &&
+                                        coordinate.get(1) > coordinateConstraints.minLat &&
+                                        coordinate.get(1) < coordinateConstraints.maxLat){
+                                    messagesInArea.add(feature);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            // TEST PRINTS
+            System.out.println(messagesInArea.size() + " Traffic messages in the area");
+//            for (TrafficMessage.Feature feature : messagesInArea){
+//                if(feature.properties.announcements != null) {
+//                    for(TrafficMessage.Announcements announcement: feature.properties.announcements){
+//                        System.out.println(announcement.title);
+//                    }
+//                }
+//            }
         }
+
     }
 
     public void createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
