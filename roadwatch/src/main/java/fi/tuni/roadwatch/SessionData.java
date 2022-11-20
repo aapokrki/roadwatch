@@ -52,9 +52,13 @@ public class SessionData {
 
     public CoordinateConstraints coordinateConstraints;
 
+    public static RoadAPILogic roadAPILogic;
+    public static WeatherAPILogic weatherAPILogic;
+
 
     public SessionData() throws URISyntaxException, IOException {
-        RoadAPILogic roadAPILogic = new RoadAPILogic();
+        roadAPILogic = new RoadAPILogic();
+        weatherAPILogic = new WeatherAPILogic();
         trafficMessages = roadAPILogic.getTrafficMessages();
 
     }
@@ -86,7 +90,6 @@ public class SessionData {
     }
 
     public void createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
-        WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
@@ -99,7 +102,6 @@ public class SessionData {
 
     // WeatherData creation to sessionData
     public void createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
-        WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
