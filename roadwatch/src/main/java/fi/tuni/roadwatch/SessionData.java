@@ -1,11 +1,11 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Coordinate;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
 
@@ -18,8 +18,8 @@ public class SessionData {
     public List<Coordinate> polyCoordinates = new ArrayList<>();
     private Date dateAndTime = Calendar.getInstance().getTime();
 
-    private ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
-    private ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
+    public ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
+    public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
 
     // Used in creation of wantedWeatherData
     private double currentTemp;
@@ -80,7 +80,7 @@ public class SessionData {
         }
     }
 
-    public ArrayList<WeatherDataMinMaxAvg> createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
+    public void createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
         WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
@@ -88,14 +88,12 @@ public class SessionData {
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
         String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints.getAsString(','),  startTimeString, endTimeString);
         System.out.println(urlstring);
-        Document doc = weatherAPILogic.GetApiDocument(urlstring);
-        wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(doc);
+        this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
 
-        return wantedWeatherAVGMinMax;
     }
 
     // WeatherData creation to sessionData
-    public ArrayList<WeatherData> createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
+    public void createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
         WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
@@ -103,19 +101,15 @@ public class SessionData {
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
         String urlstring = weatherAPILogic.createURLString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(),  startTimeString, endTimeString);
 
-
        //Test to see what api is found with parameters
         System.out.println(urlstring);
-
-
-        Document doc = weatherAPILogic.GetApiDocument(urlstring);
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation
         if(startTime.after(dateAndTime)){
-            this.WantedWeatherData = weatherAPILogic.creatingWeatherForecast(doc);
+            this.WantedWeatherData = weatherAPILogic.creatingWeatherForecast(weatherAPILogic.GetApiDocument(urlstring));
         }
-        this.WantedWeatherData = weatherAPILogic.creatingWeatherObservations(doc);
-        return this.WantedWeatherData;
+        this.WantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
+
     }
 
     // Helper function to get the closest date to current
@@ -135,6 +129,45 @@ public class SessionData {
         });
         return closest;
     }
+
+    public double getMIN_value(){
+        double min = wantedWeatherAVGMinMax.get(0).getTempMIN();
+
+        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
+            if(wd.getTempMIN() <= min){
+                min = wd.getTempMIN();
+            }
+
+        }
+
+        return min;
+    }
+
+    public double getMAX_value(){
+        double max = wantedWeatherAVGMinMax.get(0).getTempMAX();
+
+        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
+            if(wd.getTempMAX() >= max){
+                max = wd.getTempMAX();
+            }
+        }
+
+        return max;
+    }
+
+    public String getAVG_value(){
+        double average = wantedWeatherAVGMinMax.get(0).getTempAverage();;
+        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
+            average += wd.getTempAverage();
+        }
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        average = average/wantedWeatherAVGMinMax.size();
+
+        return df.format(average);
+    }
+
+
 
 
 
