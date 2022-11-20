@@ -88,6 +88,7 @@ public class SessionData {
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
         String urlstring = weatherAPILogic.createAVGMINMAXurlString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(),  startTimeString, endTimeString);
 
+        System.out.println(urlstring);
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
 
     }
