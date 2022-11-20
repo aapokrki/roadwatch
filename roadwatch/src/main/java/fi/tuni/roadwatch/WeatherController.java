@@ -28,8 +28,6 @@ public class WeatherController {
     private final Integer timeline = 0;
     private Datatype datatype;
     private SessionData sessionData;
-    private ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
-    private ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMINMAXData = new ArrayList<>();
     private LocalDateTime currentDate = LocalDateTime.now();
 
     @FXML
@@ -158,12 +156,12 @@ public class WeatherController {
 
     // Changes temperature labels according to which day you want to see
     private void changeTempLabels(String nowOrNot){
-        double min = wantedWeatherData.get(0).getTemperature();
-        double max = wantedWeatherData.get(0).getTemperature();
+        double min = sessionData.WantedWeatherData.get(0).getTemperature();
+        double max = sessionData.WantedWeatherData.get(0).getTemperature();
         tempRightNowLabel.setVisible(false);
 
         //Sets min max and now labels according to newest weather information
-        for(WeatherData wd : wantedWeatherData){
+        for(WeatherData wd : sessionData.WantedWeatherData){
             if(wd.getTemperature() <= min){
                 min = wd.getTemperature();
             }
@@ -221,8 +219,8 @@ public class WeatherController {
         Date startTime = new Date(timeInSecs + (10*60*10));
         Date endTime = timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
 
-        // Creates weather data according to new start and end time
-        wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
+        // Creates weather data according to new start and end time to sessionData
+        sessionData.createWeatherData(startTime, endTime);
 
         changeTempLabels("now");
     }
@@ -236,8 +234,8 @@ public class WeatherController {
         Date startTime = trimToStart(now,1);
         Date endTime = trimToEnd(now, 1);
 
-        // Creates weather data according to new start and end time
-        wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
+        // Creates weather data according to new start and end time to sessionData
+        sessionData.createWeatherData(startTime, endTime);
         changeTempLabels("not");
 
     }
@@ -252,7 +250,7 @@ public class WeatherController {
         Date endTime = trimToEnd(now, 2);
 
         // Creates weather data according to new start and end time
-        wantedWeatherData = sessionData.createWeatherData(startTime, endTime);
+        sessionData.createWeatherData(startTime, endTime);
         changeTempLabels("not");
     }
 
@@ -273,18 +271,9 @@ public class WeatherController {
         Date startTime = savedDate;
         Date endTime = trimToEnd(savedDate,0);
 
-        wantedWeatherAVGMINMAXData = sessionData.createAvgMinMax(startTime, endTime);
+        sessionData.createAvgMinMax(startTime, endTime);
 
-        double average = wantedWeatherAVGMINMAXData.get(0).getTempAverage();;
-        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMINMAXData){
-            average += wd.getTempAverage();
-        }
-
-        DecimalFormat df = new DecimalFormat("0.00");
-        average = average/wantedWeatherAVGMINMAXData.size();
-
-        avglabel.setText(df.format(average));
-
+        avglabel.setText(sessionData.getAVG_value());
     }
 
     // Counts the min and max temperature of a certain day in certain month and year
@@ -294,21 +283,9 @@ public class WeatherController {
         Date startTime = savedDate;
         Date endTime = trimToEnd(savedDate,0);
 
-        wantedWeatherAVGMINMAXData = sessionData.createAvgMinMax(startTime, endTime);
+        sessionData.createAvgMinMax(startTime, endTime);
 
-        double min = wantedWeatherAVGMINMAXData.get(0).getTempMIN();
-        double max = wantedWeatherAVGMINMAXData.get(0).getTempMAX();
-
-        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMINMAXData){
-            if(wd.getTempMIN() <= min){
-                min = wd.getTempMIN();
-            }
-            if(wd.getTempMAX() >= max){
-                max = wd.getTempMAX();
-            }
-        }
-
-        minlabel.setText(String.valueOf(min));
-        maxlabel.setText(String.valueOf(max));
+        minlabel.setText(String.valueOf(sessionData.getMIN_value()));
+        maxlabel.setText(String.valueOf(sessionData.getMAX_value()));
     }
 }
