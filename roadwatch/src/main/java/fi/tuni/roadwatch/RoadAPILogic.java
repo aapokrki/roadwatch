@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.sothawo.mapjfx.Coordinate;
 import javafx.scene.SubScene;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -20,6 +21,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -64,26 +66,86 @@ public class RoadAPILogic {
     public RoadAPILogic() throws URISyntaxException, IOException {
         System.out.println("MAINTENANCE API-LINK: \n"+uriMaintenance.toString());
         System.out.println("ROAD-CONDITION API-LINK: \n"+uriRoadCondition.toString());
-        System.out.println("TRAFFIC-MESSAGES API-LINK: \n"+uriTrafficMessage.toString());
 
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
         JsonNode roadConditionNode = retrieveData(uriRoadCondition);
-        JsonNode trafficMessagesNode = retrieveData(uriTrafficMessage);
 
-        // TODO:Required recursive functions must be done to extract needed data for RoadData
+        // MATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIAS
+        // TODO: Kato alta esimerkkii getTrafficMessages() ja miten se ja tää constructor toimii sessiondatassa.
+        // TODO: Näin saadaa tää järkevästi tehtyy
 
         // Construct RoadData
-        RoadData roadData = new RoadData();
+        //RoadData roadData = new RoadData();
         // Fill roadData with data from road-condition API for now
-        roadConditionRec(roadConditionNode, roadData);
+        //roadConditionRec(roadConditionNode, roadData);
 
-        // Example recursive model for getting data of all traffic messages
-        // with the given situation type in the url.
-        // Currently only prints the result, since a solid solution has not been done
-        // TODO: create solid way to save traffic messages or just their amount.
-        // TODO: To SessionData for example
-        //roadAPIAlertRec(trafficMessagesNode);
+    }
 
+    // Construct traffic messages
+    public ArrayList<TrafficMessage> getTrafficMessages() throws IOException, URISyntaxException {
+        System.out.println("TRAFFIC-MESSAGES API-LINK: \n"+uriTrafficMessage.toString());
+        JsonNode trafficMessagesNode = retrieveData(uriTrafficMessage);
+
+        ArrayList<TrafficMessage> trafficMessages = new ArrayList<>();
+
+        if(trafficMessagesNode.get("type").asText().equals("FeatureCollection")){
+
+            JsonNode features = trafficMessagesNode.get("features");
+            for(JsonNode feature : features){
+
+                TrafficMessage trafficMessage = createTrafficMessage(feature);
+                trafficMessages.add(trafficMessage);
+                System.out.println(trafficMessage.title);
+            }
+        }
+        return trafficMessages;
+    }
+    private TrafficMessage createTrafficMessage(JsonNode dataNode){
+
+        TrafficMessage trafficMessage = new TrafficMessage();
+
+        if(!dataNode.get("geometry").isNull()){
+            JsonNode coordinates = dataNode.get("geometry").get("coordinates");
+            ArrayList<Coordinate> coordinateArrayList = new ArrayList<>();
+            for(JsonNode coordinate : coordinates.get(0)){
+                coordinateArrayList.add(new Coordinate(coordinate.get(0).asDouble(), coordinate.get(1).asDouble()));
+            }
+            trafficMessage.setCoordinates(coordinateArrayList);
+        }
+
+        if(dataNode.get("type").asText().equals("Feature")){
+            JsonNode properties = dataNode.get("properties");
+            trafficMessage.setTrafficAnnouncementType(properties.get("trafficAnnouncementType").asText());
+            trafficMessage.setDate(properties.get("dataUpdatedTime").asText());
+            JsonNode announcements = properties.get("announcements");
+            for(JsonNode announcement : announcements){
+
+                // Title of the announcement, usually contains location and situation
+                JsonNode title = announcement.get("title");
+
+                // More accurate information about the location
+                JsonNode description = announcement.get("location").get("description");
+
+                // List of the situations eg. "Tie suljettu". Can be empty
+                JsonNode situations = announcement.get("features");
+                JsonNode comment = announcement.get("comment");
+
+                if(title != null){
+                    trafficMessage.setTitle(title.asText());
+                }
+                if(description != null){
+                    trafficMessage.setDescription(description.asText());
+                }
+                if(situations != null && !situations.isEmpty()){
+                    JsonNode situation = situations.get(0).get("name");
+                    trafficMessage.setSituation(situation.asText());
+                }
+                if(comment != null){
+                    trafficMessage.setComment(comment.asText());
+                }
+            }
+        }
+        return trafficMessage;
     }
 
     // Retrieves a specified dataset from the API
@@ -147,51 +209,7 @@ public class RoadAPILogic {
         }
     }
 
-    private void roadAPIAlertRec(JsonNode dataNode){
 
-        //System.out.println("hep");
-        if(dataNode.get("type").asText().equals("FeatureCollection")){
-
-            JsonNode features = dataNode.get("features");
-            for(JsonNode feature : features){
-                //System.out.println(feature);
-                roadAPIAlertRec(feature);
-                System.out.println();
-            }
-        }
-
-        if(dataNode.get("type").asText().equals("Feature")){
-            JsonNode properties = dataNode.get("properties");
-            JsonNode announcements = properties.get("announcements");
-            for(JsonNode announcement : announcements){
-
-                // Title of the announcement, usually contains location and situation
-                JsonNode title = announcement.get("title");
-
-                // More accurate information about the location
-                JsonNode location = announcement.get("location").get("description");
-
-                // List of the situations eg. "Tie suljettu". Can be empty
-                JsonNode situations = announcement.get("features");
-
-                // Test print with the necessary info
-                if(!title.isNull()){
-                    System.out.println(title.asText());
-                }
-                if(!location.isNull()){
-                    System.out.println(" - " + location.asText());
-                }
-                if(!situations.isNull() && !situations.isEmpty()){
-                    JsonNode situation = situations.get(0).get("name");
-                    System.out.println(" -- " + situation.asText());
-                }
-            }
-
-
-        }
-
-
-    }
     public static void main(String[] args) {
         try {
             RoadAPILogic test = new RoadAPILogic();
