@@ -65,6 +65,8 @@ public class RoadWatchController {
     private Button roadDataButton;
     @FXML
     private Label siteLabel;
+    @FXML
+    private Label trafficMessageCount;
 
     public void setScreenBounds(Rectangle2D screenBounds) {
         this.screen = screenBounds;

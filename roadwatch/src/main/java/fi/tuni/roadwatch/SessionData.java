@@ -86,8 +86,8 @@ public class SessionData {
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
-        String urlstring = weatherAPILogic.createAVGMINMAXurlString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(),  startTimeString, endTimeString);
-
+        String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints.getAsString(','),  startTimeString, endTimeString);
+        System.out.println(urlstring);
         Document doc = weatherAPILogic.GetApiDocument(urlstring);
         wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(doc);
 
