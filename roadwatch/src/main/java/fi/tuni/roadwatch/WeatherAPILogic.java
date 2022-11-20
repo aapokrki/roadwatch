@@ -1,5 +1,4 @@
 package fi.tuni.roadwatch;
-import com.sothawo.mapjfx.Coordinate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,7 +26,7 @@ public class WeatherAPILogic {
 
     private Date dateAndTime = Calendar.getInstance().getTime();
 
-    private final ArrayList<WeatherData> weatherpast12 = new ArrayList<>();
+    private final ArrayList<WeatherData> weatherData = new ArrayList<>();
     private final ArrayList<WeatherDataMinMaxAvg> weatherAVGMinMax = new ArrayList<>();
 
 
@@ -67,12 +66,9 @@ public class WeatherAPILogic {
 
     }
 
-    public String createAVGMINMAXurlString(Double latitude, Double longitude, String startime, String endtime){
-        String coordinates = latitude.toString() + "," + longitude.toString();
+    public String createAVGMINMAXurlString(String bbox, String startime, String endtime){
         StringBuilder str = new StringBuilder();
-        double longitude2 = longitude +1;
-        double latitude2 = latitude+1;
-        String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
+        String coordinateBbox = bbox;
 
         str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=").append(coordinateBbox)
                 .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
@@ -121,7 +117,6 @@ public class WeatherAPILogic {
                         }
                     }
                 }
-
             }
         }
         return weatherAVGMinMax;
@@ -176,8 +171,8 @@ public class WeatherAPILogic {
                     // Saves all weatherdata members to arraylist of weatherdata
                     if(counter % 3 == 0){
                         WeatherData savetemp = new WeatherData(currentTemp, currentWind, currentCloud,currentDate , currentCoordinates);
-                        if(!weatherpast12.contains(savetemp)){
-                            weatherpast12.add(savetemp);
+                        if(!weatherData.contains(savetemp)){
+                            weatherData.add(savetemp);
                         }
                     }
 
@@ -186,7 +181,7 @@ public class WeatherAPILogic {
 
             }
         }
-        return weatherpast12;
+        return weatherData;
     }
 
     // Creates forecast weather data. Has to be different function due to different parameter names versus observations
@@ -222,8 +217,8 @@ public class WeatherAPILogic {
 
                     if(counter % 2 == 0){
                         WeatherData savetemp = new WeatherData(currentTemp, currentWind, currentCloud,currentDate , currentCoordinates);
-                        if(!weatherpast12.contains(savetemp)){
-                            weatherpast12.add(savetemp);
+                        if(!weatherData.contains(savetemp)){
+                            weatherData.add(savetemp);
                         }
                     }
 
@@ -232,7 +227,7 @@ public class WeatherAPILogic {
 
             }
         }
-        return weatherpast12;
+        return weatherData;
     }
 
 
