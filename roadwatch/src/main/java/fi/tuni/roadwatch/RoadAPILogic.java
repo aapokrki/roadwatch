@@ -71,6 +71,8 @@ public class RoadAPILogic {
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
         JsonNode roadConditionNode = retrieveData(uriRoadCondition);
 
+        Maintenance maintenance = getMaintenance();
+
         // MATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIAS
         // TODO: Kato alta esimerkkii getTrafficMessages() ja miten se ja tää constructor toimii sessiondatassa.
         // TODO: Näin saadaa tää järkevästi tehtyy
@@ -148,6 +150,20 @@ public class RoadAPILogic {
         }
         return trafficMessage;
     }
+
+    public Maintenance getMaintenance() throws IOException, URISyntaxException {
+        JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
+        Maintenance maintenance = new Maintenance();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        maintenance = mapper.treeToValue(roadMaintenanceNode, Maintenance.class);
+        return maintenance;
+    }
+
+
+
+
 
     // Retrieves a specified dataset from the API
     public JsonNode retrieveData(URI uri) throws IOException, URISyntaxException {
