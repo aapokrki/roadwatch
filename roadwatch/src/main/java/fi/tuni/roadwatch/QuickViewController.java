@@ -26,6 +26,14 @@ public class QuickViewController {
     private Button combinePageButton;
     @FXML
     public Pane combine;
+    // TODO: Tiedot päivittyy tilanteen mukaan.
+    @FXML
+    private Label conditionLabel;
+    @FXML
+    private Label maintenanceLabel;
+    @FXML
+    private Label alertsLabel;
+
     public CombineController combineController;
 
     public void setSessionData(SessionData sessionData) {
@@ -59,7 +67,6 @@ public class QuickViewController {
 
         siteLabel.setText("COMBINE");
         infoPane.setCenter(combine);
-
 
     }
 }

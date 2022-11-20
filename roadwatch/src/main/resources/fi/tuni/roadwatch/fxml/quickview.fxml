@@ -14,9 +14,9 @@
          </font>
       </Label>
       <Button fx:id="combinePageButton" layoutX="578.0" layoutY="181.0" mnemonicParsing="false" onAction="#loadCombine" styleClass="basicButton" text="COMBINE PAGE" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="465.0" prefHeight="129.0" prefWidth="189.0" styleClass="valueText" text="BAD" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="465.0" prefHeight="129.0" prefWidth="189.0" styleClass="valueText" text="!Tilhintie &amp; Others" wrapText="true" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="612.0" layoutY="455.0" prefHeight="129.0" prefWidth="189.0" styleClass="valueText" text="!6" wrapText="true" />
+      <Label fx:id="conditionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="465.0" prefHeight="129.0" prefWidth="189.0" styleClass="valueText" text="BAD" />
+      <Label fx:id="maintenanceLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="465.0" prefHeight="129.0" prefWidth="189.0" styleClass="valueText" text="!Tilhintie &amp; Others" wrapText="true" />
+      <Label fx:id="alertsLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="612.0" layoutY="455.0" prefHeight="129.0" prefWidth="189.0" styleClass="valueText" text="!6" wrapText="true" />
       <Label layoutX="41.0" layoutY="403.0" styleClass="bigText" text="ROAD CONDITION" />
       <Label layoutX="335.0" layoutY="403.0" styleClass="bigText" text="MAINTENANCE" />
       <Label layoutX="641.0" layoutY="403.0" styleClass="bigText" text="ALERTS" />
