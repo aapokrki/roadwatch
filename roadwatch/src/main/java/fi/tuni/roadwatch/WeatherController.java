@@ -105,8 +105,8 @@ public class WeatherController {
         windPane.setVisible(false);
     }
 
-     @FXML
-     private void changeDatatype() {
+    @FXML
+    private void changeDatatype() {
         if(comboBox.getValue().equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
             datatype = Datatype.TEMPERATURE;
             datatypeLabel.setText(datatype.toString());
@@ -127,7 +127,7 @@ public class WeatherController {
             visibilityPane.setVisible(false);
             windPane.setVisible(true);
         }
-     }
+    }
 
     // Changes date String in to string 8601Format to use in urlstring
     public Date timeAndDateAsDate(String datestring) throws ParseException {
