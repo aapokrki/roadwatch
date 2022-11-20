@@ -5,6 +5,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
@@ -20,6 +21,8 @@ public class SessionData {
 
     public ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
+
+    public ArrayList<TrafficMessage> trafficMessages = new ArrayList<>();
 
     // Used in creation of wantedWeatherData
     private double currentTemp;
@@ -50,7 +53,9 @@ public class SessionData {
     public CoordinateConstraints coordinateConstraints;
 
 
-    public SessionData() {
+    public SessionData() throws URISyntaxException, IOException {
+        RoadAPILogic roadAPILogic = new RoadAPILogic();
+        trafficMessages = roadAPILogic.getTrafficMessages();
 
     }
 

@@ -83,6 +83,8 @@ public class RoadWatchController {
 
     public void setSessionData(SessionData sessionData){
         this.sessionData = sessionData;
+        // TEMPORARY PAIKKA TÄLLE TEKSTIN SETTAUKSELLE
+        trafficMessageCount.setText(sessionData.trafficMessages.size() + " Traffic messages");
     }
 
     public void loadMap() throws IOException {
