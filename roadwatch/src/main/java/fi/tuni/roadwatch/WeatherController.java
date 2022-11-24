@@ -90,6 +90,8 @@ public class WeatherController {
     private CategoryAxis xAxisWind;
     @FXML
     private NumberAxis yAxisWind;
+    @FXML
+    private Label windErrorLabel;
 
     // Visibility components
     @FXML
@@ -140,29 +142,35 @@ public class WeatherController {
     //Test to check if apiread works and gets data to weather controller
     @FXML
     private void calculateData() throws ParserConfigurationException, IOException, ParseException, SAXException {
-        // Gets the date right now and adds a few seconds to get forecast from API
-        // Also getting the date and the end of day
-        Calendar cal = Calendar.getInstance();
-        long timeInSecs = cal.getTimeInMillis();
-        Date startTime = new Date(timeInSecs + (10*60*10));
-        Date endTime = timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
+        if(sessionData.currentCoordinates == null) {
+            windErrorLabel.setText("Choose coordinates!");
+        } else {
+            // Gets the date right now and adds a few seconds to get forecast from API
+            // Also getting the date and the end of day
+            windErrorLabel.setText("");
+            Calendar cal = Calendar.getInstance();
+            long timeInSecs = cal.getTimeInMillis();
+            Date startTime = new Date(timeInSecs + (10*60*10));
+            Date endTime = timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
 
-        // Creates weather data according to new start and end time to sessionData
-        sessionData.createWeatherData(startTime, endTime);
+            // Creates weather data according to new start and end time to sessionData
+            sessionData.createWeatherData(startTime, endTime);
+            System.out.println("Ronjan testi1");
 
-        if(comboBox.getValue().equals("WIND")){
-            xAxisWind.setLabel("Time");
-            yAxisWind.setLabel("km/h");
-            windChart.getData().add(sessionData.createGraphSeriesWind());
+            if(comboBox.getValue().equals("WIND")){
+                xAxisWind.setLabel("Time");
+                yAxisWind.setLabel("km/h");
 
-            
-            System.out.println(sessionData.WantedWeatherData.get(0).getWind());
-            System.out.println(sessionData.WantedWeatherData.get(1).getWind());
-            System.out.println(sessionData.WantedWeatherData.get(1).getDate());
+                // Ronjan chart testit.
+                windChart.getData().add(sessionData.createGraphSeriesWind());
+
+                windErrorLabel.setText(sessionData.WantedWeatherData.get(0).getWind()+ "");
+                System.out.println(sessionData.WantedWeatherData.get(0).getWind());
+                System.out.println(sessionData.WantedWeatherData.get(1).getWind());
+                System.out.println(sessionData.WantedWeatherData.get(1).getDate());
+            }
+            System.out.println("Testi toinen testi");
         }
-
-        System.out.println("Testi toinen testi");
-
     }
 
     @FXML
