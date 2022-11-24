@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import javafx.scene.control.Label;
@@ -85,7 +86,7 @@ public class WeatherController {
     @FXML
     private Label windLabel;
     @FXML
-    private LineChart windChart;
+    protected LineChart<String, Double> windChart;
     @FXML
     private CategoryAxis xAxisWind;
     @FXML
@@ -122,14 +123,14 @@ public class WeatherController {
             datatype = Datatype.WIND;
             datatypeLabel.setText(datatype.toString());
             temperaturePane.setVisible(false);
-            visibilityPane.setVisible(true);
-            windPane.setVisible(false);
+            visibilityPane.setVisible(false);
+            windPane.setVisible(true);
         } else {
             datatype = Datatype.VISIBILITY;
             datatypeLabel.setText(datatype.toString());
             temperaturePane.setVisible(false);
-            visibilityPane.setVisible(false);
-            windPane.setVisible(true);
+            visibilityPane.setVisible(true);
+            windPane.setVisible(false);
         }
     }
 
@@ -155,21 +156,17 @@ public class WeatherController {
 
             // Creates weather data according to new start and end time to sessionData
             sessionData.createWeatherData(startTime, endTime);
-            System.out.println("Ronjan testi1");
 
-            if(comboBox.getValue().equals("WIND")){
+            if(datatype == Datatype.WIND) {
+                visibilityChart.setVisible(false);
                 xAxisWind.setLabel("Time");
                 yAxisWind.setLabel("km/h");
 
-                // Ronjan chart testit.
-                windChart.getData().add(sessionData.createGraphSeriesWind());
+                XYChart.Series<String, Double> windSeries = sessionData.createGraphSeriesWind();
+                windSeries.setName("Wind");
 
-                windErrorLabel.setText(sessionData.WantedWeatherData.get(0).getWind()+ "");
-                System.out.println(sessionData.WantedWeatherData.get(0).getWind());
-                System.out.println(sessionData.WantedWeatherData.get(1).getWind());
-                System.out.println(sessionData.WantedWeatherData.get(1).getDate());
+                windChart.getData().add(windSeries);
             }
-            System.out.println("Testi toinen testi");
         }
     }
 
