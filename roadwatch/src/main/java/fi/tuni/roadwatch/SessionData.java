@@ -1,6 +1,7 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Coordinate;
+import javafx.scene.chart.XYChart;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,6 +21,9 @@ public class SessionData {
     public List<Coordinate> polyCoordinates = new ArrayList<>();
     private Date dateAndTime = Calendar.getInstance().getTime();
 
+
+    public TreeMap<Date, Double> windTimeMap = new TreeMap<Date, Double>();
+    public TreeMap<Date, Double> visibilityTimeMap = new TreeMap<Date, Double>();
     public ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
 
@@ -122,11 +126,12 @@ public class SessionData {
     }
 
     public void createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
+        this.wantedWeatherAVGMinMax.clear();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
-        String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints.getAsString(','),  startTimeString, endTimeString);
+        String urlstring = weatherAPILogic.createAVGMINMAXurlString(currentCoordinates.getLatitude(), currentCoordinates.getLongitude(),  startTimeString, endTimeString);
         System.out.println(urlstring);
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
 
@@ -134,6 +139,7 @@ public class SessionData {
 
     // WeatherData creation to sessionData
     public void createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
+        this.WantedWeatherData.clear();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
@@ -204,6 +210,19 @@ public class SessionData {
         average = average/wantedWeatherAVGMinMax.size();
 
         return df.format(average);
+    }
+
+    public XYChart.Series createGraphSeriesWind(){
+
+        XYChart.Series wind_series = new XYChart.Series();
+
+        for(WeatherData wd : this.WantedWeatherData){
+            Double Y = wd.getWind();
+            String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
+            wind_series.getData().add(new XYChart.Data(X, Y));
+        }
+
+        return wind_series;
     }
 
 

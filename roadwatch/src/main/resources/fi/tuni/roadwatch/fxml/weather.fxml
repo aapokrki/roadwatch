@@ -55,10 +55,10 @@
            <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
            <LineChart fx:id="windChart" layoutX="162.0" layoutY="14.0">
                <xAxis>
-                   <CategoryAxis side="BOTTOM" />
+                   <CategoryAxis side="BOTTOM" fx:id="xAxisWind" />
                </xAxis>
                <yAxis>
-                   <NumberAxis side="LEFT" />
+                   <NumberAxis side="LEFT" fx:id="yAxisWind"/>
                </yAxis>
            </LineChart>
        </AnchorPane>

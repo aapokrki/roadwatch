@@ -2,7 +2,9 @@ package fi.tuni.roadwatch;
 
 import javafx.fxml.FXML;
 
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 
 import javafx.scene.control.Label;
@@ -78,22 +80,24 @@ public class WeatherController {
 
 
     // Wind components
-    private TreeMap<Date, Double> windTimeMap = new TreeMap<Date, Double>();
     @FXML
     private AnchorPane windPane;
     @FXML
     private Label windLabel;
     @FXML
-    private LineChart<Integer, Integer> windChart;
+    private LineChart windChart;
+    @FXML
+    private CategoryAxis xAxisWind;
+    @FXML
+    private NumberAxis yAxisWind;
 
     // Visibility components
-    private TreeMap<Date, Double> visibilityTimeMap = new TreeMap<Date, Double>();
     @FXML
     private AnchorPane visibilityPane;
     @FXML
     private Label  visibilityLabel ;
     @FXML
-    private LineChart<Integer, Integer> visibilityChart;
+    private LineChart<String, Double> visibilityChart;
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
@@ -136,6 +140,28 @@ public class WeatherController {
     //Test to check if apiread works and gets data to weather controller
     @FXML
     private void calculateData() throws ParserConfigurationException, IOException, ParseException, SAXException {
+        // Gets the date right now and adds a few seconds to get forecast from API
+        // Also getting the date and the end of day
+        Calendar cal = Calendar.getInstance();
+        long timeInSecs = cal.getTimeInMillis();
+        Date startTime = new Date(timeInSecs + (10*60*10));
+        Date endTime = timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
+
+        // Creates weather data according to new start and end time to sessionData
+        sessionData.createWeatherData(startTime, endTime);
+
+        if(comboBox.getValue().equals("WIND")){
+            xAxisWind.setLabel("Time");
+            yAxisWind.setLabel("km/h");
+            windChart.getData().add(sessionData.createGraphSeriesWind());
+
+            
+            System.out.println(sessionData.WantedWeatherData.get(0).getWind());
+            System.out.println(sessionData.WantedWeatherData.get(1).getWind());
+            System.out.println(sessionData.WantedWeatherData.get(1).getDate());
+        }
+
+        System.out.println("Testi toinen testi");
 
     }
 

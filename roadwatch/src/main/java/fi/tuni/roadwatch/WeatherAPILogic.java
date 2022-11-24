@@ -53,8 +53,8 @@ public class WeatherAPILogic {
                     .append("&timestep=10&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
         }
         else{
-            double longitude2 = longitude +1;
-            double latitude2 = latitude+1;
+            double longitude2 = longitude +0.5;
+            double latitude2 = latitude+0.5;
             String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
 
 
@@ -66,9 +66,11 @@ public class WeatherAPILogic {
 
     }
 
-    public String createAVGMINMAXurlString(String bbox, String startime, String endtime){
+    public String createAVGMINMAXurlString(Double latitude, Double longitude, String startime, String endtime){
         StringBuilder str = new StringBuilder();
-        String coordinateBbox = bbox;
+        double longitude2 = longitude +0.5;
+        double latitude2 = latitude+0.5;
+        String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
 
         str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=").append(coordinateBbox)
                 .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
