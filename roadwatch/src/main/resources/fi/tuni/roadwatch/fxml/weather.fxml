@@ -74,8 +74,12 @@
          <Label fx:id="tempMaxLabel2" layoutX="574.0" layoutY="214.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Ylin" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="266.0" layoutX="24.0" layoutY="64.0" stroke="#78e2a2" strokeType="INSIDE" width="778.0" />
        </AnchorPane>
-       <DatePicker fx:id="startDatePicker" layoutX="24.0" layoutY="89.0" />
-       <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="256.0" />
+       <AnchorPane fx:id="datePickerPane">
+           <Label fx:id="startDateLabel" layoutX="17.0" layoutY="100.0" styleClass="smallText" text="Select start date"/>
+           <Label fx:id="endDateLabel" layoutX="17.0" layoutY="270.0" styleClass="smallText" text="Select end date"/>
+           <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="130.0" />
+           <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="300.0" />
+       </AnchorPane>
        <Label fx:id="errorLabel" layoutX="514.0" layoutY="448.0" prefHeight="30.0" prefWidth="297.0" styleClass="smallText" />
    </children>
 </AnchorPane>

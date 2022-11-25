@@ -37,6 +37,8 @@ public class WeatherController {
     @FXML
     private Label datatypeLabel;
     @FXML
+    private AnchorPane datePickerPane;
+    @FXML
     private  DatePicker startDatePicker;
     @FXML
     private  DatePicker endDatePicker;
@@ -110,22 +112,22 @@ public class WeatherController {
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
+        setTemperatureData();
+    }
+
+    private void setTemperatureData() {
         datatype = Datatype.TEMPERATURE;
-        // TODO: enemmän enum tyyppien hyödynnystä?
+        datatypeLabel.setText(datatype.toString());
+        setTemperature();
         visibilityPane.setVisible(false);
         windPane.setVisible(false);
+        datePickerPane.setVisible(false);
     }
 
     @FXML
     private void changeDatatype() {
         if(comboBox.getValue().equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
-            datatype = Datatype.TEMPERATURE;
-            datatypeLabel.setText(datatype.toString());
-            setTemperature();
-            visibilityPane.setVisible(false);
-            windPane.setVisible(false);
-            startDatePicker.setVisible(false);
-            endDatePicker.setVisible(false);
+            setTemperatureData();
         }
         else if(comboBox.getValue().equalsIgnoreCase(Datatype.WIND.toString())) {
             datatype = Datatype.WIND;
@@ -134,8 +136,7 @@ public class WeatherController {
             visibilityPane.setVisible(false);
             windPane.setVisible(true);
             windChart.setVisible(true);
-            startDatePicker.setVisible(true);
-            endDatePicker.setVisible(true);
+            datePickerPane.setVisible(true);
         } else {
             datatype = Datatype.VISIBILITY;
             datatypeLabel.setText(datatype.toString());
@@ -143,8 +144,7 @@ public class WeatherController {
             visibilityPane.setVisible(true);
             windPane.setVisible(false);
             visibilityChart.setVisible(true);
-            startDatePicker.setVisible(true);
-            endDatePicker.setVisible(true);
+            datePickerPane.setVisible(true);
         }
     }
 
