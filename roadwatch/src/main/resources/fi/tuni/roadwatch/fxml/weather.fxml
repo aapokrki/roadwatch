@@ -40,9 +40,9 @@
          <Label layoutX="39.0" layoutY="355.0" styleClass="smallHeading" text="Calculate values from given date" />
          <DatePicker fx:id="chooseDay" layoutX="136.0" layoutY="457.0" onAction="#saveDate" />
          <Label layoutX="161.0" layoutY="415.0" styleClass="basicTextWhite" text="Select date" />
-         <Label fx:id="avglabel" layoutX="688.0" layoutY="381.0" prefHeight="17.0" prefWidth="113.0" styleClass="smallText" text="avglabel" />
-         <Label fx:id="minlabel" layoutX="688.0" layoutY="444.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" text="minlabel" />
-         <Label fx:id="maxlabel" layoutX="688.0" layoutY="470.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" text="maxlabel" />
+         <Label fx:id="avglabel" layoutX="688.0" layoutY="381.0" prefHeight="17.0" prefWidth="113.0" styleClass="smallText" />
+         <Label fx:id="minlabel" layoutX="688.0" layoutY="444.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" />
+         <Label fx:id="maxlabel" layoutX="688.0" layoutY="470.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" />
            <Button fx:id="minMaxTempButton" layoutX="426.0" layoutY="444.0" mnemonicParsing="false" onAction="#onMinMaxBtnClick" styleClass="basicButton" text="MIN-MAX TEMP" />
          <Label fx:id="tempMinLabel1" layoutX="574.0" layoutY="262.0" prefHeight="47.0" prefWidth="68.0" styleClass="basicHeadingWhite" text="Alin" />
          <Label fx:id="tempMinLabel2" layoutX="276.0" layoutY="262.0" prefHeight="47.0" prefWidth="68.0" styleClass="basicHeadingWhite" text="Alin" />
@@ -50,6 +50,9 @@
          <Label fx:id="tempMaxLabel2" layoutX="574.0" layoutY="214.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Ylin" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="266.0" layoutX="24.0" layoutY="64.0" stroke="#78e2a2" strokeType="INSIDE" width="778.0" />
        </AnchorPane>
+       <DatePicker fx:id="startDatePicker" layoutX="24.0" layoutY="89.0" />
+       <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="256.0" />
+       <Label fx:id="errorLabel" layoutX="514.0" layoutY="448.0" prefHeight="30.0" prefWidth="297.0" styleClass="smallText" />
        <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="62.0" prefHeight="450.0" prefWidth="823.0">
            <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
            <Button fx:id="windButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="CALCULATE" />
@@ -61,9 +64,8 @@
                    <NumberAxis fx:id="yAxisWind" side="LEFT" />
                </yAxis>
            </LineChart>
-           <Label fx:id="windErrorLabel" layoutX="514.0" layoutY="448.0" prefHeight="30.0" prefWidth="297.0" styleClass="smallText" />
        </AnchorPane>
-       <AnchorPane fx:id="visibilityPane" layoutX="3.0" layoutY="62.0" prefHeight="450.0" prefWidth="823.0">
+       <AnchorPane fx:id="visibilityPane" layoutX="3.0" layoutY="65.0" prefHeight="450.0" prefWidth="823.0">
            <Label fx:id="visibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
            <Button fx:id="visibilityButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="CALCULATE" />
             <LineChart fx:id="visibilityChart" layoutX="162.0" layoutY="14.0">
@@ -71,7 +73,7 @@
                     <CategoryAxis side="BOTTOM" fx:id="xAxisVisibility" />
                 </xAxis>
                 <yAxis>
-                    <NumberAxis side="LEFT" fx:id="yAxisVisibility"/>
+                    <NumberAxis fx:id="yAxisVisibility" side="LEFT" />
                 </yAxis>
             </LineChart>
        </AnchorPane>

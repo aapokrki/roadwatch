@@ -36,6 +36,10 @@ public class WeatherController {
     private ComboBox<String> comboBox;
     @FXML
     private Label datatypeLabel;
+    @FXML
+    private  DatePicker startDatePicker;
+    @FXML
+    private  DatePicker endDatePicker;
 
     // Temperature components
     private TreeMap<Date, Double> temperatureTimeMap = new TreeMap<Date, Double>();
@@ -78,7 +82,6 @@ public class WeatherController {
     private Label tempMinLabel;
 
 
-
     // Wind components
     @FXML
     private AnchorPane windPane;
@@ -91,7 +94,7 @@ public class WeatherController {
     @FXML
     private NumberAxis yAxisWind;
     @FXML
-    private Label windErrorLabel;
+    private Label errorLabel;
 
     // Visibility components
     @FXML
@@ -121,6 +124,8 @@ public class WeatherController {
             setTemperature();
             visibilityPane.setVisible(false);
             windPane.setVisible(false);
+            startDatePicker.setVisible(false);
+            endDatePicker.setVisible(false);
         }
         else if(comboBox.getValue().equalsIgnoreCase(Datatype.WIND.toString())) {
             datatype = Datatype.WIND;
@@ -128,12 +133,18 @@ public class WeatherController {
             temperaturePane.setVisible(false);
             visibilityPane.setVisible(false);
             windPane.setVisible(true);
+            windChart.setVisible(true);
+            startDatePicker.setVisible(true);
+            endDatePicker.setVisible(true);
         } else {
             datatype = Datatype.VISIBILITY;
             datatypeLabel.setText(datatype.toString());
             temperaturePane.setVisible(false);
             visibilityPane.setVisible(true);
             windPane.setVisible(false);
+            visibilityChart.setVisible(true);
+            startDatePicker.setVisible(true);
+            endDatePicker.setVisible(true);
         }
     }
 
@@ -144,38 +155,39 @@ public class WeatherController {
 
     @FXML
     private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        visibilityChart.setVisible(true);
-        visibilityChart.getData().clear();
-        // Gets the date right now and adds a few seconds to get forecast from API
-        // Also getting the date and the end of day
-        Date startTime = timeAndDateAsDate("2022-11-03T00:40:10Z");
-        Date endTime = timeAndDateAsDate("2022-11-04T20:15:10Z");
+        if(sessionData.currentCoordinates == null) {
+            errorLabel.setText("Choose coordinates!");
+        } else {
+            visibilityChart.setAnimated(false);
+            visibilityChart.getData().clear();
+            // Gets the date right now and adds a few seconds to get forecast from API
+            // Also getting the date and the end of day
+            Date startTime = timeAndDateAsDate("2022-11-03T00:40:10Z");
+            Date endTime = timeAndDateAsDate("2022-11-04T20:15:10Z");
+            sessionData.createWeatherData(startTime, endTime);
+            XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
 
-        sessionData.createWeatherData(startTime, endTime);
-        XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
-
-        if(visibilitySeries != null){
-            visibilitySeries.setName("Visibility");
-
-            visibilityChart.getData().add(visibilitySeries);
-            windChart.setVisible(false);
-            xAxisVisibility.setLabel("Time");
-            yAxisVisibility.setLabel("km");
+            if(visibilitySeries != null){
+                visibilitySeries.setName("Visibility");
+                visibilityChart.getData().add(visibilitySeries);
+                windChart.setVisible(false);
+                xAxisVisibility.setLabel("Time");
+                yAxisVisibility.setLabel("km");
+            }
         }
-
-
     }
 
     @FXML
     private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException {
         windChart.setVisible(true);
         if(sessionData.currentCoordinates == null) {
-            windErrorLabel.setText("Choose coordinates!");
+            errorLabel.setText("Choose coordinates!");
         } else {
+            windChart.setAnimated(false);
             windChart.getData().clear();
             // Gets the date right now and adds a few seconds to get forecast from API
             // Also getting the date and the end of day
-            windErrorLabel.setText("");
+            errorLabel.setText("");
             Calendar cal = Calendar.getInstance();
             long timeInSecs = cal.getTimeInMillis();
             Date startTime = new Date(timeInSecs + (10*60*10));
@@ -194,7 +206,7 @@ public class WeatherController {
                 yAxisWind.setLabel("m/s");
             }
             else{
-                windErrorLabel.setText("No Data");
+                errorLabel.setText("No Data");
             }
 
         }
@@ -237,10 +249,6 @@ public class WeatherController {
 
             }
         }
-        // TEST LABELS
-        // RONJA SITKU TEET NE SUN LABELIT NII VAIHA VAA NE TÄHÄN NIIN NE TOIMII
-        // TEIN NYT MYÖS LABELIN JOKA NÄYTTÄÄ SEN PÄIVÄN MIN JA MAX LÄMPÖTILAN LISÄKSI MYÖS LÄMPÖTILAN JUST NYT
-        // tai no 10 minuttii tulevaisuudessa. Laitoin sen tohon ylös if lauseesee niin näkyy vain now tabis
         tempMinLabel.setText(String.valueOf(min));
         tempMaxLabel.setText(String.valueOf(max));
     }
