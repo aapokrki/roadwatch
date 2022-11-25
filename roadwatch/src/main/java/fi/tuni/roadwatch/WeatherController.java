@@ -155,7 +155,7 @@ public class WeatherController {
             yAxisWind.setLabel("km/h");
             windChart.getData().add(sessionData.createGraphSeriesWind());
 
-            
+
             System.out.println(sessionData.WantedWeatherData.get(0).getWind());
             System.out.println(sessionData.WantedWeatherData.get(1).getWind());
             System.out.println(sessionData.WantedWeatherData.get(1).getDate());
