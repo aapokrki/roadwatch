@@ -212,14 +212,14 @@ public class SessionData {
         return df.format(average);
     }
 
-    public XYChart.Series createGraphSeriesWind(){
+    public XYChart.Series<String, Double> createGraphSeriesWind(){
 
-        XYChart.Series wind_series = new XYChart.Series();
+        XYChart.Series<String, Double> wind_series = new XYChart.Series<>();
 
         for(WeatherData wd : this.WantedWeatherData){
             Double Y = wd.getWind();
             String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-            wind_series.getData().add(new XYChart.Data(X, Y));
+            wind_series.getData().add(new XYChart.Data<>(X, Y));
         }
 
         return wind_series;
