@@ -61,6 +61,5 @@
       <Label layoutX="1037.0" layoutY="271.0" styleClass="smallText" text="Start date" />
       <Label layoutX="1036.0" layoutY="354.0" styleClass="smallText" text="End date" />
       <DatePicker layoutX="1033.0" layoutY="394.0" />
-      <Button layoutX="882.0" layoutY="473.0" mnemonicParsing="false" text="Button" />
    </children>
 </AnchorPane>
