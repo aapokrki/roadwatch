@@ -100,6 +100,10 @@ public class WeatherController {
     private Label  visibilityLabel ;
     @FXML
     private LineChart<String, Double> visibilityChart;
+    @FXML
+    private CategoryAxis xAxisVisibility;
+    @FXML
+    private NumberAxis yAxisVisibility;
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
@@ -139,7 +143,32 @@ public class WeatherController {
     }
 
     @FXML
-    private void calculateData() throws ParserConfigurationException, IOException, ParseException, SAXException {
+    private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException {
+        visibilityChart.setVisible(true);
+        visibilityChart.getData().clear();
+        // Gets the date right now and adds a few seconds to get forecast from API
+        // Also getting the date and the end of day
+        Date startTime = timeAndDateAsDate("2022-11-03T00:40:10Z");
+        Date endTime = timeAndDateAsDate("2022-11-04T20:15:10Z");
+
+        sessionData.createWeatherData(startTime, endTime);
+        XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
+
+        if(visibilitySeries != null){
+            visibilitySeries.setName("Visibility");
+
+            visibilityChart.getData().add(visibilitySeries);
+            windChart.setVisible(false);
+            xAxisVisibility.setLabel("Time");
+            yAxisVisibility.setLabel("km");
+        }
+
+
+    }
+
+    @FXML
+    private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException {
+        windChart.setVisible(true);
         if(sessionData.currentCoordinates == null) {
             windErrorLabel.setText("Choose coordinates!");
         } else {
@@ -155,36 +184,17 @@ public class WeatherController {
             // Creates weather data according to new start and end time to sessionData
             sessionData.createWeatherData(startTime, endTime);
 
-            if(datatype == Datatype.WIND) {
+            XYChart.Series<String, Double> windSeries = sessionData.createGraphSeries("WIND");
+            if(windSeries != null){
+                windSeries.setName("Wind");
 
-                XYChart.Series<String, Double> windSeries = sessionData.createGraphSeries("WIND");
-                if(windSeries != null){
-                    windSeries.setName("Wind");
-
-                    windChart.getData().add(windSeries);
-                    visibilityChart.setVisible(false);
-                    xAxisWind.setLabel("Time");
-                    yAxisWind.setLabel("m/s");
-                }
-                else{
-                    windErrorLabel.setText("No Data");
-                }
-
+                windChart.getData().add(windSeries);
+                visibilityChart.setVisible(false);
+                xAxisWind.setLabel("Time");
+                yAxisWind.setLabel("m/s");
             }
-
-            if(datatype == Datatype.VISIBILITY){
-                XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
-                if(visibilitySeries != null){
-                    visibilitySeries.setName("Visibility");
-
-                    windChart.getData().add(visibilitySeries);
-                    visibilityChart.setVisible(false);
-                    xAxisWind.setLabel("Time");
-                    yAxisWind.setLabel("km");
-                }
-                else{
-                    windErrorLabel.setText("No Data");
-                }
+            else{
+                windErrorLabel.setText("No Data");
             }
 
         }

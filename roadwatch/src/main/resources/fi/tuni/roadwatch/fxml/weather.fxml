@@ -68,10 +68,10 @@
            <Button fx:id="visibilityButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="CALCULATE" />
             <LineChart fx:id="visibilityChart" layoutX="162.0" layoutY="14.0">
                 <xAxis>
-                    <CategoryAxis side="BOTTOM" />
+                    <CategoryAxis side="BOTTOM" fx:id="xAxisVisibility" />
                 </xAxis>
                 <yAxis>
-                    <NumberAxis side="LEFT" />
+                    <NumberAxis side="LEFT" fx:id="yAxisVisibility"/>
                 </yAxis>
             </LineChart>
        </AnchorPane>
