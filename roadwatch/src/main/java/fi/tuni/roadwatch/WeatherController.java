@@ -63,7 +63,6 @@ public class WeatherController {
     private Button minMaxTempButton;
 
 
-    // ONNIN TESTI LABELIT TEE NÄISTÄ HIENOI RONJA
     private Date savedDate;
 
     @FXML
@@ -148,23 +147,18 @@ public class WeatherController {
         }
     }
 
-    // Changes date String in to string 8601Format to use in urlstring
-    public Date timeAndDateAsDate(String datestring) throws ParseException {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
-    }
 
     @FXML
+    // Calculates visibility data according to start and end date to a linechart
     private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        if(sessionData.currentCoordinates == null) {
-            errorLabel.setText("Choose coordinates!");
-        } else {
+        visibilityChart.setVisible(true);
+        if(datePickerErrorCheck()){
             visibilityChart.setAnimated(false);
             visibilityChart.getData().clear();
-            // Gets the date right now and adds a few seconds to get forecast from API
-            // Also getting the date and the end of day
-            Date startTime = timeAndDateAsDate("2022-11-03T00:40:10Z");
-            Date endTime = timeAndDateAsDate("2022-11-04T20:15:10Z");
-            sessionData.createWeatherData(startTime, endTime);
+
+
+            sessionData.createWeatherData(getStartDate(), getEndDate());
+
             XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
 
             if(visibilitySeries != null){
@@ -174,27 +168,24 @@ public class WeatherController {
                 xAxisVisibility.setLabel("Time");
                 yAxisVisibility.setLabel("km");
             }
+            else{
+                errorLabel.setText("No Data");
+            }
         }
+
     }
 
     @FXML
+    // Calculates wind data according to start and end date to a linechart
     private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException {
         windChart.setVisible(true);
-        if(sessionData.currentCoordinates == null) {
-            errorLabel.setText("Choose coordinates!");
-        } else {
+        if(datePickerErrorCheck()){
             windChart.setAnimated(false);
             windChart.getData().clear();
-            // Gets the date right now and adds a few seconds to get forecast from API
-            // Also getting the date and the end of day
-            errorLabel.setText("");
-            Calendar cal = Calendar.getInstance();
-            long timeInSecs = cal.getTimeInMillis();
-            Date startTime = new Date(timeInSecs + (10*60*10));
-            Date endTime = timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
 
-            // Creates weather data according to new start and end time to sessionData
-            sessionData.createWeatherData(startTime, endTime);
+            errorLabel.setText("");
+
+            sessionData.createWeatherData(getStartDate(), getEndDate());
 
             XYChart.Series<String, Double> windSeries = sessionData.createGraphSeries("WIND");
             if(windSeries != null){
@@ -208,8 +199,31 @@ public class WeatherController {
             else{
                 errorLabel.setText("No Data");
             }
-
         }
+    }
+
+    private Date getStartDate(){
+        LocalDate startLocalDate = startDatePicker.getValue();
+        if(startLocalDate == null){
+            errorLabel.setText("Dates cant be null");
+            return null;
+        }
+        Instant instant = Instant.from(startLocalDate.atStartOfDay(ZoneId.systemDefault()));
+        Date startDate = Date.from(instant);
+
+        return sessionData.trimToStart(startDate,0);
+    }
+
+    private Date getEndDate(){
+        LocalDate endLocalDate = endDatePicker.getValue();
+        if(endLocalDate == null){
+            errorLabel.setText("Dates cant be null");
+            return null;
+        }
+        Instant instant2 = Instant.from(endLocalDate.atStartOfDay(ZoneId.systemDefault()));
+        Date endDate = Date.from(instant2);
+
+        return  sessionData.trimToEnd(endDate,0);
     }
 
     @FXML
@@ -217,7 +231,6 @@ public class WeatherController {
         LocalDate localDate = chooseDay.getValue();
         Instant instant = Instant.from(localDate.atStartOfDay(ZoneOffset.UTC));
         savedDate = Date.from(instant);
-
     }
 
     // Temperature actions
@@ -246,81 +259,78 @@ public class WeatherController {
                     tempRightNowLabel.setVisible(true);
                     tempRightNowLabel.setText(String.valueOf(wd.getTemperature()));
                 }
-
             }
         }
         tempMinLabel.setText(String.valueOf(min));
         tempMaxLabel.setText(String.valueOf(max));
     }
 
-    // Helper function to set the time of day to 00:00:00, also can add days to date
-    private Date trimToStart(Date date, int Days){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, Days);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-
-        return cal.getTime();
+    private boolean coordinateCheck(){
+        if(sessionData.coordinateConstraints == null){
+            return false;
+        }
+        return sessionData.currentCoordinates != null;
     }
 
-    // Helper function to set the time of day to 23:59:59, also can add days to date
-    private Date trimToEnd(Date date, int Days){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, Days);
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE,59);
-        cal.set(Calendar.SECOND,59);
-
-        return cal.getTime();
-    }
 
     @FXML
     private void onNowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         changeTimeColors(nowLabel, tomorrowLabel, dATomorrowLabel);
 
+        if(!coordinateCheck()){
+            errorLabel.setText("Choose coordinates, remember to add on map!");
+        }
+        else{
         // Gets the date right now and adds a few seconds to get forecast from API
         // Also getting the date and the end of day
         Calendar cal = Calendar.getInstance();
         long timeInSecs = cal.getTimeInMillis();
         Date startTime = new Date(timeInSecs + (10*60*10));
-        Date endTime = timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
+        Date endTime = sessionData.timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
 
         // Creates weather data according to new start and end time to sessionData
         sessionData.createWeatherData(startTime, endTime);
 
         changeTempLabels("now");
+
+        }
     }
 
     @FXML
     private void onTomorrowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         changeTimeColors(tomorrowLabel, nowLabel, dATomorrowLabel);
+        if(!coordinateCheck()){
+            errorLabel.setText("Choose coordinates, remember to add on map!");
+        }
+        else {
+            // Sets the date to the next day to hours 00 - 24
+            Date now = Calendar.getInstance().getTime();
+            Date startTime = sessionData.trimToStart(now, 1);
+            Date endTime = sessionData.trimToEnd(now, 1);
 
-        // Sets the date to the next day to hours 00 - 24
-        Date now = Calendar.getInstance().getTime();
-        Date startTime = trimToStart(now,1);
-        Date endTime = trimToEnd(now, 1);
-
-        // Creates weather data according to new start and end time to sessionData
-        sessionData.createWeatherData(startTime, endTime);
-        changeTempLabels("not");
+            // Creates weather data according to new start and end time to sessionData
+            sessionData.createWeatherData(startTime, endTime);
+            changeTempLabels("not");
+        }
 
     }
 
     @FXML
     private void onDATomorrowClick() throws ParserConfigurationException, IOException, ParseException, SAXException {
         changeTimeColors(dATomorrowLabel, nowLabel, tomorrowLabel);
+        if(!coordinateCheck()){
+            errorLabel.setText("Choose coordinates, remember to add on map!");
+        }
+        else {
+            // Sets the date to the next day to hours 00 - 24
+            Date now = Calendar.getInstance().getTime();
+            Date startTime = sessionData.trimToStart(now, 2);
+            Date endTime = sessionData.trimToEnd(now, 2);
 
-        // Sets the date to the next day to hours 00 - 24
-        Date now = Calendar.getInstance().getTime();
-        Date startTime = trimToStart(now,2);
-        Date endTime = trimToEnd(now, 2);
-
-        // Creates weather data according to new start and end time
-        sessionData.createWeatherData(startTime, endTime);
-        changeTempLabels("not");
+            // Creates weather data according to new start and end time
+            sessionData.createWeatherData(startTime, endTime);
+            changeTempLabels("not");
+        }
     }
 
     @FXML
@@ -333,28 +343,84 @@ public class WeatherController {
     }
 
 
+    private boolean datePickerErrorCheck(){
+        errorLabel.setText("");
+        if(startDatePicker == null || endDatePicker == null){
+            errorLabel.setText("Datepicker cant be null");
+            return false;
+        }
+        else if(!coordinateCheck()) {
+            errorLabel.setText("Choose coordinates, remember to add on map!");
+            return false;
+        }
+        else if (getStartDate() == null || getEndDate() == null){
+            errorLabel.setText("Datepicker cant be null");
+            return false;
+        }
+        else if(Objects.requireNonNull(getStartDate()).after(getEndDate())){
+            errorLabel.setText("Start date cant be after end date");
+            return false;
+        }
+        else if(getStartDate().before(sessionData.convertToDateViaInstant(currentDate.toLocalDate())) &&
+                Objects.requireNonNull(getEndDate()).after(sessionData.convertToDateViaInstant(currentDate.toLocalDate()))){
+            errorLabel.setText("Can't get data from both past and future");
+            return false;
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(getStartDate());
+        c.add(Calendar.DATE,7);
+        if(c.getTime().compareTo(getEndDate()) <= 0){
+            errorLabel.setText("Maximum time length 1 week");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean avgMinMaxErrorCheck(){
+        errorLabel.setText("");
+        if(savedDate == null){
+            errorLabel.setText("Choose a date");
+            return false;
+        }
+        if(sessionData.currentCoordinates == null){
+            errorLabel.setText("Choose coordinates");
+            return false;
+        }
+        if(savedDate.after(sessionData.convertToDateViaInstant(LocalDate.from(currentDate)))){
+            errorLabel.setText("Can't count average or min-max of future");
+            return false;
+        }
+        return true;
+    }
+
     // Counts the average temperature of a certain day in certain month and year
     // at certain location
     @FXML
     private void onAvgBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        Date startTime = savedDate;
-        Date endTime = trimToEnd(savedDate,0);
+        if(avgMinMaxErrorCheck()){
+            Date startTime = savedDate;
+            Date endTime = sessionData.trimToEnd(savedDate, 0);
 
-        sessionData.createAvgMinMax(startTime, endTime);
+            sessionData.createAvgMinMax(startTime, endTime);
 
-        avglabel.setText(sessionData.getAVG_value());
+            avglabel.setText(sessionData.getAVG_value());
+        }
     }
 
     // Counts the min and max temperature of a certain day in certain month and year
     // at certain location
     @FXML
     private void onMinMaxBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        Date startTime = savedDate;
-        Date endTime = trimToEnd(savedDate,0);
+        if(avgMinMaxErrorCheck()){
+            Date startTime = savedDate;
+            Date endTime = sessionData.trimToEnd(savedDate, 0);
 
-        sessionData.createAvgMinMax(startTime, endTime);
+            sessionData.createAvgMinMax(startTime, endTime);
 
-        minlabel.setText(String.valueOf(sessionData.getMIN_value()));
-        maxlabel.setText(String.valueOf(sessionData.getMAX_value()));
+            minlabel.setText(String.valueOf(sessionData.getMIN_value()));
+            maxlabel.setText(String.valueOf(sessionData.getMAX_value()));
+        }
     }
+
+
 }

@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class SessionData {
@@ -43,8 +46,8 @@ public class SessionData {
             this.maxLat = maxLat;
 
         }
-        private final Double minLon;
-        private final Double minLat;
+        public final Double minLon;
+        public final Double minLat;
 
         private final Double maxLon;
         private final Double maxLat;
@@ -130,8 +133,10 @@ public class SessionData {
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
-        String urlstring = weatherAPILogic.createAVGMINMAXurlString(currentCoordinates.getLatitude(), currentCoordinates.getLongitude(),  startTimeString, endTimeString);
-        System.out.println(urlstring);
+
+
+        String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints.minLat, coordinateConstraints.minLon,  startTimeString, endTimeString);
+
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
 
     }
@@ -143,10 +148,8 @@ public class SessionData {
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
-        String urlstring = weatherAPILogic.createURLString(currentCoordinates.getLatitude(),currentCoordinates.getLongitude(),  startTimeString, endTimeString);
+        String urlstring = weatherAPILogic.createURLString(coordinateConstraints.minLat, coordinateConstraints.minLon,  startTimeString, endTimeString);
 
-       //Test to see what api is found with parameters
-        System.out.println(urlstring);
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation
         if(startTime.after(dateAndTime)){
@@ -243,6 +246,41 @@ public class SessionData {
         }
         return null;
 
+    }
+
+    // Helper function to set the time of day to 00:00:00, also can add days to date
+    public Date trimToStart(Date date, int Days){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, Days);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+
+        return cal.getTime();
+    }
+
+    // Helper function to set the time of day to 23:59:59, also can add days to date
+    public Date trimToEnd(Date date, int Days){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, Days);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND,59);
+
+        return cal.getTime();
+    }
+
+    // Changes date String in to string 8601Format to use in urlstring
+    public Date timeAndDateAsDate(String datestring) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
+    }
+
+    public Date convertToDateViaInstant(LocalDate dateToConvert) {
+        return java.util.Date.from(dateToConvert.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
     }
 
 
