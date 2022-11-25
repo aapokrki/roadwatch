@@ -14,7 +14,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -139,13 +138,12 @@ public class WeatherController {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
     }
 
-    // DONT DELETE YET HAJOTTAA SOFTAN ENNE KUN POISTAA FXML ton napin
-    //Test to check if apiread works and gets data to weather controller
     @FXML
     private void calculateData() throws ParserConfigurationException, IOException, ParseException, SAXException {
         if(sessionData.currentCoordinates == null) {
             windErrorLabel.setText("Choose coordinates!");
         } else {
+            windChart.getData().clear();
             // Gets the date right now and adds a few seconds to get forecast from API
             // Also getting the date and the end of day
             windErrorLabel.setText("");
@@ -158,20 +156,35 @@ public class WeatherController {
             sessionData.createWeatherData(startTime, endTime);
 
             if(datatype == Datatype.WIND) {
-                visibilityChart.setVisible(false);
-                xAxisWind.setLabel("Time");
-                yAxisWind.setLabel("km/h");
 
+                XYChart.Series<String, Double> windSeries = sessionData.createGraphSeries("WIND");
+                if(windSeries != null){
+                    windSeries.setName("Wind");
 
+                    windChart.getData().add(windSeries);
+                    visibilityChart.setVisible(false);
+                    xAxisWind.setLabel("Time");
+                    yAxisWind.setLabel("m/s");
+                }
+                else{
+                    windErrorLabel.setText("No Data");
+                }
 
-            System.out.println(sessionData.WantedWeatherData.get(0).getWind());
-            System.out.println(sessionData.WantedWeatherData.get(1).getWind());
-            System.out.println(sessionData.WantedWeatherData.get(1).getDate());
+            }
 
-            XYChart.Series<String, Double> windSeries = sessionData.createGraphSeriesWind();
-            windSeries.setName("Wind");
+            if(datatype == Datatype.VISIBILITY){
+                XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
+                if(visibilitySeries != null){
+                    visibilitySeries.setName("Visibility");
 
-            windChart.getData().add(windSeries);
+                    windChart.getData().add(visibilitySeries);
+                    visibilityChart.setVisible(false);
+                    xAxisWind.setLabel("Time");
+                    yAxisWind.setLabel("km");
+                }
+                else{
+                    windErrorLabel.setText("No Data");
+                }
             }
 
         }

@@ -10,7 +10,6 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SessionData {
 
@@ -212,18 +211,41 @@ public class SessionData {
         return df.format(average);
     }
 
-    public XYChart.Series<String, Double> createGraphSeriesWind(){
+    public XYChart.Series<String, Double> createGraphSeries(String chart_type){
 
         XYChart.Series<String, Double> wind_series = new XYChart.Series<>();
+        XYChart.Series<String, Double> visibility_series = new XYChart.Series<>();
 
         for(WeatherData wd : this.WantedWeatherData){
-            Double Y = wd.getWind();
-            String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-            wind_series.getData().add(new XYChart.Data<>(X, Y));
+            Date datecheck = wd.getDate();
+            Calendar date = Calendar.getInstance();
+            date.setTime(datecheck);
+            int hours = date.get(Calendar.HOUR_OF_DAY);
+            int minutes = date.get(Calendar.MINUTE);
+            if(hours % 2 == 0 && minutes == 0){
+                if(chart_type.equals("WIND")){
+                    Double Y = wd.getWind();
+                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
+                    wind_series.getData().add(new XYChart.Data<>(X, Y));
+                }
+                if(chart_type.equals("VISIBILITY")){
+                    Double Y = wd.getCloudiness();
+                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
+                    visibility_series.getData().add(new XYChart.Data<>(X, Y));
+                }
+            }
         }
+        if(Objects.equals(chart_type, "VISIBILITY")){
+            return visibility_series;
+        }
+        if(Objects.equals(chart_type, "WIND")){
+            return wind_series;
+        }
+        return null;
 
-        return wind_series;
     }
+
+
 
 
 
