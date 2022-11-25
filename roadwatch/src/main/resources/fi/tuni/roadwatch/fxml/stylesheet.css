@@ -154,11 +154,9 @@
 }
 
 .combo-box .label {
-    -fx-font-size: 14.0 pt;
     -fx-font-family: "Ubuntu";
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-padding: 10.0px;
 }
 
 .combo-box .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
@@ -176,7 +174,7 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 3 0 2 7;
-    -fx-cell-size: 1.66667em;
+    -fx-cell-size: 2em;
     -fx-border-width: 2.0;
     -fx-background-radius: 10px;
 }

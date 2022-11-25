@@ -10,11 +10,10 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
    <children>
-       <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="62.0" prefHeight="450.0" prefWidth="823.0">
+       <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="125.0" prefHeight="548.0" prefWidth="823.0">
            <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
            <Button fx:id="windButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="CALCULATE" />
            <LineChart fx:id="windChart" layoutX="162.0" layoutY="14.0">
@@ -26,7 +25,8 @@
                </yAxis>
            </LineChart>
        </AnchorPane>
-       <AnchorPane fx:id="visibilityPane" layoutX="3.0" layoutY="65.0" prefHeight="450.0" prefWidth="823.0">
+
+       <AnchorPane fx:id="visibilityPane" layoutX="3.0" layoutY="125.0" prefHeight="450.0" prefWidth="823.0">
            <Label fx:id="visibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
            <Button fx:id="visibilityButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="CALCULATE" />
             <LineChart fx:id="visibilityChart" layoutX="162.0" layoutY="14.0">
@@ -72,13 +72,12 @@
          <Label fx:id="tempMinLabel2" layoutX="276.0" layoutY="262.0" prefHeight="47.0" prefWidth="68.0" styleClass="basicHeadingWhite" text="Alin" />
          <Label fx:id="tempMaxLabel1" layoutX="276.0" layoutY="215.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Ylin" />
          <Label fx:id="tempMaxLabel2" layoutX="574.0" layoutY="214.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Ylin" />
-         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="266.0" layoutX="24.0" layoutY="64.0" stroke="#78e2a2" strokeType="INSIDE" width="778.0" />
        </AnchorPane>
-       <AnchorPane fx:id="datePickerPane">
-           <Label fx:id="startDateLabel" layoutX="17.0" layoutY="100.0" styleClass="smallText" text="Select start date"/>
-           <Label fx:id="endDateLabel" layoutX="17.0" layoutY="270.0" styleClass="smallText" text="Select end date"/>
-           <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="130.0" />
-           <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="300.0" />
+       <AnchorPane fx:id="datePickerPane" layoutX="9.0" layoutY="225.0" prefHeight="245.0" prefWidth="191.0">
+           <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />
+           <Label fx:id="endDateLabel" layoutX="17.0" layoutY="170.0" styleClass="smallText" text="Select end date" />
+           <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
+           <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="200.0" />
        </AnchorPane>
        <Label fx:id="errorLabel" layoutX="514.0" layoutY="448.0" prefHeight="30.0" prefWidth="297.0" styleClass="smallText" />
    </children>
