@@ -382,8 +382,8 @@ public class WeatherController {
             errorLabel.setText("Choose a date");
             return false;
         }
-        if(sessionData.currentCoordinates == null){
-            errorLabel.setText("Choose coordinates");
+        else if(!coordinateCheck()) {
+            errorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
         if(savedDate.after(sessionData.convertToDateViaInstant(LocalDate.from(currentDate)))){
