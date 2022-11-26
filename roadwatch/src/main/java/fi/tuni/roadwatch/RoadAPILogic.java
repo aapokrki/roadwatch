@@ -61,11 +61,13 @@ public class RoadAPILogic {
             "yMax=" + yMax + "&"+
             "taskId=&domain=state-roads");
 
-    //ObjectMapper roadMapper = new JsonMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper RoadAPImapper = new ObjectMapper();
 
     public RoadAPILogic() throws URISyntaxException, IOException {
-        System.out.println("MAINTENANCE API-LINK: \n"+uriMaintenance.toString());
-        System.out.println("ROAD-CONDITION API-LINK: \n"+uriRoadCondition.toString());
+        RoadAPImapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        RoadAPImapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
+
 
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
         JsonNode roadConditionNode = retrieveData(uriRoadCondition);
@@ -86,24 +88,20 @@ public class RoadAPILogic {
     // Construct traffic messages
     public TrafficMessage getTrafficMessages() throws IOException, URISyntaxException {
         System.out.println("TRAFFIC-MESSAGES API-LINK: \n"+uriTrafficMessage.toString());
-
         JsonNode trafficMessageNode = retrieveData(uriTrafficMessage);
-        TrafficMessage trafficMessage = new TrafficMessage();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        trafficMessage = mapper.treeToValue(trafficMessageNode, TrafficMessage.class);
-        return trafficMessage;
+        return RoadAPImapper.treeToValue(trafficMessageNode, TrafficMessage.class);
+    }
+
+    public RoadData getRoadData() throws IOException, URISyntaxException {
+        System.out.println("ROAD-CONDITION API-LINK: \n"+uriRoadCondition.toString());
+        JsonNode roadConditionNode = retrieveData(uriRoadCondition);
+        return RoadAPImapper.treeToValue(roadConditionNode, RoadData.class);
     }
 
     public Maintenance getMaintenance() throws IOException, URISyntaxException {
+        System.out.println("MAINTENANCE API-LINK: \n"+uriMaintenance.toString());
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
-        Maintenance maintenance = new Maintenance();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        maintenance = mapper.treeToValue(roadMaintenanceNode, Maintenance.class);
-        return maintenance;
+        return RoadAPImapper.treeToValue(roadMaintenanceNode, Maintenance.class);
     }
 
 
