@@ -202,6 +202,7 @@ public class SessionData {
     }
 
     public String getAVG_value(){
+
         double average = wantedWeatherAVGMinMax.get(0).getTempAverage();;
         for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
             average += wd.getTempAverage();
