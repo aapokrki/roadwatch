@@ -15,7 +15,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 
@@ -106,6 +105,10 @@ public class WeatherController {
     private CategoryAxis xAxisVisibility;
     @FXML
     private NumberAxis yAxisVisibility;
+
+    @FXML
+    private Button saveDataButton;
+
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
@@ -240,12 +243,12 @@ public class WeatherController {
 
     // Changes temperature labels according to which day you want to see
     private void changeTempLabels(Boolean now){
-        double min = sessionData.WantedWeatherData.get(0).getTemperature();
-        double max = sessionData.WantedWeatherData.get(0).getTemperature();
+        double min = sessionData.wantedWeatherData.get(0).getTemperature();
+        double max = sessionData.wantedWeatherData.get(0).getTemperature();
         tempRightNowLabel.setVisible(false);
 
         //Sets min max and now labels according to newest weather information
-        for(WeatherData wd : sessionData.WantedWeatherData){
+        for(WeatherData wd : sessionData.wantedWeatherData){
             if(wd.getTemperature() <= min){
                 min = wd.getTemperature();
             }
@@ -269,6 +272,7 @@ public class WeatherController {
         }
         return sessionData.currentCoordinates != null;
     }
+
 
 
     @FXML
@@ -376,7 +380,7 @@ public class WeatherController {
         return true;
     }
 
-    private boolean avgMinMaxErrorCheck(){
+    private boolean avgMinMaxErrorCheck(boolean flag){
         errorLabel.setText("");
         if(savedDate == null){
             errorLabel.setText("Choose a date");
@@ -386,10 +390,19 @@ public class WeatherController {
             errorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
-        if(savedDate.after(sessionData.convertToDateViaInstant(LocalDate.from(currentDate)))){
-            errorLabel.setText("Can't count average or min-max of future");
-            return false;
+        if(flag){
+            if(savedDate.after(sessionData.convertToDateViaInstant(LocalDate.from(currentDate)))){
+                errorLabel.setText("Can't count average or min-max of future");
+                return false;
+            }
         }
+        else{
+            if(savedDate.after(sessionData.convertToDateViaInstant(LocalDate.from(currentDate)))){
+                errorLabel.setText("Can't save date from the future");
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -397,7 +410,7 @@ public class WeatherController {
     // at certain location
     @FXML
     private void onAvgBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        if(avgMinMaxErrorCheck()){
+        if(avgMinMaxErrorCheck(true)){
             Date startTime = savedDate;
             Date endTime = sessionData.trimToEnd(savedDate, 0);
 
@@ -411,7 +424,7 @@ public class WeatherController {
     // at certain location
     @FXML
     private void onMinMaxBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        if(avgMinMaxErrorCheck()){
+        if(avgMinMaxErrorCheck(true)){
             Date startTime = savedDate;
             Date endTime = sessionData.trimToEnd(savedDate, 0);
 
@@ -420,6 +433,17 @@ public class WeatherController {
             minlabel.setText(String.valueOf(sessionData.getMIN_value()));
             maxlabel.setText(String.valueOf(sessionData.getMAX_value()));
         }
+    }
+
+    @FXML
+    private void saveWeatherData() throws ParserConfigurationException, IOException, ParseException, SAXException {
+        if(avgMinMaxErrorCheck(false)){
+            Date startTime = savedDate;
+            Date endTime = sessionData.trimToEnd(savedDate, 0);
+            sessionData.createWeatherData(startTime, endTime);
+            sessionData.saveWeatherData(savedDate);
+        }
+
     }
 
 

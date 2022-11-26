@@ -24,10 +24,9 @@ public class SessionData {
     private Date dateAndTime = Calendar.getInstance().getTime();
 
 
-    public TreeMap<Date, Double> windTimeMap = new TreeMap<Date, Double>();
-    public TreeMap<Date, Double> visibilityTimeMap = new TreeMap<Date, Double>();
-    public ArrayList<WeatherData> WantedWeatherData = new ArrayList<>();
+    public ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
+    public TreeMap<Date, WeatherData> savedWeatherData = new TreeMap<>();
 
     public TrafficMessage trafficMessage = new TrafficMessage();
 
@@ -143,7 +142,7 @@ public class SessionData {
 
     // WeatherData creation to sessionData
     public void createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
-        this.WantedWeatherData.clear();
+        this.wantedWeatherData.clear();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
@@ -153,16 +152,16 @@ public class SessionData {
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation
         if(startTime.after(dateAndTime)){
-            this.WantedWeatherData = weatherAPILogic.creatingWeatherForecast(weatherAPILogic.GetApiDocument(urlstring));
+            this.wantedWeatherData = weatherAPILogic.creatingWeatherForecast(weatherAPILogic.GetApiDocument(urlstring));
         }
-        this.WantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
+        this.wantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
 
     }
 
     // Helper function to get the closest date to current
     public Date getClosestDate(){
         ArrayList<Date> alldates = new ArrayList<>();
-        for (WeatherData wd : this.WantedWeatherData){
+        for (WeatherData wd : this.wantedWeatherData){
             alldates.add(wd.getDate());
         }
 
@@ -219,7 +218,7 @@ public class SessionData {
         XYChart.Series<String, Double> wind_series = new XYChart.Series<>();
         XYChart.Series<String, Double> visibility_series = new XYChart.Series<>();
 
-        for(WeatherData wd : this.WantedWeatherData){
+        for(WeatherData wd : this.wantedWeatherData){
             Date datecheck = wd.getDate();
             Calendar date = Calendar.getInstance();
             date.setTime(datecheck);
@@ -283,7 +282,20 @@ public class SessionData {
                 .toInstant());
     }
 
+    public void saveWeatherData(Date savedDate){
+        for(WeatherData wd : wantedWeatherData){
+            Date startDate = trimToStart(savedDate, 0);
+            Date endDate = trimToEnd(savedDate, 0);
+            if (wd.getDate() == startDate && wd.getDate().after(startDate) && wd.getDate().before(endDate)
+            && wd.getDate() == endDate){
+                if(!savedWeatherData.containsKey(wd.getDate())){
+                    savedWeatherData.put(wd.getDate(), wd);
+                }
 
+            }
+        }
+
+    }
 
 
 
