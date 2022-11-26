@@ -19,13 +19,13 @@
          <children>
             <Label styleClass="basicHeading" text="SELECT DATA" />
             <Line endX="204.2928924560547" endY="-1.4497476816177368" startX="-100.0" stroke="WHITE" />
-            <Label fx:id="RCLabel" styleClass="basicHeadingGrey" text="ROAD CONDITION" />
+            <Label fx:id="RCLabel" styleClass="basicHeadingGreyUnclickable" text="ROAD CONDITION" />
             <Label fx:id="visibilityLabel" onMouseClicked="#onVisibilityClick" styleClass="basicTextGrey" text="    VISIBILITY" />
             <Label fx:id="frictionLabel" onMouseClicked="#onFrictionClick" styleClass="basicTextGrey" text="    FRICTION" />
             <Label fx:id="precipitationLabel" onMouseClicked="#onPrecipitationClick" styleClass="basicTextGrey" text="    PRECIPITATION" />
             <Label fx:id="winterSlipperinessLabel" onMouseClicked="#onWinterSlipperinessClick" styleClass="basicTextGrey" text="    WINTER SLIPPERINESS" />
             <Label fx:id="overallConditionLabel" onMouseClicked="#onOverallConditionClick" styleClass="basicTextGrey" text="    OVERALL CONDITION" />
-            <Label styleClass="basicHeadingGrey" text="MAINTENANCE" />
+            <Label styleClass="basicHeadingGreyUnclickable" text="MAINTENANCE" />
             <Label styleClass="basicTextGrey" text="    TASKTYPE 1" />
             <Label styleClass="basicTextGrey" text="    TASKTYPE 2" />
             <Label styleClass="basicTextGrey" text="    TASKTYPE 3" />

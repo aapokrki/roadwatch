@@ -13,6 +13,7 @@
 
 <AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
    <children>
+      <Button fx:id="saveDataButton" layoutX="826.0" layoutY="30.0" mnemonicParsing="false" styleClass="basicButton" text="Fuck off" />
        <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="125.0" prefHeight="548.0" prefWidth="823.0">
            <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
            <Button fx:id="windButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="CALCULATE" />
@@ -48,7 +49,7 @@
            </FXCollections>
        </items>
       </ComboBox>
-       <Label fx:id="datatypeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="445.0" layoutY="14.0" prefHeight="70.0" prefWidth="381.0" styleClass="basicHeadingLightBlue" />
+       <Label fx:id="datatypeLabel" contentDisplay="CENTER" layoutX="466.0" layoutY="21.0" prefHeight="70.0" prefWidth="360.0" styleClass="basicHeadingLightBlue" />
 
        <AnchorPane fx:id="temperaturePane" layoutX="3.0" layoutY="62.0" prefHeight="523.0" prefWidth="823.0">
            <Label fx:id="weatherLabel" layoutX="43.0" layoutY="29.0" styleClass="basicText" text="WEATHER " />

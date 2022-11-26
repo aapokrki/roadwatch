@@ -44,6 +44,10 @@
     -fx-font-weight: bold;
 }
 
+.basicTextGrey:hover {
+    -fx-text-fill: #487AD9;
+}
+
 .basicTextBlue {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 24px;
@@ -79,10 +83,21 @@
     -fx-font-weight: bold;
 }
 
+.basicHeading:hover {
+    -fx-text-fill: #78e2a2;
+}
+
 .basicHeadingGreen {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 32px;
     -fx-text-fill: #78e2a2;
+    -fx-font-weight: bold;
+}
+
+.basicHeadingGreyUnclickable {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 32px;
+    -fx-text-fill: #434343;
     -fx-font-weight: bold;
 }
 
@@ -91,6 +106,10 @@
     -fx-font-size: 32px;
     -fx-text-fill: #434343;
     -fx-font-weight: bold;
+}
+
+.basicHeadingGrey:hover {
+    -fx-text-fill: #487AD9;
 }
 
 .basicHeadingBlue {
@@ -144,6 +163,14 @@
     -fx-background-color: #78C2E2;
     -fx-text-fill: white;
     -fx-background-radius: 15px;
+}
+
+.basicButton:hover {
+    -fx-background-color: #78e2a2;
+}
+
+.basicButton:selected:focused {
+    -fx-background-color: black;
 }
 
 .combo-box {
