@@ -149,7 +149,7 @@ public class SessionData {
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
         String urlstring = weatherAPILogic.createURLString(coordinateConstraints.minLat, coordinateConstraints.minLon,  startTimeString, endTimeString);
-
+        System.out.println(urlstring);
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation
         if(startTime.after(dateAndTime)){
