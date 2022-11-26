@@ -54,13 +54,18 @@
            <Label fx:id="weatherLabel" layoutX="43.0" layoutY="29.0" styleClass="basicText" text="WEATHER " />
            <Label fx:id="cityLabel" layoutX="171.0" layoutY="29.0" prefHeight="35.0" prefWidth="139.0" styleClass="basicText" text="City" />
            <Label fx:id="dateLabel" layoutX="325.0" layoutY="29.0" prefHeight="35.0" prefWidth="498.0" styleClass="basicText" />
-           <Label fx:id="nowLabel" layoutX="54.0" layoutY="74.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="101.0" styleClass="basicHeading" text="NOW" />
+           <Label fx:id="todayLabel" layoutX="54.0" layoutY="74.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="122.0" styleClass="basicHeading" text="TODAY" />
            <Label fx:id="tomorrowLabel" layoutX="183.0" layoutY="74.0" onMouseClicked="#onTomorrowClick" prefHeight="47.0" prefWidth="212.0" styleClass="basicHeading" text="TOMORROW" />
            <Label fx:id="dATomorrowLabel" layoutX="420.0" layoutY="74.0" onMouseClicked="#onDATomorrowClick" prefHeight="47.0" prefWidth="381.0" styleClass="basicHeading" text="DAY AFTER TOMORROW" />
            <Button fx:id="avgTempButton" layoutX="426.0" layoutY="364.0" mnemonicParsing="false" onAction="#onAvgBtnClick" styleClass="basicButton" text="AVERAGE TEMP" />
-            <Label fx:id="tempMinLabel" layoutX="70.0" layoutY="262.0" prefHeight="47.0" prefWidth="68.0" styleClass="basicHeadingWhite" text="Alin" />
-            <Label fx:id="tempMaxLabel" layoutX="67.0" layoutY="224.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Ylin" />
-            <Label fx:id="tempRightNowLabel" layoutX="70.0" layoutY="159.0" prefHeight="47.0" prefWidth="68.0" styleClass="basicHeadingWhite" text="Nyt" />
+
+           <Label fx:id="nowLabel" layoutX="100.0" layoutY="142.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Now" />
+            <Label fx:id="tempRightNowLabel" layoutX="83.0" layoutY="200.0" prefHeight="47.0" prefWidth="139.0" styleClass="basicHeadingWhite" />
+           <Label layoutX="280.0" layoutY="142.0" prefHeight="47.0" prefWidth="139.0" styleClass="basicHeadingWhite" text="Highest" />
+            <Label fx:id="tempMaxLabel" layoutX="280.0" layoutY="200.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
+           <Label layoutX="467.0" layoutY="142.0" prefHeight="47.0" prefWidth="130.0" styleClass="basicHeadingWhite" text="Lowest" />
+            <Label fx:id="tempMinLabel" layoutX="460.0" layoutY="200.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
+
          <Label layoutX="39.0" layoutY="355.0" styleClass="smallHeading" text="Calculate values from given date" />
          <DatePicker fx:id="chooseDay" layoutX="136.0" layoutY="457.0" onAction="#saveDate" />
          <Label layoutX="161.0" layoutY="415.0" styleClass="basicTextWhite" text="Select date" />
@@ -68,10 +73,6 @@
          <Label fx:id="minlabel" layoutX="688.0" layoutY="444.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" />
          <Label fx:id="maxlabel" layoutX="688.0" layoutY="470.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" />
            <Button fx:id="minMaxTempButton" layoutX="426.0" layoutY="444.0" mnemonicParsing="false" onAction="#onMinMaxBtnClick" styleClass="basicButton" text="MIN-MAX TEMP" />
-         <Label fx:id="tempMinLabel1" layoutX="574.0" layoutY="262.0" prefHeight="47.0" prefWidth="68.0" styleClass="basicHeadingWhite" text="Alin" />
-         <Label fx:id="tempMinLabel2" layoutX="276.0" layoutY="262.0" prefHeight="47.0" prefWidth="68.0" styleClass="basicHeadingWhite" text="Alin" />
-         <Label fx:id="tempMaxLabel1" layoutX="276.0" layoutY="215.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Ylin" />
-         <Label fx:id="tempMaxLabel2" layoutX="574.0" layoutY="214.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Ylin" />
        </AnchorPane>
        <AnchorPane fx:id="datePickerPane" layoutX="9.0" layoutY="225.0" prefHeight="245.0" prefWidth="191.0">
            <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />

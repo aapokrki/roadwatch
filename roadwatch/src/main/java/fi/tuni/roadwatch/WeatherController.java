@@ -54,6 +54,8 @@ public class WeatherController {
     @FXML
     private Label nowLabel;
     @FXML
+    private Label todayLabel;
+    @FXML
     private Label tomorrowLabel;
     @FXML
     private Label dATomorrowLabel;
@@ -87,8 +89,6 @@ public class WeatherController {
     @FXML
     private AnchorPane windPane;
     @FXML
-    private Label windLabel;
-    @FXML
     protected LineChart<String, Double> windChart;
     @FXML
     private CategoryAxis xAxisWind;
@@ -100,8 +100,6 @@ public class WeatherController {
     // Visibility components
     @FXML
     private AnchorPane visibilityPane;
-    @FXML
-    private Label  visibilityLabel ;
     @FXML
     private LineChart<String, Double> visibilityChart;
     @FXML
@@ -241,7 +239,7 @@ public class WeatherController {
     }
 
     // Changes temperature labels according to which day you want to see
-    private void changeTempLabels(String nowOrNot){
+    private void changeTempLabels(Boolean now){
         double min = sessionData.WantedWeatherData.get(0).getTemperature();
         double max = sessionData.WantedWeatherData.get(0).getTemperature();
         tempRightNowLabel.setVisible(false);
@@ -255,14 +253,14 @@ public class WeatherController {
                 max = wd.getTemperature();
             }
             if(Objects.equals(wd.getDate(), sessionData.getClosestDate())){
-                if(nowOrNot.equals("now")){
+                if(now){
                     tempRightNowLabel.setVisible(true);
-                    tempRightNowLabel.setText(String.valueOf(wd.getTemperature()));
+                    tempRightNowLabel.setText(wd.getTemperature() + "°");
                 }
             }
         }
-        tempMinLabel.setText(String.valueOf(min));
-        tempMaxLabel.setText(String.valueOf(max));
+        tempMinLabel.setText(min + "°");
+        tempMaxLabel.setText(max + "°");
     }
 
     private boolean coordinateCheck(){
@@ -275,8 +273,8 @@ public class WeatherController {
 
     @FXML
     private void onNowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        changeTimeColors(nowLabel, tomorrowLabel, dATomorrowLabel);
-
+        changeTimeColors(todayLabel, tomorrowLabel, dATomorrowLabel);
+        nowLabel.setVisible(true);
         if(!coordinateCheck()){
             errorLabel.setText("Choose coordinates, remember to add on map!");
         }
@@ -291,14 +289,15 @@ public class WeatherController {
         // Creates weather data according to new start and end time to sessionData
         sessionData.createWeatherData(startTime, endTime);
 
-        changeTempLabels("now");
+        changeTempLabels(true);
 
         }
     }
 
     @FXML
     private void onTomorrowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        changeTimeColors(tomorrowLabel, nowLabel, dATomorrowLabel);
+        changeTimeColors(tomorrowLabel, todayLabel, dATomorrowLabel);
+        nowLabel.setVisible(false);
         if(!coordinateCheck()){
             errorLabel.setText("Choose coordinates, remember to add on map!");
         }
@@ -310,14 +309,15 @@ public class WeatherController {
 
             // Creates weather data according to new start and end time to sessionData
             sessionData.createWeatherData(startTime, endTime);
-            changeTempLabels("not");
+            changeTempLabels(false);
         }
 
     }
 
     @FXML
     private void onDATomorrowClick() throws ParserConfigurationException, IOException, ParseException, SAXException {
-        changeTimeColors(dATomorrowLabel, nowLabel, tomorrowLabel);
+        changeTimeColors(dATomorrowLabel, todayLabel, tomorrowLabel);
+        nowLabel.setVisible(false);
         if(!coordinateCheck()){
             errorLabel.setText("Choose coordinates, remember to add on map!");
         }
@@ -329,7 +329,7 @@ public class WeatherController {
 
             // Creates weather data according to new start and end time
             sessionData.createWeatherData(startTime, endTime);
-            changeTempLabels("not");
+            changeTempLabels(false);
         }
     }
 
