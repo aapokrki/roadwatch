@@ -67,37 +67,26 @@ public class RoadAPILogic {
         RoadAPImapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         RoadAPImapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
-
-
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
         JsonNode roadConditionNode = retrieveData(uriRoadCondition);
-
         Maintenance maintenance = getMaintenance();
-
-        // MATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIASMATIAS
-        // TODO: Kato alta esimerkkii getTrafficMessages() ja miten se ja tää constructor toimii sessiondatassa.
-        // TODO: Näin saadaa tää järkevästi tehtyy
-
-        // Construct RoadData
-        //RoadData roadData = new RoadData();
-        // Fill roadData with data from road-condition API for now
-        //roadConditionRec(roadConditionNode, roadData);
-
     }
 
-    // Construct traffic messages
+    // Retrieves traffic messages and constructs a TrafficMessage object
     public TrafficMessage getTrafficMessages() throws IOException, URISyntaxException {
         System.out.println("TRAFFIC-MESSAGES API-LINK: \n"+uriTrafficMessage.toString());
         JsonNode trafficMessageNode = retrieveData(uriTrafficMessage);
         return RoadAPImapper.treeToValue(trafficMessageNode, TrafficMessage.class);
     }
 
+    // Retrieves road conditions and constructs a RoadCondition object
     public RoadData getRoadData() throws IOException, URISyntaxException {
         System.out.println("ROAD-CONDITION API-LINK: \n"+uriRoadCondition.toString());
         JsonNode roadConditionNode = retrieveData(uriRoadCondition);
         return RoadAPImapper.treeToValue(roadConditionNode, RoadData.class);
     }
 
+    // Retrieves road maintenance and constructs a Maintenance object
     public Maintenance getMaintenance() throws IOException, URISyntaxException {
         System.out.println("MAINTENANCE API-LINK: \n"+uriMaintenance.toString());
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
@@ -107,23 +96,19 @@ public class RoadAPILogic {
 
     // Retrieves a specified dataset from the API
     public JsonNode retrieveData(URI uri) throws IOException, URISyntaxException {
-
-
+        // Creates an HTTP request with the specified URI and required parameters
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(uri);
         httpGet.addHeader("Accept-Encoding","gzip");
         httpGet.addHeader("Digitraffic-User","AMOR-TUNI");
 
+        // Executes the request and retrieves the response
         CloseableHttpResponse httpresponse = httpClient.execute(httpGet);
-
         InputStream in = httpresponse.getEntity().getContent();
 
+        // Reads the response to a JsonNode
         String body = IOUtils.toString(in, String.valueOf(StandardCharsets.UTF_8));
-
-        //whenWriteStringUsingBufferedWritter_thenCorrect(body);
-        JsonNode dataNode = new ObjectMapper().readTree(body);
-
-        return dataNode;
+        return RoadAPImapper.readTree(body);
     }
     // TODO: Täytyy miettiä miten yhden tien dataa otetaan useasta nodesta
     // TODO: esim otetaanko keskiarvo kaikista 4.tieltä saaduista säätiedoista
@@ -178,13 +163,6 @@ public class RoadAPILogic {
 
     public void run (String[] args) throws Exception {
         System.out.print("run");
-    }
-    // Testing Json content
-    public void whenWriteStringUsingBufferedWritter_thenCorrect(String s) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("Test.json"));
-        writer.write(s);
-
-        writer.close();
     }
 
 
