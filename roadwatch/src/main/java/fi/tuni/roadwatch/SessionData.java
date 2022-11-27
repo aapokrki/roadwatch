@@ -225,13 +225,16 @@ public class SessionData {
     // API hakee tietyn bboxin sisällä olevilta asemilta säätietoa.
     // Säätietoa voi tulla eri koordinaateista.
     // Lopulta chartissa on säädatapisteitä useista eri koordinaateista päällekäin
-    // TODO: Jokaiselle koordinaatille oma viiva tai valitaan vain yksi koordinaatti josta otetaan dataa
+    // TODO: Jokaiselle koordinaatille oma viiva
+    //  tai valitaan vain yksi koordinaatti josta otetaan dataa
+    //  tai otetaan kaikkien kordinaattien keskiarvo
     // TODO: Koordinaatti voidaan näyttää kartalla
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){
 
-        XYChart.Series<String, Double> wind_series = new XYChart.Series<>();
-        XYChart.Series<String, Double> visibility_series = new XYChart.Series<>();
+        XYChart.Series<String, Double> series = new XYChart.Series<>();
+        Double Y = null;
         for(WeatherData wd : this.wantedWeatherData){
+
             Date datecheck = wd.getDate();
             Calendar date = Calendar.getInstance();
             date.setTime(datecheck);
@@ -239,40 +242,28 @@ public class SessionData {
             int minutes = date.get(Calendar.MINUTE);
             if(hours % 2 == 0 && minutes == 0){
                 if(chart_type.equals("WIND")){
-                    Double Y = wd.getWind();
-                    if(!Y.isNaN()){
-                        String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-                        wind_series.getData().add(new XYChart.Data<>(X, Y));
-                    }
-
+                    Y = wd.getWind();
                 }
                 if(chart_type.equals("VISIBILITY")){
-                    Double Y = wd.getCloudiness();
-                    if(!Y.isNaN()){
-                        String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-                        visibility_series.getData().add(new XYChart.Data<>(X, Y));
-                    }
+                    Y = wd.getCloudiness();
+                }
 
+                assert Y != null;
+                // Do not add NaN data to chart. It will break the charting.
+                if(!Y.isNaN()){
+                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
+
+                    series.getData().add(new XYChart.Data<>(X, Y));
                 }
             }
             System.out.println(wd.getCoordinates());
         }
-        System.out.println("-----VISIBILITY-----");
-        System.out.println(visibility_series);
-        System.out.println(visibility_series.getData());
-        System.out.println("-----WIND-----");
-        System.out.println(wind_series);
-        System.out.println(wind_series.getData());
 
 
-        if(Objects.equals(chart_type, "VISIBILITY")){
-            return visibility_series;
-        }
-        if(Objects.equals(chart_type, "WIND")){
-            return wind_series;
-        }
-        return null;
+        System.out.println("---"+chart_type+"---");
+        System.out.println(series.getData());
 
+        return series;
     }
 
     // Helper function to set the time of day to 00:00:00, also can add days to date

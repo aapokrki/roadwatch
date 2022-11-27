@@ -196,8 +196,8 @@ public class WeatherController {
 
             if(windSeries.getData().size() != 0){
                 windSeries.setName("Wind");
-
                 windChart.getData().add(windSeries);
+
                 visibilityChart.setVisible(false);
                 xAxisWind.setLabel("Time");
                 yAxisWind.setLabel("m/s");
