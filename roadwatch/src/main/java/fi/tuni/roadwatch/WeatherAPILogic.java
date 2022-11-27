@@ -43,22 +43,22 @@ public class WeatherAPILogic {
     }
 
     // Creates URL String based on given parameters to be used in creating API document
-    public String createURLString(Double latitude, Double longitude, String startime, String endtime) throws ParseException {
-        String coordinates = latitude.toString() + "," + longitude.toString();
+    public String createURLString(SessionData.CoordinateConstraints coordinates, String startime, String endtime) throws ParseException {
+//        String coordinates = latitude.toString() + "," + longitude.toString();
         StringBuilder str = new StringBuilder();
-
+        String latLonCoords = coordinates.minLat.toString() + ',' + coordinates.minLon.toString();
         // Compares given starttime date to current time to see if forecast or observation
         if(timeAndDateAsDate(startime).after(dateAndTime)){
-            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(coordinates)
+            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(latLonCoords)
                     .append("&timestep=10&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
         }
         else{
-            double longitude2 = longitude +0.5;
-            double latitude2 = latitude+0.5;
-            String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
+//            double longitude2 = longitude +0.5;
+//            double latitude2 = latitude+0.5;
+//            String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
 
 
-            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&bbox=").append(coordinateBbox)
+            str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&bbox=").append(coordinates.getAsString(','))
                     .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&timestep=120&parameters=t2m,ws_10min,n_man");
         }
 
@@ -66,13 +66,10 @@ public class WeatherAPILogic {
 
     }
 
-    public String createAVGMINMAXurlString(Double latitude, Double longitude, String startime, String endtime){
+    public String createAVGMINMAXurlString(SessionData.CoordinateConstraints coordinates, String startime, String endtime){
         StringBuilder str = new StringBuilder();
-        double longitude2 = longitude +0.5;
-        double latitude2 = latitude+0.5;
-        String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
 
-        str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=").append(coordinateBbox)
+        str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=").append(coordinates.getAsString(','))
                 .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
 
         return str.toString();

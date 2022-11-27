@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class RoadAPILogic {
-    String road4SmallSegment= "https://tie.digitraffic.fi/api/v3/data/road-conditions/25.58893688730363/60.886638156574094/25.5977133197657/60.89613951610315";
 
     // !!!IN REAL PROGRAM, SET THESE WHEN CONSTRUCTING, BASED ON USER INPUT!!!
 
@@ -109,46 +108,6 @@ public class RoadAPILogic {
         // Reads the response to a JsonNode
         String body = IOUtils.toString(in, String.valueOf(StandardCharsets.UTF_8));
         return RoadAPImapper.readTree(body);
-    }
-    // TODO: Täytyy miettiä miten yhden tien dataa otetaan useasta nodesta
-    // TODO: esim otetaanko keskiarvo kaikista 4.tieltä saaduista säätiedoista
-    // TODO: vai annetaanko käyttäjän valita eri tiekohtien väliltä
-    // TODO: tutki esimerkiksi: https://tie.digitraffic.fi/api/v3/data/road-conditions/25.58893688730363/60.886638156574094/25.5977133197657/60.89613951610315
-    // TODO: Mitä jos valitulla alueella on useita teitä?
-
-    // TODO: Ehdotus: lasketaan valitun alueen isot tiet yhteen ja niiden osien sääkeskiarvot myös.
-    // TODO: esim. https://tie.digitraffic.fi/api/v3/data/road-conditions/25.72346721036581/60.98567993555781/25.745287003297207/60.99503275531163
-    // TODO: jossa on tiet 24 ja 04 joista molemmista kaksi tiekohtaa, joiden keskiarvot lasketaan
-    // TODO: ja tiestä 24 ja 04 tehdään omat RoadDatat
-
-    // TODO: Tai sitte mite on jo tehty eli RoadDatassa arraylist tienosista
-
-    // Tämä esimerkki ei ota kantaa eri teihin, vaan pelkästään annettuun bbox alueeseen
-    // Jos halutaan koko tietyn tien säätiedot niin täytyy käyttää
-    // esim: https://tie.digitraffic.fi/api/v3/metadata/forecast-sections/4
-    // Ylhäällä Nelostien tiedatat kokonaisuudessaan, Saa myös koordinaatit esim kartalle maalaamista varten.
-    // Täytyy varmaan ottaa joka kymmenes tielokaatio, liian raskasta muuten
-    private void roadConditionRec(JsonNode node, RoadData roadData){
-
-        if(!node.get("weatherData").isNull()){
-            JsonNode weatherDataList = node.get("weatherData");
-
-            for(JsonNode roadLocations : weatherDataList){
-
-                roadConditionRec(roadLocations, roadData);
-            }
-        }
-        if(!node.get("roadConditions").isNull()){
-            JsonNode roadConditions = node.get("roadConditions");
-
-            for (JsonNode roadCondition : roadConditions){
-                roadConditionRec(roadCondition,roadData);
-            }
-        }
-
-        if(!node.get("type").isNull()){
-
-        }
     }
 
 

@@ -19,7 +19,9 @@ public class SessionData {
 //    private RoadWatchController roadWatchController;
 //    private MapController mapController;
 
-    public Coordinate currentCoordinates;
+    private static final DecimalFormat df = new DecimalFormat("0.000");
+
+
     public List<Coordinate> polyCoordinates = new ArrayList<>();
     private Date dateAndTime = Calendar.getInstance().getTime();
 
@@ -69,10 +71,6 @@ public class SessionData {
 
     }
 
-    public void setCurrentCoordinates(Coordinate newCoordinate){
-        currentCoordinates = newCoordinate;
-    }
-
     public void setPolygonCoordinates(List<Coordinate> polyCoordinates){
         this.polyCoordinates.addAll(polyCoordinates);
     }
@@ -85,8 +83,14 @@ public class SessionData {
                 Double maxLongtitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
                 Double maxLatitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLatitude)).get().getLatitude();
 
+                maxLongtitude = Double.parseDouble(df.format(maxLongtitude).replace(',','.'));
+                maxLatitude = Double.parseDouble(df.format(maxLatitude).replace(',','.'));
+
                 Double minLongtitude = polyCoordinates.stream().min(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
                 Double minLatitude = polyCoordinates.stream().min(Comparator.comparing(Coordinate::getLatitude)).get().getLatitude();
+
+                minLongtitude = Double.parseDouble(df.format(minLongtitude).replace(',','.'));
+                minLatitude = Double.parseDouble(df.format(minLatitude).replace(',','.'));
 
                 coordinateConstraints = new CoordinateConstraints(minLongtitude, minLatitude, maxLongtitude, maxLatitude);
                 System.out.println(coordinateConstraints.getAsString('/'));
@@ -134,8 +138,8 @@ public class SessionData {
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
 
 
-        String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints.minLat, coordinateConstraints.minLon,  startTimeString, endTimeString);
-
+        String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints,  startTimeString, endTimeString);
+        System.out.println(urlstring);
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
 
     }
@@ -147,7 +151,7 @@ public class SessionData {
         // than creates the document used to create the arraylist of WeatherData
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
-        String urlstring = weatherAPILogic.createURLString(coordinateConstraints.minLat, coordinateConstraints.minLon,  startTimeString, endTimeString);
+        String urlstring = weatherAPILogic.createURLString(coordinateConstraints,  startTimeString, endTimeString);
         System.out.println(urlstring);
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation

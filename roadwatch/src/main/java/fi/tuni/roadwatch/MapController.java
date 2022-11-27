@@ -391,8 +391,6 @@ public class MapController {
             final Coordinate newPosition = event.getCoordinate().normalize();
             // Set new current coordinate
             System.out.println("["+newPosition.getLatitude() + ", " + newPosition.getLongitude()+"]");
-            currentCoordinate = newPosition;
-            sessionData.setCurrentCoordinates(newPosition);
 
             if (checkDrawPolygon.isSelected()) {
                 handlePolygonClick(event);

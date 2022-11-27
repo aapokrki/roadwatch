@@ -270,7 +270,7 @@ public class WeatherController {
         if(sessionData.coordinateConstraints == null){
             return false;
         }
-        return sessionData.currentCoordinates != null;
+        return true;
     }
 
 
