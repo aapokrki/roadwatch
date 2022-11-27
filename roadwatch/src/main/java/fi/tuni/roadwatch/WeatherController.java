@@ -151,7 +151,7 @@ public class WeatherController {
 
     @FXML
     // Calculates visibility data according to start and end date to a linechart
-    private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException {
+    private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
         visibilityChart.setVisible(true);
         if(datePickerErrorCheck()){
             visibilityChart.setAnimated(false);
@@ -159,10 +159,12 @@ public class WeatherController {
 
 
             sessionData.createWeatherData(getStartDate(), getEndDate());
+            System.out.println(sessionData.wantedWeatherData.size());
+            Thread.sleep(1000);
 
             XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
 
-            if(visibilitySeries != null){
+            if(visibilitySeries.getData().size() != 0){
                 visibilitySeries.setName("Visibility");
                 visibilityChart.getData().add(visibilitySeries);
                 windChart.setVisible(false);
@@ -178,7 +180,7 @@ public class WeatherController {
 
     @FXML
     // Calculates wind data according to start and end date to a linechart
-    private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException {
+    private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
         windChart.setVisible(true);
         if(datePickerErrorCheck()){
             windChart.setAnimated(false);
@@ -187,9 +189,12 @@ public class WeatherController {
             errorLabel.setText("");
 
             sessionData.createWeatherData(getStartDate(), getEndDate());
+            System.out.println(sessionData.wantedWeatherData.size());
+            Thread.sleep(1000);
 
             XYChart.Series<String, Double> windSeries = sessionData.createGraphSeries("WIND");
-            if(windSeries != null){
+
+            if(windSeries.getData().size() != 0){
                 windSeries.setName("Wind");
 
                 windChart.getData().add(windSeries);
@@ -381,6 +386,7 @@ public class WeatherController {
     }
 
     private boolean avgMinMaxErrorCheck(boolean flag){
+        System.out.println(sessionData.wantedWeatherAVGMinMax);
         errorLabel.setText("");
         if(savedDate == null){
             errorLabel.setText("Choose a date");
@@ -390,6 +396,7 @@ public class WeatherController {
             errorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
+
         if(flag){
             if(savedDate.after(sessionData.convertToDateViaInstant(LocalDate.from(currentDate)))){
                 errorLabel.setText("Can't count average or min-max of future");
@@ -414,9 +421,14 @@ public class WeatherController {
             Date startTime = savedDate;
             Date endTime = sessionData.trimToEnd(savedDate, 0);
 
-            sessionData.createAvgMinMax(startTime, endTime);
+            // If avgminmax is empty, api call failed, needs bigger area
+            if(!sessionData.createAvgMinMax(startTime, endTime)){
+                errorLabel.setText("Area must be larger to calculate average");
+                avglabel.setText("");
+            }else{
+                avglabel.setText(sessionData.getAVG_value());
+            }
 
-            avglabel.setText(sessionData.getAVG_value());
         }
     }
 
@@ -428,10 +440,17 @@ public class WeatherController {
             Date startTime = savedDate;
             Date endTime = sessionData.trimToEnd(savedDate, 0);
 
-            sessionData.createAvgMinMax(startTime, endTime);
+            // If created avgminMax is empty, api call failed, needs bigger area
+            if(!sessionData.createAvgMinMax(startTime, endTime)){
+                errorLabel.setText("Area must be larger to calculate min-max");
+                minlabel.setText("");
+                maxlabel.setText("");
+            }else{
+                minlabel.setText(String.valueOf(sessionData.getMIN_value()));
+                maxlabel.setText(String.valueOf(sessionData.getMAX_value()));
+            }
 
-            minlabel.setText(String.valueOf(sessionData.getMIN_value()));
-            maxlabel.setText(String.valueOf(sessionData.getMAX_value()));
+
         }
     }
 

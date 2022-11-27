@@ -50,8 +50,8 @@ public class SessionData {
         public final Double minLon;
         public final Double minLat;
 
-        private final Double maxLon;
-        private final Double maxLat;
+        public final Double maxLon;
+        public final Double maxLat;
 
         public String getAsString(Character c){
             return ""+minLon + c + minLat + c + maxLon + c + maxLat;
@@ -130,7 +130,7 @@ public class SessionData {
 
     }
 
-    public void createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
+    public boolean createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
         this.wantedWeatherAVGMinMax.clear();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
@@ -142,6 +142,9 @@ public class SessionData {
         System.out.println(urlstring);
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
 
+        // If the created arraylist is empty, the API call failed, needs bigger bbox area
+        // boolean check to display error messages in WeatherController
+        return wantedWeatherAVGMinMax.size() != 0;
     }
 
     // WeatherData creation to sessionData
@@ -218,11 +221,16 @@ public class SessionData {
         return df.format(average);
     }
 
+    // ONGELMA
+    // API hakee tietyn bboxin sisällä olevilta asemilta säätietoa.
+    // Säätietoa voi tulla eri koordinaateista.
+    // Lopulta chartissa on säädatapisteitä useista eri koordinaateista päällekäin
+    // TODO: Jokaiselle koordinaatille oma viiva tai valitaan vain yksi koordinaatti josta otetaan dataa
+    // TODO: Koordinaatti voidaan näyttää kartalla
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){
 
         XYChart.Series<String, Double> wind_series = new XYChart.Series<>();
         XYChart.Series<String, Double> visibility_series = new XYChart.Series<>();
-
         for(WeatherData wd : this.wantedWeatherData){
             Date datecheck = wd.getDate();
             Calendar date = Calendar.getInstance();
@@ -232,16 +240,31 @@ public class SessionData {
             if(hours % 2 == 0 && minutes == 0){
                 if(chart_type.equals("WIND")){
                     Double Y = wd.getWind();
-                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-                    wind_series.getData().add(new XYChart.Data<>(X, Y));
+                    if(!Y.isNaN()){
+                        String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
+                        wind_series.getData().add(new XYChart.Data<>(X, Y));
+                    }
+
                 }
                 if(chart_type.equals("VISIBILITY")){
                     Double Y = wd.getCloudiness();
-                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-                    visibility_series.getData().add(new XYChart.Data<>(X, Y));
+                    if(!Y.isNaN()){
+                        String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
+                        visibility_series.getData().add(new XYChart.Data<>(X, Y));
+                    }
+
                 }
             }
+            System.out.println(wd.getCoordinates());
         }
+        System.out.println("-----VISIBILITY-----");
+        System.out.println(visibility_series);
+        System.out.println(visibility_series.getData());
+        System.out.println("-----WIND-----");
+        System.out.println(wind_series);
+        System.out.println(wind_series.getData());
+
+
         if(Objects.equals(chart_type, "VISIBILITY")){
             return visibility_series;
         }

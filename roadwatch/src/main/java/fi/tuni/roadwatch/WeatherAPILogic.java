@@ -67,16 +67,16 @@ public class WeatherAPILogic {
     }
 
     public String createAVGMINMAXurlString(SessionData.CoordinateConstraints coordinates, String startime, String endtime){
-        StringBuilder str = new StringBuilder();
 
-        str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=").append(coordinates.getAsString(','))
-                .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
+        String str = "https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=" + coordinates.getAsString(',') +
+                "&starttime=" + startime + "&endtime=" + endtime + "&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN";
 
-        return str.toString();
+        return str;
 
     }
 
     public ArrayList<WeatherDataMinMaxAvg> creatingAvgMinMax(Document doc) throws ParseException {
+
         NodeList nList = doc.getElementsByTagName("wfs:member");
         int counter = 0;
         for (int temp = 0; temp < nList.getLength(); temp++) {
