@@ -17,11 +17,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane prefHeight="478.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.MapController">
     <top>
         <HBox fx:id="topControls" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="buttonZoom" text="Zoom 14" />
+                <Button fx:id="buttonZoom" text="Zoom 14"/>
                 <Slider fx:id="sliderZoom" blockIncrement="1.0" majorTickUnit="7.0" max="28.0" minorTickCount="6" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="14.0" HBox.hgrow="ALWAYS" />
             </children>
             <padding>
@@ -36,10 +37,9 @@
         <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
 
             <children>
-                <Button fx:id="buttonAddPolygon" text="Add" />
-                <Button fx:id="buttonClearPolygon" text="Clear" />
+                <Button fx:id="buttonAddPolygon" text="Add"  styleClass="map-button"/>
+                <Button fx:id="buttonClearPolygon" text="Clear"  styleClass="map-button"/>
                 <CheckBox fx:id="checkDrawPolygon" maxWidth="Infinity" text="Draw" />
-                <CheckBox fx:id="checkConstrainFinland" maxWidth="Infinity" text="Constrain"/>
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -53,16 +53,13 @@
                     <content>
                         <VBox spacing="4">
                             <children>
-                                <Button fx:id="buttonKotka" maxWidth="Infinity" text="Kotka" />
-                                <Button fx:id="buttonHervanta" maxWidth="Infinity" text="Hervanta" />
-                                <Button fx:id="buttonLahti" maxWidth="Infinity" text="Lahti" />
-                                <Button fx:id="buttonSmallRoad" maxWidth="Infinity" text="SmaRoadSegment"/>
-                                <Button fx:id="buttonMediumRoad" maxWidth="Infinity" text="MedRoadSegment"/>
-                                <Button fx:id="buttonLargeRoad" maxWidth="Infinity" text="LargeRoadSegment"/>
-                                <Button fx:id="buttonExtentFinland" maxWidth="Infinity" text="ZoomoutFinland" />
-
-
-
+                                <Button fx:id="buttonKotka" maxWidth="Infinity" text="Kotka" styleClass="map-button"/>
+                                <Button fx:id="buttonHervanta" maxWidth="Infinity" text="Hervanta" styleClass="map-button"/>
+                                <Button fx:id="buttonLahti" maxWidth="Infinity" text="Lahti" styleClass="map-button"/>
+                                <Button fx:id="buttonSmallRoad" maxWidth="Infinity" text="SmaRoadSegment" styleClass="map-button"/>
+                                <Button fx:id="buttonMediumRoad" maxWidth="Infinity" text="MedRoadSegment" styleClass="map-button"/>
+                                <Button fx:id="buttonLargeRoad" maxWidth="Infinity" text="LargeRoadSegment" styleClass="map-button"/>
+                                <Button fx:id="buttonExtentFinland" maxWidth="Infinity" text="ZoomoutFinland" styleClass="map-button" />
                             </children>
                         </VBox>
                     </content>
@@ -79,17 +76,6 @@
                         </VBox>
                     </content>
                 </TitledPane>
-<!--                <TitledPane fx:id="optionsMisc" animated="true" text="misc">-->
-<!--                    <content>-->
-<!--                        <VBox spacing="10.0">-->
-<!--                            <children>-->
-<!--                                <Label text="animation duration" />-->
-<!--                                <TextField fx:id="animationDuration" prefWidth="120.0" promptText="milliseconds" />-->
-<!--                                <CheckBox fx:id="checkConstrainFinland" maxWidth="Infinity" text="constrain to Germany" />-->
-<!--                            </children>-->
-<!--                        </VBox>-->
-<!--                    </content>-->
-<!--                </TitledPane>-->
             </panes>
         </Accordion>
     </left>

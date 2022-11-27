@@ -390,3 +390,33 @@
 .roadDataIcon:hover {
     -icon-paint: #78e2a2;
 }
+
+.accordion > .titled-pane > .title {
+    -fx-background-insets: -1 0 0 0, 0 1 1 1, 1 2 2 2;
+    -fx-background-radius: 0, 0, 0;
+}
+.titled-pane > *.content {
+  -fx-border-color: null;
+  -fx-background-color: null;
+
+}
+
+.map-button {
+    -fx-font-family: "Ubuntu";
+    -fx-background-color: null;
+    -fx-border-color: null;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left
+
+}
+
+.map-button:hover {
+    -fx-background-color: grey ;
+    -fx-opacity: 0.5;
+}
+.map-button:focused{
+    -fx-background-color: grey ;
+
+}
+

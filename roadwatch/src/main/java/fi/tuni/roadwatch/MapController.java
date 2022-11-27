@@ -45,27 +45,21 @@ import java.util.stream.Stream;
  * @author P.J. Meisch (pj.meisch@sothawo.com).
  */
 public class MapController {
-    String road4SmallSegment= "https://tie.digitraffic.fi/api/v3/data/road-conditions/25.576224325490955/60.87613246629303/25.600831158395405/60.89857163657564";
 
     public Button buttonAddPolygon;
     public Button buttonClearPolygon;
     // Sessiondata
     private SessionData sessionData;
-    /**
-     * Previously clicked coordinate
-     */
-    public Coordinate currentCoordinate = new Coordinate(61.45, 23.85);
 
     /** some coordinates from around town. */
     private static final Coordinate coordHervanta = new Coordinate(61.45, 23.85);
     private static final Coordinate coordKotka = new Coordinate(60.4667,26.9458);
     private static final Coordinate coordLahti = new Coordinate(60.983692, 25.650317);
-    private static final Extent extentAllLocations = Extent.forCoordinates(coordHervanta, coordKotka, coordLahti);
 
-    private static final Coordinate coordNorhWest= new Coordinate(70.31778507753353, 17.503235177994913);
-    private static final Coordinate coordNorthEast = new Coordinate(70.29756318095303, 32.20596093802763);
+    private static final Coordinate coordNorhWest= new Coordinate(70.30824014125528, 16.352667758380154);
+    private static final Coordinate coordNorthEast = new Coordinate(70.291002382638, 35.52837666547143);
     private static final Coordinate coordSouthEast = new Coordinate(59.27583073122375, 31.965916435823015);
-    private static final Coordinate coordSouthWest = new Coordinate(58.99877058368233, 18.94350219122261);
+    private static final Coordinate coordSouthWest = new Coordinate(59.26658753324523, 16.352667758380154);
 
     private static final Extent extentFinland = Extent.forCoordinates(coordNorhWest, coordNorthEast, coordSouthEast, coordSouthWest);
 
@@ -174,20 +168,6 @@ public class MapController {
     /** Check Button for polygon drawing mode. */
     @FXML
     private CheckBox checkDrawPolygon;
-
-    /** Check Button for constraining th extent. */
-    @FXML
-    private CheckBox checkConstrainFinland;
-
-    /** params for the WMS server. */
-    private WMSParam wmsParam = new WMSParam()
-        .setUrl("http://ows.terrestris.de/osm/service?")
-        .addParam("layers", "OSM-WMS");
-
-    private XYZParam xyzParams = new XYZParam()
-        .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
-        .withAttributions(
-            "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
 
     public MapController() {
 
@@ -314,6 +294,7 @@ public class MapController {
         buttonAddPolygon.setOnAction(event -> {
             sessionData.calculateMinMaxCoordinates();
 
+
         });
         //wire the clear button
         buttonClearPolygon.setOnAction(event -> {
@@ -363,15 +344,7 @@ public class MapController {
         checkDrawPolygon.selectedProperty().addListener(polygonListener);
         checkDrawPolygon.setSelected(true);
 
-        // add the constrain listener
-        checkConstrainFinland.selectedProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue) {
-                mapView.constrainExtent(extentFinland);
-            } else {
-                mapView.clearConstrainExtent();
-            }
-        }));
-
+        mapView.constrainExtent(extentFinland);
 
         // finally initialize the map view
         mapView.initialize(Configuration.builder()
@@ -479,6 +452,10 @@ public class MapController {
      * finishes setup after the mpa is initialzed
      */
     private void afterMapIsInitialized() {
+
+        // Set constraints to Finland only
+        mapView.constrainExtent(extentFinland);
+
         // start at the kotka with default zoom
         mapView.setZoom(ZOOM_DEFAULT);
         mapView.setCenter(coordKotka);
