@@ -30,12 +30,10 @@ import javafx.util.Duration;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,21 +44,15 @@ import java.util.stream.Stream;
  */
 public class MapController {
 
-    public Button buttonAddPolygon;
-    public Button buttonClearPolygon;
+
     // Sessiondata
     private SessionData sessionData;
 
-    /** some coordinates from around town. */
-    private static final Coordinate coordHervanta = new Coordinate(61.45, 23.85);
-    private static final Coordinate coordKotka = new Coordinate(60.4667,26.9458);
-    private static final Coordinate coordLahti = new Coordinate(60.983692, 25.650317);
-
+    /** Coordinates to border Finland */
     private static final Coordinate coordNorhWest= new Coordinate(70.30824014125528, 16.352667758380154);
     private static final Coordinate coordNorthEast = new Coordinate(70.291002382638, 35.52837666547143);
     private static final Coordinate coordSouthEast = new Coordinate(59.27583073122375, 31.965916435823015);
     private static final Coordinate coordSouthWest = new Coordinate(59.26658753324523, 16.352667758380154);
-
     private static final Extent extentFinland = Extent.forCoordinates(coordNorhWest, coordNorthEast, coordSouthEast, coordSouthWest);
 
 
@@ -89,38 +81,51 @@ public class MapController {
                     new Coordinate(65.51158585366903, 27.31468327648643),
                     new Coordinate(65.14037262699148, 25.613518124653677))
     );
+
+    private static final ArrayList<Coordinate> coordTampere = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(61.523, 23.645),
+                    new Coordinate(61.523, 23.903),
+                    new Coordinate(61.42, 23.903),
+                    new Coordinate(61.42, 23.645))
+
+    );
+
+    private static final ArrayList<Coordinate> coordLahti = new ArrayList<Coordinate>(
+            Arrays.asList( new Coordinate(60.922, 25.57),
+                    new Coordinate(60.922, 25.805),
+                    new Coordinate(61.036, 25.805),
+                    new Coordinate(61.036, 25.57))
+    );
+
+    private static final ArrayList<Coordinate> coordKotka = new ArrayList<Coordinate>(
+            Arrays.asList( new Coordinate(60.411, 26.776),
+                    new Coordinate(60.411, 27.047),
+                    new Coordinate(60.592, 27.047),
+                    new Coordinate(60.592, 26.776))
+    );
+
     /** default zoom value. */
     private static final int ZOOM_DEFAULT = 14;
 
     /** the markers. */
     private final Marker markerKotka;
-    private final Marker markerHervanta;
+    private final Marker markerTampere;
     private final Marker markerClick;
-
-    /** the labels. */
-    private final MapLabel labelHervanta;
-    private final MapLabel labelClick;
-
-    @FXML
-    /** button to set the map's zoom. */
-    private Button buttonZoom;
 
     /** the MapView containing the map */
     @FXML
     private MapView mapView;
 
     /** the box containing the top controls, must be enabled when mapView is initialized */
-    @FXML
-    private HBox topControls;
-
-    /** Slider to change the zoom value */
-    @FXML
-    private Slider sliderZoom;
 
     /** Accordion for all the different options */
     @FXML
     private Accordion leftControls;
 
+    @FXML
+    private HBox botControls;
+    @FXML
+    private HBox zoomControls;
     /** section containing the location button */
     @FXML
     private TitledPane optionsLocations;
@@ -129,13 +134,12 @@ public class MapController {
     private Button buttonKotka;
 
     @FXML
-    private Button buttonHervanta;
+    private Button buttonTampere;
 
     @FXML
     private Button buttonLahti;
 
-    @FXML
-    private Button buttonExtentFinland;
+
 
     @FXML
     private Button buttonSmallRoad;
@@ -154,7 +158,6 @@ public class MapController {
     @FXML
     private CheckBox checkHervantaMarker;
 
-
     /** Check button for Lahti marker */
     @FXML
     private CheckBox checkLahtiMarker;
@@ -169,22 +172,34 @@ public class MapController {
     @FXML
     private CheckBox checkDrawPolygon;
 
-    public MapController() {
+    @FXML
+    private Button buttonZoomOut;
+    @FXML
+    public Button buttonAddPolygon;
+    @FXML
+    public Button buttonClearPolygon;
+
+    public Coordinate getPolygonMiddle(ArrayList<Coordinate> coordinates){
+        Double lat  = coordinates.stream().map(Coordinate::getLatitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
+        Double lon  = coordinates.stream().map(Coordinate::getLongitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
+        System.out.println(lat + "," + lon);
+        return new Coordinate(lat,lon);
+    }
+
+    public MapController() throws MalformedURLException {
 
         // a couple of markers using the provided ones
-        markerKotka = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKotka).setVisible(
-                false);
-        markerHervanta = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordHervanta).setVisible(
-                false);
+        markerKotka = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordKotka))
+                .setVisible(true);
+
+        markerTampere = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordTampere))
+                .setVisible(false);
+
         // no position for click marker yet
-        markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
+        markerClick = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-click-icon.png")),-5,-5).setVisible(false);
 
-        // the attached labels, custom style
-        labelHervanta = new MapLabel("hervanta", 10, -10).setVisible(false).setCssClass("green-label");
-        labelClick = new MapLabel("click!", 10, -10).setVisible(false).setCssClass("orange-label");
-
-        markerHervanta.attachLabel(labelHervanta);
-        markerClick.attachLabel(labelClick);
     }
 
     /**
@@ -197,7 +212,7 @@ public class MapController {
     public void initMapAndControls(Projection projection) {
 
         // set the custom css file for the MapView
-        mapView.setCustomMapviewCssURL(getClass().getResource("/custom_mapview.css"));
+        mapView.setCustomMapviewCssURL(Objects.requireNonNull(getClass().getResource("/custom_mapview.css")));
 
         leftControls.setExpandedPane(optionsLocations);
 
@@ -207,12 +222,63 @@ public class MapController {
         // wire up the location buttons
 
         buttonKotka.setOnAction(event -> {
-            mapView.setCenter(coordKotka);
-        });
-        buttonHervanta.setOnAction(event -> mapView.setCenter(coordHervanta));
-        buttonLahti.setOnAction(event -> mapView.setCenter(coordLahti));
+            buttonClearPolygon.fire(); //Clear any previous polygons from map
 
-        buttonExtentFinland.setOnAction(event -> mapView.setExtent(extentFinland));
+
+            // Draw new polygon for said location
+            polygonLine = new CoordinateLine(coordKotka)
+                    .setColor(Color.DODGERBLUE)
+                    .setFillColor(Color.web("lawngreen", 0.4))
+                    .setClosed(true);
+            mapView.addCoordinateLine(polygonLine);
+            polygonLine.setVisible(true);
+
+            // Set polygon data to sessiondata for weather and roaddata
+            sessionData.setPolygonCoordinates(coordKotka);
+            buttonAddPolygon.fire();
+
+            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
+            mapView.setExtent(extent);// Set mapview to location
+        });
+
+        buttonTampere.setOnAction(event -> {
+            buttonClearPolygon.fire(); //Clear any previous polygons from map
+
+
+            // Draw new polygon for said location
+            polygonLine = new CoordinateLine(coordTampere)
+                    .setColor(Color.DODGERBLUE)
+                    .setFillColor(Color.web("lawngreen", 0.4))
+                    .setClosed(true);
+            mapView.addCoordinateLine(polygonLine);
+            polygonLine.setVisible(true);
+
+            // Set polygon data to sessiondata for weather and roaddata
+            sessionData.setPolygonCoordinates(coordTampere);
+            buttonAddPolygon.fire();
+
+            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
+            mapView.setExtent(extent);// Set mapview to location
+
+        });
+        buttonLahti.setOnAction(event -> {
+            buttonClearPolygon.fire(); //Clear any previous polygons from map
+
+            // Draw new polygon for said location
+            polygonLine = new CoordinateLine(coordLahti)
+                    .setColor(Color.DODGERBLUE)
+                    .setFillColor(Color.web("lawngreen", 0.4))
+                    .setClosed(true);
+            mapView.addCoordinateLine(polygonLine);
+            polygonLine.setVisible(true);
+
+            // Set polygon data to sessiondata for weather and roaddata
+            sessionData.setPolygonCoordinates(coordLahti);
+            buttonAddPolygon.fire();
+
+            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
+            mapView.setExtent(extent);// Set mapview to location
+        });
 
         // Small segment preset
         buttonSmallRoad.setOnAction(event -> {
@@ -230,7 +296,7 @@ public class MapController {
 
             // Set polygon data to sessiondata for weather and roaddata
             sessionData.setPolygonCoordinates(coordSmallRoadSegment);
-            sessionData.calculateMinMaxCoordinates();
+            buttonAddPolygon.fire();
 
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
             mapView.setExtent(extent);// Set mapview to location
@@ -253,7 +319,7 @@ public class MapController {
 
             // Set polygon data to sessiondata for weather and roaddata
             sessionData.setPolygonCoordinates(coordMediumRoadSegment);
-            sessionData.calculateMinMaxCoordinates();
+            buttonAddPolygon.fire();
 
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
             mapView.setExtent(extent);// Set mapview to location
@@ -276,7 +342,7 @@ public class MapController {
 
             // Set polygon data to sessiondata for weather and roaddata
             sessionData.setPolygonCoordinates(coordLargeRoadSegment);
-            sessionData.calculateMinMaxCoordinates();
+            buttonAddPolygon.fire();
 
             // Set mapview to location
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates);
@@ -284,16 +350,12 @@ public class MapController {
 
         });
 
-        // wire the zoom button and connect the slider to the map's zoom
-        buttonZoom.setOnAction(event -> {
-            mapView.setZoom(ZOOM_DEFAULT);
-        });
-        sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
+        // wire the zoomout button
+        buttonZoomOut.setOnAction(event -> mapView.setExtent(extentFinland));
 
         //wire the add button
         buttonAddPolygon.setOnAction(event -> {
             sessionData.calculateMinMaxCoordinates();
-
 
         });
         //wire the clear button
@@ -320,16 +382,16 @@ public class MapController {
         checkKotkaMarker.setGraphic(
             new ImageView(new Image(markerKotka.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkHervantaMarker.setGraphic(
-            new ImageView(new Image(markerHervanta.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+            new ImageView(new Image(markerTampere.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
 
         checkClickMarker.setGraphic(
             new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
 
         // bind the checkboxes to the markers visibility
         checkKotkaMarker.selectedProperty().bindBidirectional(markerKotka.visibleProperty());
-        checkHervantaMarker.selectedProperty().bindBidirectional(markerHervanta.visibleProperty());
+        checkHervantaMarker.selectedProperty().bindBidirectional(markerTampere.visibleProperty());
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
-        //checkClickMarker.setSelected(true);
+        checkClickMarker.setSelected(true);
 
 
         // add the polygon check handler
@@ -398,7 +460,7 @@ public class MapController {
             private final double deltaLongitude = newPosition.getLongitude() - oldPositionLongitude;
 
             {
-                setCycleDuration(Duration.seconds(1.0));
+                setCycleDuration(Duration.seconds(0.2));
                 setOnFinished(evt -> markerClick.setPosition(newPosition));
             }
 
@@ -444,8 +506,9 @@ public class MapController {
      *     if true the controls are disabled
      */
     private void setControlsDisable(boolean flag) {
-        topControls.setDisable(flag);
         leftControls.setDisable(flag);
+        botControls.setDisable(flag);
+        zoomControls.setDisable(flag);
     }
 
     /**
@@ -457,11 +520,11 @@ public class MapController {
         mapView.constrainExtent(extentFinland);
 
         // start at the kotka with default zoom
-        mapView.setZoom(ZOOM_DEFAULT);
-        mapView.setCenter(coordKotka);
+        mapView.setZoom(0.0);
+        mapView.setExtent(extentFinland);
         // add the markers to the map - they are still invisible
         mapView.addMarker(markerKotka);
-        mapView.addMarker(markerHervanta);
+        mapView.addMarker(markerTampere);
         // can't add the markerClick at this moment, it has no position, so it would not be added to the map
 
         // now enable the controls
