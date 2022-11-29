@@ -13,6 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane prefHeight="542.0" prefWidth="1250.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadController">
    <children>
       <VBox layoutX="14.0" layoutY="20.0" prefHeight="469.0" prefWidth="333.0" styleClass="backgroundBlue">
@@ -20,10 +23,9 @@
             <Label styleClass="basicHeading" text="SELECT DATA" />
             <Line endX="204.2928924560547" endY="-1.4497476816177368" startX="-100.0" stroke="WHITE" />
             <Label fx:id="RCLabel" styleClass="basicHeadingGreyUnclickable" text="ROAD CONDITION" />
-            <Label fx:id="visibilityLabel" onMouseClicked="#onVisibilityClick" styleClass="basicTextGrey" text="    VISIBILITY" />
             <Label fx:id="frictionLabel" onMouseClicked="#onFrictionClick" styleClass="basicTextGrey" text="    FRICTION" />
             <Label fx:id="precipitationLabel" onMouseClicked="#onPrecipitationClick" styleClass="basicTextGrey" text="    PRECIPITATION" />
-            <Label fx:id="winterSlipperinessLabel" onMouseClicked="#onWinterSlipperinessClick" styleClass="basicTextGrey" text="    WINTER SLIPPERINESS" />
+            <Label fx:id="roadConditionLabel" onMouseClicked="#onRoadConditionClick" styleClass="basicTextGrey" text="    WINTER SLIPPERINESS" />
             <Label fx:id="overallConditionLabel" onMouseClicked="#onOverallConditionClick" styleClass="basicTextGrey" text="    OVERALL CONDITION" />
             <Label styleClass="basicHeadingGreyUnclickable" text="MAINTENANCE" />
             <Label styleClass="basicTextGrey" text="    TASKTYPE 1" />
@@ -39,16 +41,19 @@
       <Label layoutX="1022.0" layoutY="42.0" styleClass="smallHeading" text="LOCATION" />
       <Label layoutX="1022.0" layoutY="167.0" styleClass="smallHeading" text="TIMELINE" />
       <Label layoutX="1027.0" layoutY="214.0" styleClass="smallText" text="Time of day" />
-      <Button layoutX="1046.0" layoutY="460.0" mnemonicParsing="false" styleClass="basicButton" text="CALCULATE" />
+      <Button layoutX="1046.0" layoutY="460.0" mnemonicParsing="false" styleClass="basicButton" text="CALCULATE" onMouseClicked="#onCalculateClick"/>
       <Button layoutX="562.0" layoutY="460.0" mnemonicParsing="false" styleClass="basicButton" text="FETCH DATA" />
-      <MenuButton layoutX="1175.0" layoutY="209.0" mnemonicParsing="false" styleClass="menu-bar">
-        <items>
-          <MenuItem mnemonicParsing="false" styleClass="menu-item" text="2H" />
-          <MenuItem mnemonicParsing="false" styleClass="menu-item" text="4H" />
-           <MenuItem mnemonicParsing="false" styleClass="menu-item" text="6H" />
-            <MenuItem mnemonicParsing="false" styleClass="menu-item" text="12H" />
-        </items>
-      </MenuButton>
+       <ComboBox fx:id="timeFrameComboBox" onAction="#changeTimeFrame" layoutX="1175.0" layoutY="209.0" styleClass="combo-box">
+           <items>
+               <FXCollections fx:factory="observableArrayList">
+                   <String fx:value="CURRENT" />
+                   <String fx:value="2H" />
+                   <String fx:value="4H" />
+                   <String fx:value="6H" />
+                   <String fx:value="12H" />
+               </FXCollections>
+           </items>
+       </ComboBox>
       <LineChart layoutX="402.0" layoutY="66.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />

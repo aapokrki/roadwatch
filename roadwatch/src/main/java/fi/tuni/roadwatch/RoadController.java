@@ -1,71 +1,76 @@
 package fi.tuni.roadwatch;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class RoadController {
     private final ArrayList<Label> RCLabels = new ArrayList<>();
+    int timeFrame = 0;
     @FXML
     private Label infoLabel;
     // Road condition labels aka RC labels.
     @FXML
     private Label RCLabel;
     @FXML
-    private Label visibilityLabel;
-    @FXML
     private Label frictionLabel;
     @FXML
     private Label precipitationLabel;
     @FXML
-    private Label winterSlipperinessLabel;
+    private Label roadConditionLabel;
     @FXML
     private Label overallConditionLabel;
-
     @FXML
     private Label alertsLabel;
+    @FXML
+    public ComboBox<String> timeFrameComboBox;
 
     private SessionData sessionData;
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
         RCLabels.add(RCLabel);
-        RCLabels.add(visibilityLabel);
         RCLabels.add(frictionLabel);
         RCLabels.add(precipitationLabel);
-        RCLabels.add(winterSlipperinessLabel);
+        RCLabels.add(roadConditionLabel);
         RCLabels.add(overallConditionLabel);
-    }
-
-    @FXML
-    private void onVisibilityClick() {
-        infoLabel.setText(visibilityLabel.getText());
-        changeRCColors(visibilityLabel);
-    }
-
-    @FXML
-    private void onFrictionClick() {
-        infoLabel.setText(frictionLabel.getText());
-        changeRCColors(frictionLabel);
-    }
-
-    @FXML
-    private void onPrecipitationClick() {
-        infoLabel.setText(precipitationLabel.getText());
-        changeRCColors(precipitationLabel);
-    }
-
-    @FXML
-    private void onWinterSlipperinessClick() {
-        infoLabel.setText(winterSlipperinessLabel.getText());
-        changeRCColors(winterSlipperinessLabel);
+        timeFrameComboBox.getSelectionModel().selectFirst();
     }
 
     @FXML
     private void onOverallConditionClick() {
         infoLabel.setText(overallConditionLabel.getText());
         changeRCColors(overallConditionLabel);
+        System.out.println(sessionData.roadData.overallCondition);
+
+    }
+
+    @FXML
+    private void onPrecipitationClick() {
+        infoLabel.setText(precipitationLabel.getText());
+        changeRCColors(precipitationLabel);
+        System.out.println(sessionData.roadData.precipicationCondition);
+    }
+
+    @FXML
+    private void onRoadConditionClick() {
+        infoLabel.setText(roadConditionLabel.getText());
+        changeRCColors(roadConditionLabel);
+        System.out.println(sessionData.roadData.roadCondition);
+
+    }
+
+    @FXML
+    private void onFrictionClick() {
+        infoLabel.setText(frictionLabel.getText());
+        changeRCColors(frictionLabel);
+        System.out.println(sessionData.roadData.frictionCondition);
     }
 
     @FXML
@@ -103,5 +108,23 @@ public class RoadController {
         }
         alertsLabel.getStyleClass().removeAll("basicHeadingGrey");
         alertsLabel.getStyleClass().add("basicHeadingBlue");
+    }
+
+    @FXML
+    private void onCalculateClick() throws IOException, URISyntaxException {
+        sessionData.createRoadData();
+        sessionData.roadData.setForecastConditions(timeFrame);
+        alertsLabel.setText(sessionData.roadData.trafficMessageAmount + " ALERTS");
+
+    }
+
+    @FXML
+    public void changeTimeFrame() {
+        String str = timeFrameComboBox.getValue();
+        if(Objects.equals(str, "CURRENT")){
+            timeFrame = 0;
+        }else{
+            timeFrame = Character.getNumericValue(str.charAt(0));
+        }
     }
 }

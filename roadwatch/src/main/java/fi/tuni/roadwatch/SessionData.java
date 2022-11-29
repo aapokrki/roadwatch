@@ -30,33 +30,13 @@ public class SessionData {
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
     public TreeMap<Date, WeatherData> savedWeatherData = new TreeMap<>();
 
-    public TrafficMessage trafficMessage = new TrafficMessage();
+    public TrafficMessage trafficMessage;
+    public RoadData roadData;
 
     // Used in creation of wantedWeatherData
     private double currentTemp;
     private double currentWind;
     private double currentCloud;
-
-    public static class CoordinateConstraints{
-
-        public CoordinateConstraints(Double minLon, Double minLat, Double maxLon, Double maxLat){
-            this.minLon = minLon;
-            this.minLat = minLat;
-
-            this.maxLon = maxLon;
-            this.maxLat = maxLat;
-
-        }
-        public final Double minLon;
-        public final Double minLat;
-
-        public final Double maxLon;
-        public final Double maxLat;
-
-        public String getAsString(Character c){
-            return ""+minLon + c + minLat + c + maxLon + c + maxLat;
-        }
-    }
 
     public CoordinateConstraints coordinateConstraints;
 
@@ -98,35 +78,35 @@ public class SessionData {
             // TODO: ADD THIS TO ROADDATA CONSTRUCTOR
             // TODO: Make nicer maybe
             // Checks the traffic messages in a given area
-            ArrayList<TrafficMessage.Feature> messagesInArea = new ArrayList<>();
-            for (TrafficMessage.Feature feature : trafficMessage.features){
-                if(feature.geometry != null){
-                    for (ArrayList<ArrayList<Double>> coordinates : feature.geometry.coordinates) {
-                        for (ArrayList<Double> coordinate : coordinates) {
-                            if(coordinate.size() == 2){
-                                if(coordinate.get(0) > coordinateConstraints.minLon &&
-                                        coordinate.get(0) < coordinateConstraints.maxLon &&
-                                        coordinate.get(1) > coordinateConstraints.minLat &&
-                                        coordinate.get(1) < coordinateConstraints.maxLat){
-                                    messagesInArea.add(feature);
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-            // TEST PRINTS
-            System.out.println(messagesInArea.size() + " Traffic messages in the area");
-//            for (TrafficMessage.Feature feature : messagesInArea){
-//                if(feature.properties.announcements != null) {
-//                    for(TrafficMessage.Announcements announcement: feature.properties.announcements){
-//                        System.out.println(announcement.title);
+//            ArrayList<TrafficMessage.Feature> messagesInArea = new ArrayList<>();
+//            for (TrafficMessage.Feature feature : trafficMessage.features){
+//                if(feature.geometry != null){
+//                    for (ArrayList<ArrayList<Double>> coordinates : feature.geometry.coordinates) {
+//                        for (ArrayList<Double> coordinate : coordinates) {
+//                            if(coordinate.size() == 2){
+//                                if(coordinate.get(0) > coordinateConstraints.minLon &&
+//                                        coordinate.get(0) < coordinateConstraints.maxLon &&
+//                                        coordinate.get(1) > coordinateConstraints.minLat &&
+//                                        coordinate.get(1) < coordinateConstraints.maxLat){
+//                                    messagesInArea.add(feature);
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                        break;
 //                    }
 //                }
 //            }
+//            // TEST PRINTS
+//            System.out.println(messagesInArea.size() + " Traffic messages in the area");
         }
+
+    }
+
+    public void createRoadData() throws IOException, URISyntaxException {
+        roadData = roadAPILogic.getRoadData(coordinateConstraints.getAsString('/'));
+        //TODO: ADD TIMEFRAME FILTERING OF TRAFFICMESSAGES
+        roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
 
     }
 
@@ -260,8 +240,8 @@ public class SessionData {
         }
 
 
-        System.out.println("---"+chart_type+"---");
-        System.out.println(series.getData());
+//        System.out.println("---"+chart_type+"---");
+//        System.out.println(series.getData());
 
         return series;
     }

@@ -11,6 +11,33 @@ public class TrafficMessage {
     Date dataUpdatedTime;
     ArrayList<Feature> features;
 
+    public Integer messagesInArea(CoordinateConstraints c){
+        int amount = 0;
+        for (TrafficMessage.Feature feature : features){
+            if(feature.geometry != null){
+                for (ArrayList<ArrayList<Double>> coordinates : feature.geometry.coordinates) {
+                    for (ArrayList<Double> coordinate : coordinates) {
+                        if(coordinate.size() == 2){
+                            if(coordinate.get(0) > c.minLon &&
+                                    coordinate.get(0) < c.maxLon &&
+                                    coordinate.get(1) > c.minLat &&
+                                    coordinate.get(1) < c.maxLat){
+                                amount = amount +1;
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        System.out.println(amount + " Traffic messages in the area");
+        return amount;
+    }
+
+
+
+
     @JsonProperty("dataUpdatedTime")
     public Date getDataUpdatedTime() {
         return this.dataUpdatedTime; }

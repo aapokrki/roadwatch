@@ -79,8 +79,11 @@ public class RoadAPILogic {
     }
 
     // Retrieves road conditions and constructs a RoadCondition object
-    public RoadData getRoadData() throws IOException, URISyntaxException {
+    public RoadData getRoadData(String bbox) throws IOException, URISyntaxException {
+        URI uriRoadCondition = new URI("https://tie.digitraffic.fi/api/v3/data/road-conditions/" +
+                bbox);
         System.out.println("ROAD-CONDITION API-LINK: \n"+uriRoadCondition.toString());
+
         JsonNode roadConditionNode = retrieveData(uriRoadCondition);
         return RoadAPImapper.treeToValue(roadConditionNode, RoadData.class);
     }

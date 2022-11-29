@@ -43,7 +43,7 @@ public class WeatherAPILogic {
     }
 
     // Creates URL String based on given parameters to be used in creating API document
-    public String createURLString(SessionData.CoordinateConstraints coordinates, String startime, String endtime) throws ParseException {
+    public String createURLString(CoordinateConstraints coordinates, String startime, String endtime) throws ParseException {
 //        String coordinates = latitude.toString() + "," + longitude.toString();
         StringBuilder str = new StringBuilder();
         String latLonCoords = coordinates.minLat.toString() + ',' + coordinates.minLon.toString();
@@ -66,7 +66,7 @@ public class WeatherAPILogic {
 
     }
 
-    public String createAVGMINMAXurlString(SessionData.CoordinateConstraints coordinates, String startime, String endtime){
+    public String createAVGMINMAXurlString(CoordinateConstraints coordinates, String startime, String endtime){
 
         String str = "https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=" + coordinates.getAsString(',') +
                 "&starttime=" + startime + "&endtime=" + endtime + "&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN";
