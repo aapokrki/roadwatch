@@ -6,6 +6,8 @@ import com.sothawo.mapjfx.Coordinate;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrafficMessage {
     Date dataUpdatedTime;
@@ -35,6 +37,30 @@ public class TrafficMessage {
         return amount;
     }
 
+    public Map<String, Integer> getTrafficMessagesByType(CoordinateConstraints c){
+        Map<String, Integer> trafficMessagesByType = new HashMap<>();
+        for (TrafficMessage.Feature feature : features){
+            if(feature.geometry != null){
+                for (ArrayList<ArrayList<Double>> coordinates : feature.geometry.coordinates) {
+                    for (ArrayList<Double> coordinate : coordinates) {
+                        if(coordinate.size() == 2){
+                            if(coordinate.get(0) > c.minLon &&
+                                    coordinate.get(0) < c.maxLon &&
+                                    coordinate.get(1) > c.minLat &&
+                                    coordinate.get(1) < c.maxLat){
+                                trafficMessagesByType.compute(feature.properties.situationType, (key, val) -> {
+                                    if(val == null){return 1;}return val + 1;
+                                });
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return trafficMessagesByType;
+    }
 
 
 
