@@ -106,6 +106,7 @@ public class RoadWatchController {
         siteLabel.setText("HOME");
         StackPane.setAlignment(infoPane, Pos.CENTER_RIGHT);
         mapPane.setVisible(true);
+        changeLayout("NORMAL");
     }
 
 
@@ -150,7 +151,7 @@ public class RoadWatchController {
         }
         infoPane.setCenter(preferences);
         siteLabel.setText("PREFERENCES");
-        changeLayout("WIDE");
+        //changeLayout("WIDE");
 
     }
 
@@ -165,7 +166,6 @@ public class RoadWatchController {
         }
         infoPane.setCenter(road);
         siteLabel.setText("ROAD DATA");
-        changeLayout("WIDE");
 
     }
 

@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="542.0" prefWidth="1250.0" styleClass="background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadController">
+<AnchorPane minHeight="610.0" minWidth="950.0" prefHeight="610.0" prefWidth="950.0" styleClass="background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadController">
    <children>
-      <VBox layoutX="14.0" layoutY="20.0" prefHeight="469.0" prefWidth="333.0" styleClass="backgroundBlue">
+      <VBox layoutX="25.0" layoutY="49.0" prefHeight="469.0" prefWidth="333.0" styleClass="backgroundBlue">
          <children>
             <Label styleClass="basicHeading" text="SELECT DATA" />
             <Line endX="204.2928924560547" endY="-1.4497476816177368" startX="-100.0" stroke="WHITE" />
@@ -35,24 +35,8 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </VBox>
-      <Label fx:id="infoLabel" alignment="CENTER" layoutX="443.0" layoutY="24.0" prefHeight="35.0" prefWidth="446.0" styleClass="smallHeading" />
-      <Label layoutX="1022.0" layoutY="42.0" styleClass="smallHeading" text="LOCATION" />
-      <Label layoutX="1022.0" layoutY="167.0" styleClass="smallHeading" text="TIMELINE" />
-      <Label layoutX="1027.0" layoutY="214.0" styleClass="smallText" text="Time of day" />
-      <Button layoutX="1027.0" layoutY="469.0" mnemonicParsing="false" onMouseClicked="#onCalculateClick" styleClass="basicButton" text="CALCULATE" />
-      <Button layoutX="562.0" layoutY="460.0" mnemonicParsing="false" styleClass="basicButton" text="FETCH DATA" />
-       <ComboBox fx:id="timeFrameComboBox" layoutX="1154.0" layoutY="218.0" onAction="#changeTimeFrame" styleClass="combo-box">
-           <items>
-               <FXCollections fx:factory="observableArrayList">
-                   <String fx:value="CURRENT" />
-                   <String fx:value="2H" />
-                   <String fx:value="4H" />
-                   <String fx:value="6H" />
-                   <String fx:value="12H" />
-               </FXCollections>
-           </items>
-       </ComboBox>
-      <LineChart layoutX="402.0" layoutY="66.0">
+      <Label fx:id="infoLabel" alignment="CENTER" layoutX="347.0" layoutY="14.0" prefHeight="35.0" prefWidth="446.0" styleClass="smallHeading" />
+      <LineChart layoutX="338.0" layoutY="66.0" prefHeight="346.0" prefWidth="323.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -60,12 +44,31 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-       <AnchorPane fx:id="datePickerPane" layoutX="1014.0" layoutY="255.0" prefHeight="148.0" prefWidth="191.0">
-           <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />
-           <Label fx:id="endDateLabel" layoutX="21.0" layoutY="79.0" styleClass="smallText" text="Select end date" />
-           <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
-           <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="109.0" />
-       </AnchorPane>
-      <Label fx:id="loadingLabel" layoutX="1049.0" layoutY="431.0" prefHeight="30.0" prefWidth="122.0" styleClass="smallHeading" text="asd" />
+      <AnchorPane layoutX="646.0" layoutY="152.0" prefHeight="268.0" prefWidth="225.0">
+         <children>
+            <Label layoutX="2.0" layoutY="40.0" styleClass="smallText" text="Time of day" />
+            <ComboBox fx:id="timeFrameComboBox" layoutX="121.0" layoutY="44.0" onAction="#changeTimeFrame" styleClass="combo-box">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="CURRENT" />
+                     <String fx:value="2H" />
+                     <String fx:value="4H" />
+                     <String fx:value="6H" />
+                     <String fx:value="12H" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <AnchorPane fx:id="datePickerPane" layoutX="11.0" layoutY="126.0" prefHeight="159.0" prefWidth="204.0">
+               <children>
+                  <Label fx:id="startDateLabel" layoutX="20.0" layoutY="-1.0" styleClass="smallText" text="Select start date" />
+                  <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
+                  <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="109.0" />
+                  <Label fx:id="endDateLabel" layoutX="20.0" layoutY="80.0" styleClass="smallText" text="Select end date" />
+               </children>
+            </AnchorPane>
+            <Label layoutX="58.0" layoutY="91.0" styleClass="smallHeading" text="TIMELINE" />
+         </children>
+      </AnchorPane>
+      <Button layoutX="439.0" layoutY="498.0" mnemonicParsing="false" onMouseClicked="#onCalculateClick" styleClass="basicButton" text="CALCULATE" />
    </children>
 </AnchorPane>
