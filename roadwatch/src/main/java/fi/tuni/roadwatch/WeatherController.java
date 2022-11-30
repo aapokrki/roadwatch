@@ -51,17 +51,13 @@ public class WeatherController {
     @FXML
     private Label nowLabel;
     @FXML
-    private Label todayLabel;
+    private Label tempRightNowLabel;
     @FXML
-    private Label tomorrowLabel;
+    private Label tempMaxLabel;
     @FXML
-    private Label dATomorrowLabel;
+    private Label tempMinLabel;
     @FXML
     private Label tempErrorLabel;
-    @FXML
-    private Button avgTempButton;
-    @FXML
-    private Button minMaxTempButton;
     private Date savedDate;
     @FXML
     private Label maxLabel;
@@ -69,17 +65,8 @@ public class WeatherController {
     private Label minLabel;
     @FXML
     private Label avgLabel;
-
     @FXML
     private DatePicker chooseDay;
-
-    @FXML
-    private Label tempRightNowLabel;
-    @FXML
-    private Label tempMaxLabel;
-    @FXML
-    private Label tempMinLabel;
-
 
     // Wind components
     @FXML
@@ -237,7 +224,7 @@ public class WeatherController {
     }
 
     // Changes temperature labels according to which day you want to see
-    private void changeTempLabels(Boolean now){
+    public void changeTempLabels(Boolean now){
         double min = sessionData.wantedWeatherData.get(0).getTemperature();
         double max = sessionData.wantedWeatherData.get(0).getTemperature();
         tempRightNowLabel.setVisible(false);
@@ -261,7 +248,7 @@ public class WeatherController {
         tempMaxLabel.setText(max + "°");
     }
 
-    private boolean coordinateCheck(){
+    public boolean coordinateCheck(){
         if(sessionData.coordinateConstraints == null){
             return false;
         }
