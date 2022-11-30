@@ -68,24 +68,11 @@ public class RoadWatchController {
     @FXML
     private Label trafficMessageCount;
 
-    public void setScreenBounds(Rectangle2D screenBounds) {
-        this.screen = screenBounds;
-    }
-
-    public void setScreenSize() {
-//        root.minWidth(screen.getMinX());
-//        root.minHeight(screen.getMinY());
-//        root.maxWidth(screen.getMaxX());
-//        root.maxHeight(screen.getMaxY());
-//        root.prefWidth(screen.getWidth());
-//        root.prefHeight(screen.getHeight());
-    }
-
-    public void setSessionData(SessionData sessionData){
+    public void setSessionData(SessionData sessionData) throws IOException {
         this.sessionData = sessionData;
         String newLabel = sessionData.trafficMessage.features.size() + " Traffic announcements";
         trafficMessageCount.setText(newLabel);
-
+        loadHome();
     }
 
     public void loadMap() throws IOException {

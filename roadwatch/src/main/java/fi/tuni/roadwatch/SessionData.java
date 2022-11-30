@@ -210,16 +210,16 @@ public class SessionData {
     //  tai otetaan kaikkien kordinaattien keskiarvo
     // TODO: Koordinaatti voidaan näyttää kartalla
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){
-
         XYChart.Series<String, Double> series = new XYChart.Series<>();
         Double Y = null;
-        for(WeatherData wd : this.wantedWeatherData){
 
-            Date datecheck = wd.getDate();
+        for(WeatherData wd : this.wantedWeatherData){
+            Date dateCheck = wd.getDate();
             Calendar date = Calendar.getInstance();
-            date.setTime(datecheck);
+            date.setTime(dateCheck);
             int hours = date.get(Calendar.HOUR_OF_DAY);
             int minutes = date.get(Calendar.MINUTE);
+
             if(hours % 2 == 0 && minutes == 0){
                 if(chart_type.equals("WIND")){
                     Y = wd.getWind();
@@ -227,7 +227,6 @@ public class SessionData {
                 if(chart_type.equals("VISIBILITY")){
                     Y = wd.getCloudiness();
                 }
-
                 assert Y != null;
                 // Do not add NaN data to chart. It will break the charting.
                 if(!Y.isNaN()){
@@ -236,13 +235,7 @@ public class SessionData {
                     series.getData().add(new XYChart.Data<>(X, Y));
                 }
             }
-            System.out.println(wd.getCoordinates());
         }
-
-
-//        System.out.println("---"+chart_type+"---");
-//        System.out.println(series.getData());
-
         return series;
     }
 
@@ -290,14 +283,7 @@ public class SessionData {
                 if(!savedWeatherData.containsKey(wd.getDate())){
                     savedWeatherData.put(wd.getDate(), wd);
                 }
-
             }
         }
-
     }
-
-
-
-
-
 }
