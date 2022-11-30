@@ -6,6 +6,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -134,30 +136,22 @@ public class SessionData {
         this.wantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
     }
 
-
-    // ONGELMA
-    // API hakee tietyn bboxin sisällä olevilta asemilta säätietoa.
-    // Säätietoa voi tulla eri koordinaateista.
-    // Lopulta chartissa on säädatapisteitä useista eri koordinaateista päällekäin
-    // TODO: Jokaiselle koordinaatille oma viiva
-    //  tai valitaan vain yksi koordinaatti josta otetaan dataa
-    //  tai otetaan kaikkien kordinaattien keskiarvo
-    // TODO: Koordinaatti voidaan näyttää kartalla
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){
 
         XYChart.Series<String, Double> series = new XYChart.Series<>();
+        Map<String, Double> seriesMap = new TreeMap<>();
         Double Y = null;
+
+        ArrayList<String> coordsInArea = new ArrayList<>();
+
         for(WeatherData wd : this.wantedWeatherData){
 
-            Date datecheck = wd.getDate();
-            Calendar date = Calendar.getInstance();
-            date.setTime(datecheck);
-            int hours = date.get(Calendar.HOUR_OF_DAY);
-            int minutes = date.get(Calendar.MINUTE);
 
-            System.out.println(wd.getCoordinates());
 
-            if(hours % 2 == 0 && minutes == 0){
+            if(!coordsInArea.contains(wd.getCoordinates())){
+                coordsInArea.add(wd.getCoordinates());
+            }
+
                 if(chart_type.equals("WIND")){
                     Y = wd.getWind();
                 }
@@ -168,13 +162,29 @@ public class SessionData {
                 assert Y != null;
                 // Do not add NaN data to chart. It will break the charting.
                 if(!Y.isNaN()){
-                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-                    series.getData().add(new XYChart.Data<>(X, Y));
+                    Date datecheck = wd.getDate();
+                    Calendar date = Calendar.getInstance();
+                    date.setTime(datecheck);
+                    int day = date.get(Calendar.DAY_OF_MONTH);
+                    int hour = date.get(Calendar.HOUR_OF_DAY);
+                    String X = day + "/" + hour + ":00";
+                    Double finalY = Y;
+                    seriesMap.compute(X, (key, val) -> {
+                        if(val == null){
+                            return finalY;
+                        }
+                        return finalY+val;
+                    });
                 }
-            }
+
         }
-//        System.out.println("---"+chart_type+"---");
-//        System.out.println(series.getData());
+
+        //Calculate data averages of coordinates in area
+        seriesMap.replaceAll( (k,v) -> v /coordsInArea.size());
+        for(Map.Entry<String,Double> entry : seriesMap.entrySet()){
+            series.getData().add(new XYChart.Data<>(entry.getKey(),entry.getValue()));
+        }
+
         return series;
     }
 
@@ -182,7 +192,6 @@ public class SessionData {
     public Map<String, Double> getMaintenanceAverages(){
         Map<String, Double> averageMaintenanceAmount = new TreeMap<>();
         for(Maintenance maintenance : maintenancesInTimeLine){
-            System.out.println(maintenance.date.toString() + " -- " + maintenance.tasks);
             maintenance.tasks.forEach((task,amount)-> {
                 averageMaintenanceAmount.compute(task, (key,val) ->{
                     if(val == null){
