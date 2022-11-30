@@ -427,3 +427,58 @@
 
 }
 
+.chart-content {
+    -fx-padding: 30px;
+}
+
+.chart-title {
+  -fx-text-fill: #4682b4;
+  -fx-font-size: 1.6em;
+}
+
+.axis-label {
+  -fx-text-fill: #4682b4;
+}
+
+.chart-legend {
+   -fx-background-color:  transparent;
+   -fx-padding: 20px;
+}
+
+.chart-legend-item-symbol{
+   -fx-background-radius: 0;
+}
+
+.chart-legend-item{
+    -fx-text-fill: white;
+}
+
+.axis {
+    -fx-font-size: 1.4em;
+    -fx-tick-label-fill: white;
+    -fx-font-family: "Ubuntu";
+    -fx-tick-length: 20;
+    -fx-minor-tick-length: 10;
+}
+
+.axis-label {
+   -fx-text-fill: white;
+}
+
+.axis-tick-mark {
+    -fx-stroke: #78C2E2;
+    -fx-stroke-width: 2;
+}
+.axis-minor-tick-mark {
+    -fx-stroke: #78C2E2;
+}
+
+.chart-series-line {
+    -fx-stroke-width: 2px;
+    -fx-effect: null;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #78C2E2; }
+.default-color1.chart-series-line { -fx-stroke: #78e2a2; }
+.default-color0.chart-line-symbol { -fx-background-color: #78C2E2, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #78e2a2, white; }

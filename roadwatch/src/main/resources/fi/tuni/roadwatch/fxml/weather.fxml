@@ -15,7 +15,7 @@
    <children>
 
        <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="125.0" prefHeight="548.0" prefWidth="823.0">
-           <LineChart fx:id="windChart" layoutX="190.0" layoutY="14.0" prefHeight="400.0" prefWidth="577.0">
+           <LineChart fx:id="windChart" layoutX="20.0" layoutY="14.0" prefHeight="400.0" prefWidth="700.0">
                <xAxis>
                    <CategoryAxis side="BOTTOM" fx:id="xAxisWind" />
                </xAxis>
@@ -24,21 +24,22 @@
                </yAxis>
            </LineChart>
            <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-           <Button fx:id="windButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="CALCULATE" />
+           <Button fx:id="windButton" layoutX="319.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="CALCULATE" />
        </AnchorPane>
 
        <AnchorPane fx:id="visibilityPane" layoutX="3.0" layoutY="125.0" prefHeight="450.0" prefWidth="823.0">
+           <LineChart fx:id="visibilityChart" layoutX="20.0" layoutY="14.0" prefHeight="400.0" prefWidth="700.0">
+               <xAxis>
+                   <CategoryAxis side="BOTTOM" fx:id="xAxisVisibility" />
+               </xAxis>
+               <yAxis>
+                   <NumberAxis fx:id="yAxisVisibility" side="LEFT" />
+               </yAxis>
+           </LineChart>
            <Label fx:id="visibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-           <Button fx:id="visibilityButton" layoutX="329.0" layoutY="437.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="CALCULATE" />
-            <LineChart fx:id="visibilityChart" layoutX="190.0" layoutY="14.0" prefHeight="400.0" prefWidth="577.0">
-                <xAxis>
-                    <CategoryAxis side="BOTTOM" fx:id="xAxisVisibility" />
-                </xAxis>
-                <yAxis>
-                    <NumberAxis fx:id="yAxisVisibility" side="LEFT" />
-                </yAxis>
-            </LineChart>
+           <Button fx:id="visibilityButton" layoutX="319.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="CALCULATE" />
        </AnchorPane>
+
       <Label contentDisplay="CENTER" layoutX="34.0" layoutY="33.0" styleClass="bigTextGreen" text="Choose datatype" />
       <ComboBox fx:id="comboBox" layoutX="289.0" layoutY="38.0" onAction="#changeDatatype" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">
        <items>
@@ -76,12 +77,13 @@
            <Label fx:id="maxLabel" layoutX="618.0" layoutY="500.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" />
            <Button fx:id="saveDataButton" layoutX="750.0" layoutY="450.0" mnemonicParsing="false" onAction="#saveWeatherData" styleClass="basicButton" text="Save Data" />
        </AnchorPane>
-       <AnchorPane fx:id="datePickerPane" layoutX="9.0" layoutY="225.0" prefHeight="245.0" prefWidth="191.0">
+
+       <AnchorPane fx:id="datePickerPane" layoutX="740.0" layoutY="225.0" prefHeight="245.0" prefWidth="191.0">
            <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />
            <Label fx:id="endDateLabel" layoutX="17.0" layoutY="170.0" styleClass="smallText" text="Select end date" />
            <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
            <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="200.0" />
        </AnchorPane>
-       <Label fx:id="errorLabel" layoutX="406.0" layoutY="600.0" prefHeight="30.0" prefWidth="500.0" styleClass="smallText" />
+       <Label fx:id="errorLabel" layoutX="366.0" layoutY="620.0" prefHeight="30.0" prefWidth="500.0" styleClass="smallText" />
    </children>
 </AnchorPane>
