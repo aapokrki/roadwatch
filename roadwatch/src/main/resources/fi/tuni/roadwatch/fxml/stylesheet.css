@@ -69,6 +69,13 @@
     -fx-font-weight: bold;
 }
 
+.bigTextGreen {
+    -fx-font-family: "Ubuntu";
+    -fx-font-size: 30px;
+    -fx-text-fill: #78e2a2;
+    -fx-font-weight: bold;
+}
+
 .valueText {
     -fx-font-family: "Ubuntu";
     -fx-font-size: 40px;

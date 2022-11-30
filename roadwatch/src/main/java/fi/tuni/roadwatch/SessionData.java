@@ -258,7 +258,6 @@ public class SessionData {
         return df.format(average);
     }
 
-
     // Helper function to set the time of day to 00:00:00, also can add days to date
     public Date trimToStart(Date date, int Days){
         Calendar cal = Calendar.getInstance();
@@ -306,11 +305,7 @@ public class SessionData {
                 if(!savedWeatherData.containsKey(wd.getDate())){
                     savedWeatherData.put(wd.getDate(), wd);
                 }
-
             }
         }
-
     }
-
-
 }

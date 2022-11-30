@@ -47,8 +47,6 @@ public class WeatherController {
     @FXML
     private AnchorPane temperaturePane;
     @FXML
-    private  Label cityLabel;
-    @FXML
     private Label dateLabel;
     @FXML
     private Label nowLabel;
@@ -59,19 +57,18 @@ public class WeatherController {
     @FXML
     private Label dATomorrowLabel;
     @FXML
+    private Label tempErrorLabel;
+    @FXML
     private Button avgTempButton;
     @FXML
     private Button minMaxTempButton;
-
-
     private Date savedDate;
-
     @FXML
-    private Label maxlabel;
+    private Label maxLabel;
     @FXML
-    private Label minlabel;
+    private Label minLabel;
     @FXML
-    private Label avglabel;
+    private Label avgLabel;
 
     @FXML
     private DatePicker chooseDay;
@@ -156,10 +153,7 @@ public class WeatherController {
         if(datePickerErrorCheck()){
             visibilityChart.setAnimated(false);
             visibilityChart.getData().clear();
-
-
             sessionData.createWeatherData(getStartDate(), getEndDate());
-            System.out.println(sessionData.wantedWeatherData.size());
             Thread.sleep(1000);
 
             XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
@@ -175,7 +169,6 @@ public class WeatherController {
                 errorLabel.setText("No Data");
             }
         }
-
     }
 
     @FXML
@@ -185,9 +178,7 @@ public class WeatherController {
         if(datePickerErrorCheck()){
             windChart.setAnimated(false);
             windChart.getData().clear();
-
             errorLabel.setText("");
-
             sessionData.createWeatherData(getStartDate(), getEndDate());
             Thread.sleep(1000);
 
@@ -277,37 +268,34 @@ public class WeatherController {
         return true;
     }
 
-
-
     @FXML
     private void onNowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        changeTimeColors(todayLabel, tomorrowLabel, dATomorrowLabel);
+        //changeTimeColors(todayLabel, tomorrowLabel, dATomorrowLabel);
         nowLabel.setVisible(true);
         if(!coordinateCheck()){
-            errorLabel.setText("Choose coordinates, remember to add on map!");
+            tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else{
         // Gets the date right now and adds a few seconds to get forecast from API
         // Also getting the date and the end of day
-        Calendar cal = Calendar.getInstance();
-        long timeInSecs = cal.getTimeInMillis();
-        Date startTime = new Date(timeInSecs + (10*60*10));
-        Date endTime = sessionData.timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
+            tempErrorLabel.setText("");
+            Calendar cal = Calendar.getInstance();
+            long timeInSecs = cal.getTimeInMillis();
+            Date startTime = new Date(timeInSecs + (10*60*10));
+            Date endTime = sessionData.timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
 
-        // Creates weather data according to new start and end time to sessionData
-        sessionData.createWeatherData(startTime, endTime);
-
-        changeTempLabels(true);
-
+            // Creates weather data according to new start and end time to sessionData
+            sessionData.createWeatherData(startTime, endTime);
+            changeTempLabels(true);
         }
     }
 
     @FXML
     private void onTomorrowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        changeTimeColors(tomorrowLabel, todayLabel, dATomorrowLabel);
+        //changeTimeColors(tomorrowLabel, todayLabel, dATomorrowLabel);
         nowLabel.setVisible(false);
         if(!coordinateCheck()){
-            errorLabel.setText("Choose coordinates, remember to add on map!");
+            tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
             // Sets the date to the next day to hours 00 - 24
@@ -324,10 +312,10 @@ public class WeatherController {
 
     @FXML
     private void onDATomorrowClick() throws ParserConfigurationException, IOException, ParseException, SAXException {
-        changeTimeColors(dATomorrowLabel, todayLabel, tomorrowLabel);
+        //changeTimeColors(dATomorrowLabel, todayLabel, tomorrowLabel);
         nowLabel.setVisible(false);
         if(!coordinateCheck()){
-            errorLabel.setText("Choose coordinates, remember to add on map!");
+            tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
             // Sets the date to the next day to hours 00 - 24
@@ -423,9 +411,9 @@ public class WeatherController {
             // If avgminmax is empty, api call failed, needs bigger area
             if(!sessionData.createAvgMinMax(startTime, endTime)){
                 errorLabel.setText("Area must be larger to calculate average");
-                avglabel.setText("");
+                avgLabel.setText("");
             }else{
-                avglabel.setText(sessionData.getAVG_value());
+                avgLabel.setText("Avg: " + sessionData.getAVG_value() + "°");
             }
 
         }
@@ -442,14 +430,12 @@ public class WeatherController {
             // If created avgminMax is empty, api call failed, needs bigger area
             if(!sessionData.createAvgMinMax(startTime, endTime)){
                 errorLabel.setText("Area must be larger to calculate min-max");
-                minlabel.setText("");
-                maxlabel.setText("");
+                minLabel.setText("");
+                maxLabel.setText("");
             }else{
-                minlabel.setText(String.valueOf(sessionData.getMIN_value()));
-                maxlabel.setText(String.valueOf(sessionData.getMAX_value()));
+                minLabel.setText("Min: " + sessionData.getMIN_value()  + "°");
+                maxLabel.setText("Max: " + sessionData.getMAX_value()  + "°");
             }
-
-
         }
     }
 
