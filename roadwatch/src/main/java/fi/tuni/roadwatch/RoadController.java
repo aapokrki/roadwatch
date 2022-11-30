@@ -2,16 +2,26 @@ package fi.tuni.roadwatch;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class RoadController {
     private final ArrayList<Label> RCLabels = new ArrayList<>();
+
+
+
+
     int timeFrame = 0;
     @FXML
     private Label infoLabel;
@@ -28,8 +38,21 @@ public class RoadController {
     private Label overallConditionLabel;
     @FXML
     private Label alertsLabel;
+
+    @FXML
+    public Label loadingLabel;
+
     @FXML
     public ComboBox<String> timeFrameComboBox;
+
+    @FXML
+    public AnchorPane datePickerPane;
+
+    @FXML
+    public DatePicker startDatePicker;
+
+    @FXML
+    public DatePicker endDatePicker;
 
     private SessionData sessionData;
 
@@ -111,11 +134,14 @@ public class RoadController {
     }
 
     @FXML
-    private void onCalculateClick() throws IOException, URISyntaxException {
+    private void onCalculateClick() throws IOException, URISyntaxException, InterruptedException {
+
         sessionData.createRoadData();
         sessionData.roadData.setForecastConditions(timeFrame);
         alertsLabel.setText(sessionData.roadData.trafficMessageAmount + " ALERTS");
 
+        //MAINTENANCE
+        sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
     }
 
     @FXML
@@ -126,5 +152,28 @@ public class RoadController {
         }else{
             timeFrame = Character.getNumericValue(str.charAt(0));
         }
+    }
+    private Date getStartDate(){
+        LocalDate startLocalDate = startDatePicker.getValue();
+        if(startLocalDate == null){
+            System.err.println("Dates cant be null");
+            return null;
+        }
+        Instant instant = Instant.from(startLocalDate.atStartOfDay(ZoneId.systemDefault()));
+        Date startDate = Date.from(instant);
+
+        return sessionData.trimToStart(startDate,0);
+    }
+
+    private Date getEndDate(){
+        LocalDate endLocalDate = endDatePicker.getValue();
+        if(endLocalDate == null){
+            System.err.println("Dates cant be null");
+            return null;
+        }
+        Instant instant2 = Instant.from(endLocalDate.atStartOfDay(ZoneId.systemDefault()));
+        Date endDate = Date.from(instant2);
+
+        return  sessionData.trimToEnd(endDate,0);
     }
 }

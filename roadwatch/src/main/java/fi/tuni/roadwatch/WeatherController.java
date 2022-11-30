@@ -189,7 +189,6 @@ public class WeatherController {
             errorLabel.setText("");
 
             sessionData.createWeatherData(getStartDate(), getEndDate());
-            System.out.println(sessionData.wantedWeatherData.size());
             Thread.sleep(1000);
 
             XYChart.Series<String, Double> windSeries = sessionData.createGraphSeries("WIND");

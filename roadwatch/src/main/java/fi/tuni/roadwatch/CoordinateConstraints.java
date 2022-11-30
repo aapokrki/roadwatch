@@ -22,9 +22,9 @@ public class CoordinateConstraints {
     }
 
     public String getAsMaintenanceString(){
-        return  "xMin="+minLon+
-                "yMin="+minLat+
-                "xMax="+maxLon+
+        return  "xMin="+minLon+"&"+
+                "yMin="+minLat+"&"+
+                "xMax="+maxLon+"&"+
                 "yMax="+maxLat;
     }
 }

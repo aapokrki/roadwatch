@@ -10,9 +10,9 @@ public class RoadData {
     //CUSTOM
     public Integer trafficMessageAmount;
     Map<String, Integer> overallCondition = new HashMap<>();
-    Map<String, Integer> frictionCondition= new HashMap<>();;
-    Map<String, Integer> roadCondition= new HashMap<>();;
-    Map<String, Integer> precipicationCondition= new HashMap<>();;
+    Map<String, Integer> frictionCondition= new HashMap<>();
+    Map<String, Integer> roadCondition= new HashMap<>();
+    Map<String, Integer> precipicationCondition= new HashMap<>();
 
     // JACKSON BASICS
     Date dataUpdatedTime;
@@ -30,71 +30,6 @@ public class RoadData {
         return this.roadWeatherData; }
     public void setroadWeatherData(ArrayList<RoadWeatherData> roadWeatherData) {
         this.roadWeatherData = roadWeatherData; }
-
-    // OLD/OTHER OPTIONS
-//    public Map<String, ForecastConditionReason> getForecastCondition(int time){
-//
-//        Map<String, ForecastConditionReason> forecastMap = new HashMap<>();
-//        int conditionIndex;
-//        if(time != 12){
-//            conditionIndex = time / 2;
-//        }else{
-//            conditionIndex = 4;
-//        }
-//
-//        for(RoadWeatherData rwd: roadWeatherData){
-//            ForecastConditionReason fcr = rwd.roadConditions.get(conditionIndex).forecastConditionReason;
-//            forecastMap.put(rwd.id, fcr);
-//            System.out.println(rwd.id);
-//            System.out.println(" Precipitation: " + fcr.precipitationCondition);
-//            System.out.println(" RoadCondition: " + fcr.roadCondition);
-//            System.out.println(" Friction: " + fcr.frictionCondition);
-//
-//        }
-//        return forecastMap;
-//    }
-
-    // Toinen vaihtoehto
-//    public Map<String,Map<String, Integer>> getForecastCondition(int time){
-//
-//        Map<String, Map<String, Integer>> forecastCountMap = new HashMap<>();
-//        forecastCountMap.put("overallCondition", new HashMap<>());
-//        forecastCountMap.put("frictionCondition", new HashMap<>());
-//        forecastCountMap.put("roadCondition", new HashMap<>());
-//        forecastCountMap.put("precipicationCondition", new HashMap<>());
-//
-//        int conditionIndex;
-//        if(time != 12){
-//            conditionIndex = time / 2;
-//        }else{
-//            conditionIndex = 4;
-//        }
-//
-//        for(RoadWeatherData rwd: roadWeatherData){
-//            RoadCondition rc = rwd.roadConditions.get(conditionIndex);
-//
-//            forecastCountMap.get("overallCondition").compute(rc.overallRoadCondition, (key,val) -> {
-//                if (val == null) {return 1;}return val + 1;
-//            });
-//
-//
-//            ForecastConditionReason fcr = rc.forecastConditionReason;
-//            forecastCountMap.get("frictionCondition").compute(fcr.frictionCondition, (key, val) -> {
-//                if(val == null){return 1;}return val + 1;
-//            });
-//
-//            forecastCountMap.get("roadCondition").compute(fcr.roadCondition, (key, val) -> {
-//                if(val == null){return 1;}return val + 1;
-//            });
-//
-//            forecastCountMap.get("precipicationCondition").compute(fcr.precipitationCondition, (key, val) -> {
-//                if(val == null){return 1;}return val + 1;
-//            });
-//        }
-//        return forecastCountMap;
-//    }
-
-    // Fills forecastcondition maps based on given timeframe
 
     // Counts the amount of different condition statuses in the area to their corresponding maps
     public void setForecastConditions(int time){

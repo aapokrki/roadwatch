@@ -32,6 +32,7 @@ public class SessionData {
 
     public TrafficMessage trafficMessage;
     public RoadData roadData;
+    public ArrayList<Maintenance> maintenancesInTimeLine;
 
     // Used in creation of wantedWeatherData
     private double currentTemp;
@@ -75,39 +76,28 @@ public class SessionData {
                 coordinateConstraints = new CoordinateConstraints(minLongtitude, minLatitude, maxLongtitude, maxLatitude);
                 System.out.println(coordinateConstraints.getAsString('/'));
             }
-            // TODO: ADD THIS TO ROADDATA CONSTRUCTOR
-            // TODO: Make nicer maybe
-            // Checks the traffic messages in a given area
-//            ArrayList<TrafficMessage.Feature> messagesInArea = new ArrayList<>();
-//            for (TrafficMessage.Feature feature : trafficMessage.features){
-//                if(feature.geometry != null){
-//                    for (ArrayList<ArrayList<Double>> coordinates : feature.geometry.coordinates) {
-//                        for (ArrayList<Double> coordinate : coordinates) {
-//                            if(coordinate.size() == 2){
-//                                if(coordinate.get(0) > coordinateConstraints.minLon &&
-//                                        coordinate.get(0) < coordinateConstraints.maxLon &&
-//                                        coordinate.get(1) > coordinateConstraints.minLat &&
-//                                        coordinate.get(1) < coordinateConstraints.maxLat){
-//                                    messagesInArea.add(feature);
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                        break;
-//                    }
-//                }
-//            }
-//            // TEST PRINTS
-//            System.out.println(messagesInArea.size() + " Traffic messages in the area");
         }
-
     }
 
     public void createRoadData() throws IOException, URISyntaxException {
         roadData = roadAPILogic.getRoadData(coordinateConstraints.getAsString('/'));
         //TODO: ADD TIMEFRAME FILTERING OF TRAFFICMESSAGES
         roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
+    }
 
+    public void createMaintenance(String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
+
+        maintenancesInTimeLine = new ArrayList<>();
+
+        System.out.println(startDate + " -- " + endDate);
+        for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+            System.out.println(date);
+            Date dayIndex = convertToDateViaInstant(date);
+            Maintenance maintenance = roadAPILogic.getMaintenances(taskId,coordinateConstraints.getAsMaintenanceString(), trimToStart(dayIndex,0), trimToEnd(dayIndex,0));
+            maintenance.setTasksAndDate(dayIndex);
+            maintenancesInTimeLine.add(maintenance);
+        }
+        System.out.println(getMaintenanceAverages());
     }
 
     public boolean createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
@@ -142,8 +132,75 @@ public class SessionData {
             this.wantedWeatherData = weatherAPILogic.creatingWeatherForecast(weatherAPILogic.GetApiDocument(urlstring));
         }
         this.wantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
-
     }
+
+
+    // ONGELMA
+    // API hakee tietyn bboxin sisällä olevilta asemilta säätietoa.
+    // Säätietoa voi tulla eri koordinaateista.
+    // Lopulta chartissa on säädatapisteitä useista eri koordinaateista päällekäin
+    // TODO: Jokaiselle koordinaatille oma viiva
+    //  tai valitaan vain yksi koordinaatti josta otetaan dataa
+    //  tai otetaan kaikkien kordinaattien keskiarvo
+    // TODO: Koordinaatti voidaan näyttää kartalla
+    public XYChart.Series<String, Double> createGraphSeries(String chart_type){
+
+        XYChart.Series<String, Double> series = new XYChart.Series<>();
+        Double Y = null;
+        for(WeatherData wd : this.wantedWeatherData){
+
+            Date datecheck = wd.getDate();
+            Calendar date = Calendar.getInstance();
+            date.setTime(datecheck);
+            int hours = date.get(Calendar.HOUR_OF_DAY);
+            int minutes = date.get(Calendar.MINUTE);
+
+            System.out.println(wd.getCoordinates());
+
+            if(hours % 2 == 0 && minutes == 0){
+                if(chart_type.equals("WIND")){
+                    Y = wd.getWind();
+                }
+                if(chart_type.equals("VISIBILITY")){
+                    Y = wd.getCloudiness();
+                }
+
+                assert Y != null;
+                // Do not add NaN data to chart. It will break the charting.
+                if(!Y.isNaN()){
+                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
+                    series.getData().add(new XYChart.Data<>(X, Y));
+                }
+            }
+        }
+//        System.out.println("---"+chart_type+"---");
+//        System.out.println(series.getData());
+        return series;
+    }
+
+    // Returns the average amount of tasks per day based on set timeline
+    public Map<String, Double> getMaintenanceAverages(){
+        Map<String, Double> averageMaintenanceAmount = new TreeMap<>();
+        for(Maintenance maintenance : maintenancesInTimeLine){
+            System.out.println(maintenance.date.toString() + " -- " + maintenance.tasks);
+            maintenance.tasks.forEach((task,amount)-> {
+                averageMaintenanceAmount.compute(task, (key,val) ->{
+                    if(val == null){
+                        return Double.valueOf(amount);
+                    }
+                    return val + amount;
+                });
+            });
+        }
+        averageMaintenanceAmount.replaceAll( (k,v) -> v/maintenancesInTimeLine.size());
+        return averageMaintenanceAmount;
+    }
+
+
+
+    //------------------------------------------------------------------------------//
+    //Nää pois sessionDatasta, jotenki paremmin
+    // Date funktiot ja getmin ja getmax jutut
 
     // Helper function to get the closest date to current
     public Date getClosestDate(){
@@ -201,50 +258,6 @@ public class SessionData {
         return df.format(average);
     }
 
-    // ONGELMA
-    // API hakee tietyn bboxin sisällä olevilta asemilta säätietoa.
-    // Säätietoa voi tulla eri koordinaateista.
-    // Lopulta chartissa on säädatapisteitä useista eri koordinaateista päällekäin
-    // TODO: Jokaiselle koordinaatille oma viiva
-    //  tai valitaan vain yksi koordinaatti josta otetaan dataa
-    //  tai otetaan kaikkien kordinaattien keskiarvo
-    // TODO: Koordinaatti voidaan näyttää kartalla
-    public XYChart.Series<String, Double> createGraphSeries(String chart_type){
-
-        XYChart.Series<String, Double> series = new XYChart.Series<>();
-        Double Y = null;
-        for(WeatherData wd : this.wantedWeatherData){
-
-            Date datecheck = wd.getDate();
-            Calendar date = Calendar.getInstance();
-            date.setTime(datecheck);
-            int hours = date.get(Calendar.HOUR_OF_DAY);
-            int minutes = date.get(Calendar.MINUTE);
-            if(hours % 2 == 0 && minutes == 0){
-                if(chart_type.equals("WIND")){
-                    Y = wd.getWind();
-                }
-                if(chart_type.equals("VISIBILITY")){
-                    Y = wd.getCloudiness();
-                }
-
-                assert Y != null;
-                // Do not add NaN data to chart. It will break the charting.
-                if(!Y.isNaN()){
-                    String X = weatherAPILogic.timeAndDateToIso8601Format(wd.getDate());
-
-                    series.getData().add(new XYChart.Data<>(X, Y));
-                }
-            }
-            System.out.println(wd.getCoordinates());
-        }
-
-
-//        System.out.println("---"+chart_type+"---");
-//        System.out.println(series.getData());
-
-        return series;
-    }
 
     // Helper function to set the time of day to 00:00:00, also can add days to date
     public Date trimToStart(Date date, int Days){
@@ -280,6 +293,9 @@ public class SessionData {
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
     }
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert){
+        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
 
     public void saveWeatherData(Date savedDate){
         for(WeatherData wd : wantedWeatherData){
@@ -295,9 +311,6 @@ public class SessionData {
         }
 
     }
-
-
-
 
 
 }

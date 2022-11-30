@@ -1,5 +1,6 @@
 package fi.tuni.roadwatch;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -26,7 +27,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class RoadAPILogic {
@@ -46,7 +49,13 @@ public class RoadAPILogic {
     String yMax = "62";
 
 
-    URI uriTrafficMessage = new URI("https://tie.digitraffic.fi/api/traffic-message/v1/messages?inactiveHours=0&includeAreaGeometry=false&situationType=TRAFFIC_ANNOUNCEMENT&situationType=EXEMPTED_TRANSPORT&situationType=WEIGHT_RESTRICTION&situationType=ROAD_WORK&");
+    URI uriTrafficMessage = new URI("https://tie.digitraffic.fi/api/traffic-message/v1/messages?inactiveHours=0&includeAreaGeometry=false" +
+            "&situationType=TRAFFIC_ANNOUNCEMENT" +
+            "&situationType=EXEMPTED_TRANSPORT" +
+            "&situationType=WEIGHT_RESTRICTION"
+            +
+            "&situationType=ROAD_WORK&"
+    );
 
     URI uriRoadCondition = new URI("https://tie.digitraffic.fi/api/v3/data/road-conditions/" +
             xMin + "/" + yMin + "/" + xMax + "/" + yMax);
@@ -65,10 +74,9 @@ public class RoadAPILogic {
     public RoadAPILogic() throws URISyntaxException, IOException {
         RoadAPImapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         RoadAPImapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        RoadAPImapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        RoadAPImapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
-        JsonNode roadConditionNode = retrieveData(uriRoadCondition);
-        Maintenance maintenance = getMaintenance();
     }
 
     // Retrieves traffic messages and constructs a TrafficMessage object
@@ -89,7 +97,17 @@ public class RoadAPILogic {
     }
 
     // Retrieves road maintenance and constructs a Maintenance object
-    public Maintenance getMaintenance() throws IOException, URISyntaxException {
+    public Maintenance getMaintenances(String taskId,String bbox, Date endFrom, Date endBefore) throws IOException, URISyntaxException {
+        String startString = new SimpleDateFormat("yyyy-MM-dd'T'HH'%3A'mm'%3A'ss'Z'").format(endFrom);
+        String endString = new SimpleDateFormat("yyyy-MM-dd'T'HH'%3A'mm'%3A'ss'Z'").format(endBefore);
+
+        URI uriMaintenance = new URI("https://tie.digitraffic.fi/api/maintenance/v1/tracking/routes?" +
+                "endFrom=" + startString + "&"+
+                "endBefore=" + endString +"&"+
+                bbox + "&" +
+                "taskId="+ taskId + "&" +
+                "&domain=state-roads");
+
         System.out.println("MAINTENANCE API-LINK: \n"+uriMaintenance.toString());
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
         return RoadAPImapper.treeToValue(roadMaintenanceNode, Maintenance.class);
