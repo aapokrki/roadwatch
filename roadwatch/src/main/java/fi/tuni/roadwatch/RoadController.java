@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -44,6 +45,11 @@ public class RoadController {
     @FXML
     public ComboBox<String> maintenanceTaskCombobox;
 
+    @FXML
+    private PieChart conditionChart;
+
+    @FXML
+    private PieChart maintenanceChart;
 
     @FXML
     public AnchorPane datePickerPane;
@@ -84,6 +90,9 @@ public class RoadController {
 
         //MAINTENANCE
         //sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
+        //conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
+        System.out.println(conditionChart.getData());
+
 
     }
 
@@ -111,28 +120,36 @@ public class RoadController {
             timeFrame = Integer.parseInt(subs);
         }
         sessionData.roadData.setForecastConditions(timeFrame);
-
+        changeConditionType();
     }
 
     @FXML
     public void changeConditionType() {
         this.conditionType = conditionTypeComboBox.getValue();
+
         if(Objects.equals(conditionType, "OVERALL")){
-            infoLabel.setText(conditionType);
             System.out.println(sessionData.roadData.overallCondition);
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
+
         }
         if(Objects.equals(conditionType, "FRICTION")){
-            infoLabel.setText(conditionType);
             System.out.println(sessionData.roadData.frictionCondition);
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.frictionCondition));
+
         }
         if(Objects.equals(conditionType, "SLIPPERINESS")){
-            infoLabel.setText(conditionType);
             System.out.println(sessionData.roadData.roadCondition);
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.roadCondition));
+
         }
         if(Objects.equals(conditionType, "PRECIPICATION")){
-            infoLabel.setText(conditionType);
             System.out.println(sessionData.roadData.precipicationCondition);
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.precipicationCondition));
+
         }
+        conditionChart.setTitle(conditionType);
+
+
     }
     @FXML
     public void changeTaskType(ActionEvent actionEvent) {
@@ -147,7 +164,7 @@ public class RoadController {
             sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
         }else{
             sessionData.createMaintenance(taskType,startDatePicker.getValue(),endDatePicker.getValue());
-
         }
+        maintenanceChart.setData(sessionData.createMaintenanceChart());
     }
 }

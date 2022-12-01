@@ -1,7 +1,10 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Coordinate;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.SubScene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import org.xml.sax.SAXException;
 
@@ -142,6 +145,24 @@ public class SessionData {
 
     public void createTaskTypes() throws URISyntaxException, IOException {
         taskTypes = roadAPILogic.getTaskTypes();
+    }
+
+    // Tää siirretään jotenki roaddataan
+    public ObservableList<PieChart.Data> createRoadConditionChart(Map<String, Double> conditionMap) {
+        ArrayList<PieChart.Data> pieChartData = new ArrayList<>();
+        for(Map.Entry<String, Double> cond : conditionMap.entrySet()){
+
+            pieChartData.add(new PieChart.Data(cond.getKey() + " (" + cond.getValue() + ")",cond.getValue()));
+        }
+        return FXCollections.observableArrayList(pieChartData);
+    }
+    public ObservableList<PieChart.Data> createMaintenanceChart() {
+        ArrayList<PieChart.Data> pieChartData = new ArrayList<>();
+        for(Map.Entry<String, Double> cond : getMaintenanceAverages().entrySet()){
+
+            pieChartData.add(new PieChart.Data(cond.getKey() + " (" + cond.getValue() + ")",cond.getValue()));
+        }
+        return FXCollections.observableArrayList(pieChartData);
     }
 
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){

@@ -1,6 +1,8 @@
 package fi.tuni.roadwatch;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 
 import java.util.*;
 
@@ -9,10 +11,10 @@ public class RoadData {
 
     //CUSTOM
     public Integer trafficMessageAmount;
-    Map<String, Integer> overallCondition;
-    Map<String, Integer> frictionCondition;
-    Map<String, Integer> roadCondition;
-    Map<String, Integer> precipicationCondition;
+    Map<String, Double> overallCondition;
+    Map<String, Double> frictionCondition;
+    Map<String, Double> roadCondition;
+    Map<String, Double> precipicationCondition;
 
     // JACKSON BASICS
     Date dataUpdatedTime;
@@ -52,21 +54,27 @@ public class RoadData {
             RoadCondition rc = rwd.roadConditions.get(conditionIndex);
 
             overallCondition.compute(rc.overallRoadCondition, (key,val) -> {
-                if (val == null) {return 1;}return val + 1;
+                if (val == null) {return 1.0;}return val + 1;
             });
             if(time != 0){
                 ForecastConditionReason fcr = rc.forecastConditionReason;
                 if(fcr != null){
-                    frictionCondition.compute(fcr.frictionCondition, (key, val) -> {
-                        if(val == null){return 1;}return val + 1;
-                    });
+
+                    // Null values chosen to be normal(meaning there's nothing to report)
+                    if(fcr.frictionCondition == null){
+                        fcr.frictionCondition = "NORMAL";
+                    }
+                        frictionCondition.compute(fcr.frictionCondition, (key, val) -> {
+                            if(val == null){return 1.0;}return val + 1;
+                        });
+
 
                     roadCondition.compute(fcr.roadCondition, (key, val) -> {
-                        if(val == null){return 1;}return val + 1;
+                        if(val == null){return 1.0;}return val + 1;
                     });
 
                     precipicationCondition.compute(fcr.precipitationCondition, (key, val) -> {
-                        if(val == null){return 1;}return val + 1;
+                        if(val == null){return 1.0;}return val + 1;
                     });
                 }
 
