@@ -182,7 +182,7 @@ public class SessionData {
         ArrayList<PieChart.Data> pieChartData = new ArrayList<>();
         for(Map.Entry<String, Double> cond : getMaintenanceAverages().entrySet()){
 
-            pieChartData.add(new PieChart.Data(cond.getKey() + " (" + cond.getValue() + ")",cond.getValue()));
+            pieChartData.add(new PieChart.Data(cond.getKey() + " (" + cond.getValue() + "/DAY)",cond.getValue()));
         }
         return FXCollections.observableArrayList(pieChartData);
     }

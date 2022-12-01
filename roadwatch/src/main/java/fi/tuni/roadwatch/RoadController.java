@@ -91,7 +91,6 @@ public class RoadController {
         //MAINTENANCE
         //sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
         //conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
-        System.out.println(conditionChart.getData());
 
 
     }
@@ -120,45 +119,49 @@ public class RoadController {
             timeFrame = Integer.parseInt(subs);
         }
         sessionData.roadData.setForecastConditions(timeFrame);
+        System.out.println(str);
         changeConditionType();
     }
 
     @FXML
     public void changeConditionType() {
         this.conditionType = conditionTypeComboBox.getValue();
-
+        System.out.println(conditionType);
+        // Nää iffit on rumaa koodia don't look ;D
         if(Objects.equals(conditionType, "OVERALL")){
-            System.out.println(sessionData.roadData.overallCondition);
             conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
 
         }
         if(Objects.equals(conditionType, "FRICTION")){
-            System.out.println(sessionData.roadData.frictionCondition);
             conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.frictionCondition));
 
         }
         if(Objects.equals(conditionType, "SLIPPERINESS")){
-            System.out.println(sessionData.roadData.roadCondition);
             conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.roadCondition));
 
         }
         if(Objects.equals(conditionType, "PRECIPICATION")){
-            System.out.println(sessionData.roadData.precipicationCondition);
             conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.precipicationCondition));
 
         }
-        conditionChart.setTitle(conditionType);
+        if(timeFrame == 0 && !Objects.equals(conditionType, "OVERALL")){
+            conditionChart.setTitle("NO DATA");
+
+        }else{
+            conditionChart.setTitle(conditionType + " CONDITION IN AREA");
+
+        }
+
 
 
     }
     @FXML
-    public void changeTaskType(ActionEvent actionEvent) {
+    public void changeTaskType() {
         this.taskType = maintenanceTaskCombobox.getValue();
     }
 
     @FXML
     public void onApplyMaintenanceClick() throws IOException, URISyntaxException {
-        System.out.println(taskType);
 
         if(Objects.equals(taskType, "ALL")){
             sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
@@ -166,5 +169,11 @@ public class RoadController {
             sessionData.createMaintenance(taskType,startDatePicker.getValue(),endDatePicker.getValue());
         }
         maintenanceChart.setData(sessionData.createMaintenanceChart());
+
+        if(maintenanceChart.getData().size() == 0){
+            maintenanceChart.setTitle("NO DATA");
+        }else{
+            maintenanceChart.setTitle(taskType + " TASKS AVERAGE");
+        }
     }
 }

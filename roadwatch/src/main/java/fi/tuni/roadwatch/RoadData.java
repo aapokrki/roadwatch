@@ -41,7 +41,6 @@ public class RoadData {
         roadCondition= new HashMap<>();
         precipicationCondition= new HashMap<>();
 
-        System.out.println(time);
 
         int conditionIndex;
         if(time != 12){

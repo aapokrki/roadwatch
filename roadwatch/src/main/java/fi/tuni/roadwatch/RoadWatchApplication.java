@@ -21,15 +21,11 @@ public class RoadWatchApplication extends Application {
         final RoadWatchController roadWatchController = fxmlLoader.getController();
         SessionData sessionData = new SessionData();
         HelperFunctions helperFunctions = new HelperFunctions();
-        WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
-        roadWatchController.setSessionData(sessionData);
-        roadWatchController.setDates(helperFunctions);
+        roadWatchController.initialize(sessionData, helperFunctions);
         roadWatchController.loadMap();
-        //roadWatchController.setScreenBounds(screenBounds);
-        //roadWatchController.setScreenSize();
+
 
         stage.setTitle("RoadWatch");
-        //stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
