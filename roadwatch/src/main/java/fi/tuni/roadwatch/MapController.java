@@ -529,6 +529,9 @@ public class MapController {
 
         // now enable the controls
         setControlsDisable(false);
+
+        //Initialize to Tampere
+        buttonTampere.fire();
     }
 
     /**

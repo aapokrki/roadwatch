@@ -2,7 +2,6 @@
 
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -11,32 +10,13 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="610.0" minWidth="950.0" prefHeight="610.0" prefWidth="950.0" styleClass="background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.RoadController">
    <children>
-      <VBox layoutX="25.0" layoutY="49.0" prefHeight="469.0" prefWidth="333.0" styleClass="backgroundBlue">
-         <children>
-            <Label styleClass="basicHeading" text="SELECT DATA" />
-            <Line endX="204.2928924560547" endY="-1.4497476816177368" startX="-100.0" stroke="WHITE" />
-            <Label fx:id="RCLabel" styleClass="basicHeadingGreyUnclickable" text="ROAD CONDITION" />
-            <Label fx:id="frictionLabel" onMouseClicked="#onFrictionClick" styleClass="basicTextGrey" text="    FRICTION" />
-            <Label fx:id="precipitationLabel" onMouseClicked="#onPrecipitationClick" styleClass="basicTextGrey" text="    PRECIPITATION" />
-            <Label fx:id="roadConditionLabel" onMouseClicked="#onRoadConditionClick" styleClass="basicTextGrey" text="    WINTER SLIPPERINESS" />
-            <Label fx:id="overallConditionLabel" onMouseClicked="#onOverallConditionClick" styleClass="basicTextGrey" text="    OVERALL CONDITION" />
-            <Label styleClass="basicHeadingGreyUnclickable" text="MAINTENANCE" />
-            <Label styleClass="basicTextGrey" text="    TASKTYPE 1" />
-            <Label styleClass="basicTextGrey" text="    TASKTYPE 2" />
-            <Label styleClass="basicTextGrey" text="    TASKTYPE 3" />
-            <Label fx:id="alertsLabel" onMouseClicked="#onAlertsClick" styleClass="basicHeadingGrey" text="ALERTS" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </VBox>
       <Label fx:id="infoLabel" alignment="CENTER" layoutX="347.0" layoutY="14.0" prefHeight="35.0" prefWidth="446.0" styleClass="smallHeading" />
-      <LineChart layoutX="338.0" layoutY="66.0" prefHeight="346.0" prefWidth="323.0">
+      <Label fx:id="alertsLabel" alignment="CENTER" layoutX="752.0" layoutY="544.0" prefHeight="35.0" prefWidth="152.0" styleClass="smallHeading" text="X ALERTS" />
+      <LineChart layoutX="20.0" layoutY="19.0" prefHeight="496.0" prefWidth="672.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -44,10 +24,32 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <AnchorPane layoutX="646.0" layoutY="152.0" prefHeight="268.0" prefWidth="225.0">
+      <AnchorPane fx:id="datePickerPane" layoutX="696.0" layoutY="217.0" prefHeight="309.0" prefWidth="240.0" style="-fx-border-color: blue; -fx-border-width: 3;">
          <children>
-            <Label layoutX="2.0" layoutY="40.0" styleClass="smallText" text="Time of day" />
-            <ComboBox fx:id="timeFrameComboBox" layoutX="121.0" layoutY="44.0" onAction="#changeTimeFrame" styleClass="combo-box">
+            <Label layoutX="32.0" styleClass="smallHeading" text="MAINTENANCE" />
+            <Label fx:id="startDateLabel" layoutX="9.0" layoutY="88.0" styleClass="smallText" text="Select start date" />
+            <DatePicker fx:id="startDatePicker" layoutX="9.0" layoutY="120.0" />
+            <DatePicker fx:id="endDatePicker" layoutX="9.0" layoutY="191.0" />
+            <Label fx:id="endDateLabel" layoutX="9.0" layoutY="161.0" styleClass="smallText" text="Select end date" />
+            <ComboBox fx:id="maintenanceTaskCombobox" layoutX="100.0" layoutY="55.0" maxWidth="130.0" minWidth="130.0" onAction="#changeTaskType" prefWidth="130.0" styleClass="combo-box">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="OVERALL" />
+                     <String fx:value="FRICTION" />
+                     <String fx:value="SLIPPERINESS" />
+                     <String fx:value="PRECIPICATION" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <Label layoutX="9.0" layoutY="51.0" styleClass="smallText" text="Type" />
+            <Button fx:id="applyMaintenanceButton" layoutX="67.0" layoutY="234.0" mnemonicParsing="false" onMouseClicked="#onApplyMaintenanceClick" styleClass="basicButton" text="APPLY" />
+         </children>
+      </AnchorPane>
+      <Button layoutX="290.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#onUpdateClick" styleClass="basicButton" text=" UPDATE" />
+      <AnchorPane layoutX="696.0" layoutY="49.0" prefHeight="128.0" prefWidth="240.0" style="-fx-border-color: blue; -fx-border-width: 3;">
+         <children>
+            <Label layoutX="9.0" layoutY="85.0" styleClass="smallText" text="Time of day" />
+            <ComboBox fx:id="timeFrameComboBox" layoutX="132.0" layoutY="89.0" maxWidth="95.0" onAction="#changeTimeFrame" prefWidth="95.0" styleClass="combo-box">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="CURRENT" />
@@ -58,17 +60,23 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <AnchorPane fx:id="datePickerPane" layoutX="11.0" layoutY="126.0" prefHeight="159.0" prefWidth="204.0">
-               <children>
-                  <Label fx:id="startDateLabel" layoutX="20.0" layoutY="-1.0" styleClass="smallText" text="Select start date" />
-                  <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
-                  <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="109.0" />
-                  <Label fx:id="endDateLabel" layoutX="20.0" layoutY="80.0" styleClass="smallText" text="Select end date" />
-               </children>
-            </AnchorPane>
-            <Label layoutX="58.0" layoutY="91.0" styleClass="smallHeading" text="TIMELINE" />
+            <Label fx:id="RCLabel" layoutX="14.0" styleClass="smallHeading" text="ROAD CONDITION" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="conditionTypeComboBox" layoutX="97.0" layoutY="48.0" maxWidth="130.0" onAction="#changeConditionType" prefWidth="130.0" styleClass="combo-box">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="OVERALL" />
+                     <String fx:value="FRICTION" />
+                     <String fx:value="SLIPPERINESS" />
+                     <String fx:value="PRECIPICATION" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <Label layoutX="9.0" layoutY="44.0" styleClass="smallText" text="Type" />
          </children>
       </AnchorPane>
-      <Button layoutX="439.0" layoutY="498.0" mnemonicParsing="false" onMouseClicked="#onCalculateClick" styleClass="basicButton" text="CALCULATE" />
    </children>
 </AnchorPane>

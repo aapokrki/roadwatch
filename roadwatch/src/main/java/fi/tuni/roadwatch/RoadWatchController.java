@@ -14,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 
@@ -162,13 +163,13 @@ public class RoadWatchController {
 
     }
 
-    public void loadRoadData() throws IOException {
+    public void loadRoadData() throws IOException, URISyntaxException {
 
         if(roadController == null){
             FXMLLoader roadFxmlLoader = new FXMLLoader();
             Parent rootNode = roadFxmlLoader.load(getClass().getResourceAsStream("fxml/roaddata.fxml"));
             roadController = roadFxmlLoader.getController();
-            roadController.setSessionData(sessionData);
+            roadController.initializeController(sessionData);
             road = (Pane) rootNode;
         }
         infoPane.setCenter(road);
