@@ -6,8 +6,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Array;
+
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -46,11 +45,14 @@ public class SessionData {
     public static RoadAPILogic roadAPILogic;
     public static WeatherAPILogic weatherAPILogic;
 
+    public static SavedDataLogic savedDataLogic;
+
 
     public SessionData() throws URISyntaxException, IOException {
         roadAPILogic = new RoadAPILogic();
         weatherAPILogic = new WeatherAPILogic();
         trafficMessage = roadAPILogic.getTrafficMessages();
+        savedDataLogic = new SavedDataLogic();
 
     }
 
@@ -109,7 +111,6 @@ public class SessionData {
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
 
-
         String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints,  startTimeString, endTimeString);
         System.out.println(urlstring);
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
@@ -145,9 +146,6 @@ public class SessionData {
         ArrayList<String> coordsInArea = new ArrayList<>();
 
         for(WeatherData wd : this.wantedWeatherData){
-
-
-
             if(!coordsInArea.contains(wd.getCoordinates())){
                 coordsInArea.add(wd.getCoordinates());
             }
@@ -229,14 +227,13 @@ public class SessionData {
         return closest;
     }
 
+
     public double getMIN_value(){
         double min = wantedWeatherAVGMinMax.get(0).getTempMIN();
-
         for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
             if(wd.getTempMIN() <= min){
                 min = wd.getTempMIN();
             }
-
         }
 
         return min;
@@ -244,7 +241,6 @@ public class SessionData {
 
     public double getMAX_value(){
         double max = wantedWeatherAVGMinMax.get(0).getTempMAX();
-
         for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
             if(wd.getTempMAX() >= max){
                 max = wd.getTempMAX();
@@ -255,7 +251,6 @@ public class SessionData {
     }
 
     public String getAVG_value(){
-
         double average = wantedWeatherAVGMinMax.get(0).getTempAverage();;
         for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
             average += wd.getTempAverage();
@@ -317,4 +312,68 @@ public class SessionData {
             }
         }
     }
+
+    public boolean coordinateCheck(){
+        if(coordinateConstraints == null){
+            return false;
+        }
+        return true;
+    }
+
+
+    public boolean writeWeatherDataToFile(String fileName){
+        for (WeatherData data : wantedWeatherData) {
+            try {
+                savedDataLogic.writeWeatherData(fileName, data);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean writeWeatherDataMinMaxAvgToFile(String fileName){
+        for (WeatherDataMinMaxAvg data : wantedWeatherAVGMinMax) {
+            try {
+                savedDataLogic.writeWeatherDataMinMaxAvg(fileName, data);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Writes the stored maintenance data to the file
+     * @param fileName the name of the file to write to
+     * @return true if the writing was successful, false otherwise
+     */
+    public boolean writeMaintenanceToFile(String fileName){
+        for (Maintenance data : maintenancesInTimeLine) {
+            try {
+                savedDataLogic.writeMaintenance(fileName, data);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // TODO: Enable reading of multiple days
+    public boolean readMaintenanceFromFile(String fileName, String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
+
+            maintenancesInTimeLine = new ArrayList<>();
+
+            System.out.println(startDate + " -- " + endDate);
+            for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+                System.out.println(date);
+                Date dayIndex = convertToDateViaInstant(date);
+                Maintenance maintenance = savedDataLogic.readMaintenance(fileName);
+                maintenance.setTasksAndDate(dayIndex);
+                maintenancesInTimeLine.add(maintenance);
+            }
+            System.out.println(getMaintenanceAverages());
+            return true;
+        }
+
 }
