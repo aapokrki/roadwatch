@@ -125,21 +125,77 @@ public class WeatherController {
     }
 
     @FXML
+    private void onWindButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
+        if(windButton.getStyleClass().contains("basicButtonGreen")){
+            windButton.getStyleClass().remove("basicButtonGreen");
+            windButton.getStyleClass().add("basicButton");
+            calculateWindData(false);
+        }else{
+            windButton.getStyleClass().removeAll();
+            windButton.getStyleClass().add("basicButtonGreen");
+            calculateWindData(true);
+
+        }
+    }
+    @FXML
     /**
-     * Calculates visibility data according to start and end date to a linechart
+     *  Calculates wind data according to start and end date to a linechart
      */
-    private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
+    private void calculateWindData(boolean show) throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
         if(datePickerErrorCheck()){
             chartErrorLabel.setText("");
             // Second button press, time to clear data.
-            if(visibilityButton.getStyleClass().contains("basicButtonGreen")) {
-                visibilityButton.getStyleClass().remove("basicButtonGreen");
-                visibilityButton.getStyleClass().add("basicButton");
+            if(!show) {
+                lineChart.getData().removeAll(windSeries);
+
+            } else { // Button has not been pressed
+                lineChart.getData().removeAll(windSeries);
+
+                lineChart.setAnimated(false);
+                sessionData.createWeatherData(getStartDate(), getEndDate());
+                Thread.sleep(1000);
+
+                windSeries = sessionData.createGraphSeries("WIND");
+
+                if(windSeries.getData().size() != 0){
+                    windSeries.setName("Wind");
+                    lineChart.getData().add(windSeries);
+                    xAxis.setLabel("Time");
+                    yAxis.setLabel("m/s");
+                }
+                else{
+                    chartErrorLabel.setText("No Data");
+                }
+            }
+        }
+    }
+
+    @FXML
+    private void onVisibilityButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
+        if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
+            visibilityButton.getStyleClass().remove("basicButtonGreen");
+            visibilityButton.getStyleClass().add("basicButton");
+            calculateVisibilityData(false);
+        }else{
+            visibilityButton.getStyleClass().removeAll();
+            visibilityButton.getStyleClass().add("basicButtonGreen");
+            calculateVisibilityData(true);
+
+        }
+    }
+    @FXML
+    /**
+     * Calculates visibility data according to start and end date to a linechart
+     */
+    private void calculateVisibilityData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
+        if(datePickerErrorCheck()){
+            chartErrorLabel.setText("");
+            // Second button press, time to clear data.
+            if(!show) {
                 lineChart.getData().removeAll(visibilitySeries);
 
             } else { // Button has not been pressed
-                visibilityButton.getStyleClass().removeAll();
-                visibilityButton.getStyleClass().add("basicButtonGreen");
+                lineChart.getData().removeAll(visibilitySeries);
 
                 lineChart.setAnimated(false);
                 sessionData.createWeatherData(getStartDate(), getEndDate());
@@ -160,41 +216,6 @@ public class WeatherController {
         }
     }
 
-    @FXML
-    /**
-     *  Calculates wind data according to start and end date to a linechart
-     */
-    private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
-        if(datePickerErrorCheck()){
-            chartErrorLabel.setText("");
-            // Second button press, time to clear data.
-            if(windButton.getStyleClass().contains("basicButtonGreen")) {
-                windButton.getStyleClass().remove("basicButtonGreen");
-                windButton.getStyleClass().add("basicButton");
-                lineChart.getData().removeAll(windSeries);
-
-            } else { // Button has not been pressed
-                windButton.getStyleClass().removeAll();
-                windButton.getStyleClass().add("basicButtonGreen");
-
-                lineChart.setAnimated(false);
-                sessionData.createWeatherData(getStartDate(), getEndDate());
-                Thread.sleep(1000);
-
-                windSeries = sessionData.createGraphSeries("WIND");
-
-                if(windSeries.getData().size() != 0){
-                    windSeries.setName("Wind");
-                    lineChart.getData().add(windSeries);
-                    xAxis.setLabel("Time");
-                    yAxis.setLabel("m/s");
-                }
-                else{
-                    chartErrorLabel.setText("No Data");
-                }
-            }
-        }
-    }
 
     /**
      * Gets the start date of datepicker

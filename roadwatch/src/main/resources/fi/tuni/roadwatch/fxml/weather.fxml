@@ -24,8 +24,8 @@
                </yAxis>
            </LineChart>
            <Label fx:id="label" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-           <Button fx:id="windButton" layoutX="230.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="WIND" />
-           <Button fx:id="visibilityButton" layoutX="380.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="VISIBILITY" />
+           <Button fx:id="windButton" layoutX="230.0" layoutY="427.0" mnemonicParsing="false" onAction="#onWindButtonClicked" styleClass="basicButton" text="WIND" />
+           <Button fx:id="visibilityButton" layoutX="380.0" layoutY="427.0" mnemonicParsing="false" onAction="#onVisibilityButtonClicked" styleClass="basicButton" text="VISIBILITY" />
            <AnchorPane fx:id="datePickerPane" layoutX="740.0" layoutY="102.0" prefHeight="264.0" prefWidth="191.0">
                <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />
                <Label fx:id="endDateLabel" layoutX="17.0" layoutY="170.0" styleClass="smallText" text="Select end date" />

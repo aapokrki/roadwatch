@@ -193,6 +193,9 @@ public class SessionData {
      * @return created XYChart.Series<String, Double>
      */
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("dd/HH:mm");
+
         XYChart.Series<String, Double> series = new XYChart.Series<>();
         Map<String, Double> seriesMap = new TreeMap<>();
         Double Y = null;
@@ -214,12 +217,9 @@ public class SessionData {
                 assert Y != null;
                 // Do not add NaN data to chart. It will break the charting.
                 if(!Y.isNaN()){
-                    Date datecheck = wd.getDate();
-                    Calendar date = Calendar.getInstance();
-                    date.setTime(datecheck);
-                    int day = date.get(Calendar.DAY_OF_MONTH);
-                    int hour = date.get(Calendar.HOUR_OF_DAY);
-                    String X = day + "/" + hour + ":00";
+                    Date date = wd.getDate();
+                    String X = sdf.format(date.getTime());
+
                     Double finalY = Y;
                     seriesMap.compute(X, (key, val) -> {
                         if(val == null){

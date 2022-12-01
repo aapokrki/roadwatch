@@ -122,7 +122,7 @@ public class RoadWatchController {
             FXMLLoader combineFxmlLoader = new FXMLLoader();
             Parent rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));
             combineController = combineFxmlLoader.getController();
-            combineController.setSessionData(sessionData);
+            combineController.initializeController(sessionData);
             combine = (Pane) rootNode;
         }
         infoPane.setCenter(combine);
@@ -141,7 +141,7 @@ public class RoadWatchController {
         }
         infoPane.setCenter(preferences);
         siteLabel.setText("PREFERENCES");
-        //changeLayout("WIDE");
+        changeLayout("NORMAL");
 
     }
 
@@ -156,6 +156,7 @@ public class RoadWatchController {
         }
         infoPane.setCenter(road);
         siteLabel.setText("ROAD DATA");
+        changeLayout("NORMAL");
 
     }
 
