@@ -205,7 +205,7 @@
 {
     -fx-background-color: black;
     -fx-font-family: "Ubuntu";
-    -fx-text-fill: white;
+    -fx-text-fill: #434343;
     -fx-font-weight: bold;
     -fx-padding: 3 0 2 7;
     -fx-cell-size: 2em;

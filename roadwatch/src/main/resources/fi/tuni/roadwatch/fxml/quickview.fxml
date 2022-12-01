@@ -18,7 +18,7 @@
       <Label fx:id="tempMaxLabel" layoutX="320.0" layoutY="209.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
       <Label layoutX="500.0" layoutY="162.0" prefHeight="47.0" prefWidth="130.0" styleClass="basicHeadingWhite" text="Lowest" />
       <Label fx:id="tempMinLabel" layoutX="500.0" layoutY="209.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
-      <Label fx:id="tempErrorLabel" layoutX="140.0" layoutY="256.0" prefHeight="47.0" styleClass="smallText" />
+      <Label fx:id="tempErrorLabel" layoutX="226.0" layoutY="280.0" prefHeight="35.0" prefWidth="574.0" styleClass="smallText" />
 
       <Button fx:id="combinePageButton" layoutX="319.0" layoutY="534.0" mnemonicParsing="false" onAction="#loadCombine" styleClass="basicButton" text="COMBINE PAGE" />
       <Label fx:id="conditionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="387.0" prefHeight="129.0" prefWidth="189.0" styleClass="valueText" text="BAD" />

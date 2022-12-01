@@ -139,6 +139,7 @@ public class WeatherController {
         visibilityChart.setVisible(true);
         if(datePickerErrorCheck()){
             visibilityChart.setAnimated(false);
+            visibilityChart.setAnimated(false);
             visibilityChart.getData().clear();
             sessionData.createWeatherData(getStartDate(), getEndDate());
             Thread.sleep(1000);
