@@ -1,6 +1,7 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Coordinate;
+import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import org.xml.sax.SAXException;
 
@@ -34,6 +35,7 @@ public class SessionData {
     public TrafficMessage trafficMessage;
     public RoadData roadData;
     public ArrayList<Maintenance> maintenancesInTimeLine;
+    public ArrayList<String> taskTypes;
 
     // Used in creation of wantedWeatherData
     private double currentTemp;
@@ -53,6 +55,7 @@ public class SessionData {
         weatherAPILogic = new WeatherAPILogic();
         trafficMessage = roadAPILogic.getTrafficMessages();
         savedDataLogic = new SavedDataLogic();
+        createTaskTypes();
 
     }
 
@@ -135,6 +138,10 @@ public class SessionData {
             this.wantedWeatherData = weatherAPILogic.creatingWeatherForecast(weatherAPILogic.GetApiDocument(urlstring));
         }
         this.wantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
+    }
+
+    public void createTaskTypes() throws URISyntaxException, IOException {
+        taskTypes = roadAPILogic.getTaskTypes();
     }
 
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){

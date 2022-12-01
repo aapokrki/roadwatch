@@ -9,10 +9,10 @@ public class RoadData {
 
     //CUSTOM
     public Integer trafficMessageAmount;
-    Map<String, Integer> overallCondition = new HashMap<>();
-    Map<String, Integer> frictionCondition= new HashMap<>();
-    Map<String, Integer> roadCondition= new HashMap<>();
-    Map<String, Integer> precipicationCondition= new HashMap<>();
+    Map<String, Integer> overallCondition;
+    Map<String, Integer> frictionCondition;
+    Map<String, Integer> roadCondition;
+    Map<String, Integer> precipicationCondition;
 
     // JACKSON BASICS
     Date dataUpdatedTime;
@@ -34,6 +34,13 @@ public class RoadData {
     // Counts the amount of different condition statuses in the area to their corresponding maps
     public void setForecastConditions(int time){
 
+        overallCondition = new HashMap<>();
+        frictionCondition= new HashMap<>();
+        roadCondition= new HashMap<>();
+        precipicationCondition= new HashMap<>();
+
+        System.out.println(time);
+
         int conditionIndex;
         if(time != 12){
             conditionIndex = time / 2;
@@ -49,17 +56,20 @@ public class RoadData {
             });
             if(time != 0){
                 ForecastConditionReason fcr = rc.forecastConditionReason;
-                frictionCondition.compute(fcr.frictionCondition, (key, val) -> {
-                    if(val == null){return 1;}return val + 1;
-                });
+                if(fcr != null){
+                    frictionCondition.compute(fcr.frictionCondition, (key, val) -> {
+                        if(val == null){return 1;}return val + 1;
+                    });
 
-                roadCondition.compute(fcr.roadCondition, (key, val) -> {
-                    if(val == null){return 1;}return val + 1;
-                });
+                    roadCondition.compute(fcr.roadCondition, (key, val) -> {
+                        if(val == null){return 1;}return val + 1;
+                    });
 
-                precipicationCondition.compute(fcr.precipitationCondition, (key, val) -> {
-                    if(val == null){return 1;}return val + 1;
-                });
+                    precipicationCondition.compute(fcr.precipitationCondition, (key, val) -> {
+                        if(val == null){return 1;}return val + 1;
+                    });
+                }
+
             }
 
         }

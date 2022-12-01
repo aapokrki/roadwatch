@@ -1,12 +1,10 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Projection;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,9 +12,9 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.controlsfx.control.spreadsheet.Grid;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 
@@ -155,13 +153,13 @@ public class RoadWatchController {
 
     }
 
-    public void loadRoadData() throws IOException {
+    public void loadRoadData() throws IOException, URISyntaxException {
 
         if(roadController == null){
             FXMLLoader roadFxmlLoader = new FXMLLoader();
             Parent rootNode = roadFxmlLoader.load(getClass().getResourceAsStream("fxml/roaddata.fxml"));
             roadController = roadFxmlLoader.getController();
-            roadController.setSessionData(sessionData);
+            roadController.initializeController(sessionData);
             road = (Pane) rootNode;
         }
         infoPane.setCenter(road);
