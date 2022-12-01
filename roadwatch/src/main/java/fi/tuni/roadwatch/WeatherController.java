@@ -29,7 +29,7 @@ public class WeatherController {
     private final Integer timeline = 0;
     private Datatype datatype;
     private SessionData sessionData;
-    private LocalDateTime currentDate = LocalDateTime.now();
+    private final LocalDateTime currentDate = LocalDateTime.now();
 
     @FXML
     private ComboBox<String> comboBox;
@@ -42,8 +42,7 @@ public class WeatherController {
     @FXML
     private  DatePicker endDatePicker;
 
-    // Temperature components
-    private TreeMap<Date, Double> temperatureTimeMap = new TreeMap<Date, Double>();
+
     @FXML
     private AnchorPane temperaturePane;
     @FXML
@@ -248,18 +247,12 @@ public class WeatherController {
         tempMaxLabel.setText(max + "°");
     }
 
-    public boolean coordinateCheck(){
-        if(sessionData.coordinateConstraints == null){
-            return false;
-        }
-        return true;
-    }
 
     @FXML
     private void onNowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         //changeTimeColors(todayLabel, tomorrowLabel, dATomorrowLabel);
         nowLabel.setVisible(true);
-        if(!coordinateCheck()){
+        if(!sessionData.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else{
@@ -281,7 +274,7 @@ public class WeatherController {
     private void onTomorrowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         //changeTimeColors(tomorrowLabel, todayLabel, dATomorrowLabel);
         nowLabel.setVisible(false);
-        if(!coordinateCheck()){
+        if(!sessionData.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
@@ -294,14 +287,13 @@ public class WeatherController {
             sessionData.createWeatherData(startTime, endTime);
             changeTempLabels(false);
         }
-
     }
 
     @FXML
     private void onDATomorrowClick() throws ParserConfigurationException, IOException, ParseException, SAXException {
         //changeTimeColors(dATomorrowLabel, todayLabel, tomorrowLabel);
         nowLabel.setVisible(false);
-        if(!coordinateCheck()){
+        if(!sessionData.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
@@ -332,7 +324,7 @@ public class WeatherController {
             errorLabel.setText("Datepicker cant be null");
             return false;
         }
-        else if(!coordinateCheck()) {
+        else if(!sessionData.coordinateCheck()) {
             errorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
@@ -366,7 +358,7 @@ public class WeatherController {
             errorLabel.setText("Choose a date");
             return false;
         }
-        else if(!coordinateCheck()) {
+        else if(!sessionData.coordinateCheck()) {
             errorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
@@ -402,7 +394,6 @@ public class WeatherController {
             }else{
                 avgLabel.setText("Avg: " + sessionData.getAVG_value() + "°");
             }
-
         }
     }
 
@@ -426,6 +417,7 @@ public class WeatherController {
         }
     }
 
+    // Saves weatherData to map on button click to access later
     @FXML
     private void saveWeatherData() throws ParserConfigurationException, IOException, ParseException, SAXException {
         if(avgMinMaxErrorCheck(false)){
@@ -436,6 +428,4 @@ public class WeatherController {
         }
 
     }
-
-
 }
