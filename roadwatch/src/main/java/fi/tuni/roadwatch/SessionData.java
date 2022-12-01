@@ -55,6 +55,7 @@ public class SessionData {
         trafficMessage = roadAPILogic.getTrafficMessages();
         savedDataLogic = new SavedDataLogic();
         createTaskTypes();
+        helperFunctions = new HelperFunctions();
 
     }
 
