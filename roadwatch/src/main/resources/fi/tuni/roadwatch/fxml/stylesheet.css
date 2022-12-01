@@ -176,8 +176,8 @@
     -fx-background-color: #78e2a2;
 }
 
-.basicButton:selected:focused {
-    -fx-background-color: black;
+.basicButtonGreen {
+    -fx-background-color: #78e2a2;
 }
 
 .combo-box {
