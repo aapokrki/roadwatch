@@ -35,8 +35,8 @@ public class RoadWatchController {
     public Pane weather;
     public WeatherController weatherController;
 
-    public Pane quickView;
-    public QuickViewController quickViewController;
+    public Pane combine;
+    public CombineController combineController;
 
     public Pane preferences;
     public PreferencesController preferencesController;
@@ -48,20 +48,6 @@ public class RoadWatchController {
     private HelperFunctions helperFunctions;
 
     //MAINWINDOW
-    @FXML
-    private Label logo;
-    @FXML
-    private ButtonBar buttonBar;
-    @FXML
-    private Button homeButton;
-    @FXML
-    private Button weatherButton;
-    @FXML
-    private Button quickViewButton;
-    @FXML
-    private Button preferencesButton;
-    @FXML
-    private Button roadDataButton;
     @FXML
     private Label siteLabel;
     @FXML
@@ -131,18 +117,17 @@ public class RoadWatchController {
 
     }
 
-    public void loadQuickView() throws IOException {
-        if(quickViewController == null){
-            FXMLLoader quickViewFxmlLoader = new FXMLLoader();
-            Parent rootNode = quickViewFxmlLoader.load(getClass().getResourceAsStream("fxml/quickview.fxml"));
-            quickViewController = quickViewFxmlLoader.getController();
-            quickViewController.setSessionData(sessionData);
-            quickViewController.setData(mapPane, infoPane, siteLabel);
-            quickView = (Pane) rootNode;
+    public void loadCombine() throws IOException, URISyntaxException {
+        if(combineController == null){
+            FXMLLoader combineFxmlLoader = new FXMLLoader();
+            Parent rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));
+            combineController = combineFxmlLoader.getController();
+            combineController.setSessionData(sessionData);
+            combine = (Pane) rootNode;
         }
-        infoPane.setCenter(quickView);
-        siteLabel.setText("QUICK VIEW");
-        changeLayout("NORMAL");
+        infoPane.setCenter(combine);
+        siteLabel.setText("COMBINE");
+        changeLayout("WIDE");
 
     }
 

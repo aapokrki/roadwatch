@@ -23,7 +23,7 @@
                <buttons>
                   <Button fx:id="homeButton" minHeight="-Infinity" minWidth="26.0" mnemonicParsing="false" onAction="#loadHome" prefHeight="25.0" styleClass="homeIcon" translateX="-50.0" ButtonBar.buttonData="LEFT" />
                   <Button fx:id="weatherButton" mnemonicParsing="false" onAction="#loadWeather" prefHeight="51.0" styleClass="weatherIcon" translateX="-40.0" ButtonBar.buttonData="LEFT" />
-                  <Button fx:id="combineButton" mnemonicParsing="false" onAction="#loadQuickView" prefHeight="97.0" prefWidth="190.0" styleClass="combineIcon" translateX="-30.0" ButtonBar.buttonData="LEFT" />
+                  <Button fx:id="combineButton" mnemonicParsing="false" onAction="#loadCombine" prefHeight="97.0" prefWidth="190.0" styleClass="combineIcon" translateX="-30.0" ButtonBar.buttonData="LEFT" />
                   <Button fx:id="preferencesButton" mnemonicParsing="false" onAction="#loadPreferences" styleClass="preferencesIcon" translateX="-20.0" ButtonBar.buttonData="LEFT" />
                   <Button fx:id="roadDataButton" mnemonicParsing="false" onAction="#loadRoadData" prefHeight="51.0" prefWidth="97.0" styleClass="roadDataIcon" ButtonBar.buttonData="LEFT" />
                </buttons>
