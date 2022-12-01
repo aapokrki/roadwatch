@@ -1,5 +1,7 @@
 package fi.tuni.roadwatch;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 
 import javafx.scene.chart.CategoryAxis;
@@ -61,6 +63,8 @@ public class WeatherController {
     private Label avgLabel;
     @FXML
     private DatePicker chooseDay;
+    @FXML
+    private Label dateErrorLabel;
 
     // Chart components
     @FXML
@@ -68,7 +72,9 @@ public class WeatherController {
     @FXML
     protected LineChart<String, Double> lineChart;
     @FXML
-    private Label errorLabel;
+    private Label chartErrorLabel;
+    @FXML
+    private Label dataSavedLabel;
     @FXML
     private CategoryAxis xAxis;
     @FXML
@@ -124,6 +130,7 @@ public class WeatherController {
      */
     private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
         if(datePickerErrorCheck()){
+            chartErrorLabel.setText("");
             // Second button press, time to clear data.
             if(visibilityButton.getStyleClass().contains("basicButtonGreen")) {
                 visibilityButton.getStyleClass().remove("basicButtonGreen");
@@ -147,7 +154,7 @@ public class WeatherController {
                     yAxis.setLabel("km");
                 }
                 else{
-                    errorLabel.setText("No Data");
+                    chartErrorLabel.setText("No Data");
                 }
             }
         }
@@ -159,6 +166,7 @@ public class WeatherController {
      */
     private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
         if(datePickerErrorCheck()){
+            chartErrorLabel.setText("");
             // Second button press, time to clear data.
             if(windButton.getStyleClass().contains("basicButtonGreen")) {
                 windButton.getStyleClass().remove("basicButtonGreen");
@@ -170,7 +178,6 @@ public class WeatherController {
                 windButton.getStyleClass().add("basicButtonGreen");
 
                 lineChart.setAnimated(false);
-                errorLabel.setText("");
                 sessionData.createWeatherData(getStartDate(), getEndDate());
                 Thread.sleep(1000);
 
@@ -183,7 +190,7 @@ public class WeatherController {
                     yAxis.setLabel("m/s");
                 }
                 else{
-                    errorLabel.setText("No Data");
+                    chartErrorLabel.setText("No Data");
                 }
             }
         }
@@ -196,7 +203,7 @@ public class WeatherController {
     private Date getStartDate(){
         LocalDate startLocalDate = startDatePicker.getValue();
         if(startLocalDate == null){
-            errorLabel.setText("Dates cant be null");
+            chartErrorLabel.setText("Dates cant be null");
             return null;
         }
         Instant instant = Instant.from(startLocalDate.atStartOfDay(ZoneId.systemDefault()));
@@ -212,7 +219,7 @@ public class WeatherController {
     private Date getEndDate(){
         LocalDate endLocalDate = endDatePicker.getValue();
         if(endLocalDate == null){
-            errorLabel.setText("Dates cant be null");
+            chartErrorLabel.setText("Dates cant be null");
             return null;
         }
         Instant instant2 = Instant.from(endLocalDate.atStartOfDay(ZoneId.systemDefault()));
@@ -360,33 +367,33 @@ public class WeatherController {
      * @return boolean true or false
      */
     private boolean datePickerErrorCheck(){
-        errorLabel.setText("");
+        dateErrorLabel.setText("");
         if(startDatePicker == null || endDatePicker == null){
-            errorLabel.setText("Datepicker cant be null");
+            chartErrorLabel.setText("Date picker can't be null");
             return false;
         }
         else if(!sessionData.coordinateCheck()) {
-            errorLabel.setText("Choose coordinates, remember to add on map!");
+            dateErrorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
         else if (getStartDate() == null || getEndDate() == null){
-            errorLabel.setText("Datepicker cant be null");
+            chartErrorLabel.setText("Date picker can't be null");
             return false;
         }
         else if(Objects.requireNonNull(getStartDate()).after(getEndDate())){
-            errorLabel.setText("Start date cant be after end date");
+            chartErrorLabel.setText("Start date can't be after end date");
             return false;
         }
         else if(getStartDate().before(sessionData.helperFunctions.convertToDateViaInstant(currentDate.toLocalDate())) &&
                 Objects.requireNonNull(getEndDate()).after(sessionData.helperFunctions.convertToDateViaInstant(currentDate.toLocalDate()))){
-            errorLabel.setText("Can't get data from both past and future");
+            chartErrorLabel.setText("Can't get data from both past and future");
             return false;
         }
         Calendar c = Calendar.getInstance();
         c.setTime(getStartDate());
         c.add(Calendar.DATE,7);
         if(c.getTime().compareTo(getEndDate()) <= 0){
-            errorLabel.setText("Maximum time length 1 week");
+            chartErrorLabel.setText("Maximum time length 1 week");
             return false;
         }
         return true;
@@ -399,25 +406,25 @@ public class WeatherController {
      */
     private boolean avgMinMaxErrorCheck(boolean flag){
         System.out.println(sessionData.wantedWeatherAVGMinMax);
-        errorLabel.setText("");
+        dateErrorLabel.setText("");
         if(savedDate == null){
-            errorLabel.setText("Choose a date");
+            dateErrorLabel.setText("Choose a date");
             return false;
         }
         else if(!sessionData.coordinateCheck()) {
-            errorLabel.setText("Choose coordinates, remember to add on map!");
+            dateErrorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
 
         if(flag){
             if(savedDate.after(sessionData.helperFunctions.convertToDateViaInstant(LocalDate.from(currentDate)))){
-                errorLabel.setText("Can't count average or min-max of future");
+                dateErrorLabel.setText("Can't count average or min-max of future");
                 return false;
             }
         }
         else{
             if(savedDate.after(sessionData.helperFunctions.convertToDateViaInstant(LocalDate.from(currentDate)))){
-                errorLabel.setText("Can't save date from the future");
+                dateErrorLabel.setText("Can't save date from the future");
                 return false;
             }
         }
@@ -441,7 +448,7 @@ public class WeatherController {
 
             // If avgminmax is empty, api call failed, needs bigger area
             if(!sessionData.createAvgMinMax(startTime, endTime)){
-                errorLabel.setText("Area must be larger to calculate average");
+                dateErrorLabel.setText("Area must be larger to calculate average");
                 avgLabel.setText("");
             }else{
                 avgLabel.setText("Avg: " + sessionData.helperFunctions.getAVG_value() + "°");
@@ -465,7 +472,7 @@ public class WeatherController {
 
             // If created avgminMax is empty, api call failed, needs bigger area
             if(!sessionData.createAvgMinMax(startTime, endTime)){
-                errorLabel.setText("Area must be larger to calculate min-max");
+                dateErrorLabel.setText("Area must be larger to calculate min-max");
                 minLabel.setText("");
                 maxLabel.setText("");
             }else{
@@ -484,12 +491,14 @@ public class WeatherController {
      */
     @FXML
     private void saveWeatherData() throws ParserConfigurationException, IOException, ParseException, SAXException {
+        dataSavedLabel.setText("");
         if(avgMinMaxErrorCheck(false)){
             Date startTime = savedDate;
             Date endTime = sessionData.helperFunctions.trimToEnd(savedDate, 0);
             sessionData.createWeatherData(startTime, endTime);
             sessionData.saveWeatherData(savedDate);
-        }
 
+            dataSavedLabel.setText("Data saved successfully");
+        }
     }
 }
