@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -30,6 +31,8 @@ public class QuickViewController {
     private Label siteLabel;
 
     // Temperature components.
+    @FXML
+    private Label dateLabel;
     @FXML
     private Label nowLabel;
     @FXML
@@ -61,6 +64,8 @@ public class QuickViewController {
         this.mapPane = mapPane;
         this.infoPane = infoPane;
         this.siteLabel = siteLabel;
+        dateLabel.setText(LocalDateTime.now().getDayOfMonth() + "." + LocalDateTime.now().getMonthValue() + "." +
+                LocalDateTime.now().getYear());
     }
 
     public boolean coordinateCheck(){
@@ -124,6 +129,7 @@ public class QuickViewController {
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
+            tempErrorLabel.setText("");
             // Sets the date to the next day to hours 00 - 24
             Date now = Calendar.getInstance().getTime();
             Date startTime = sessionData.trimToStart(now, 1);
@@ -133,7 +139,6 @@ public class QuickViewController {
             sessionData.createWeatherData(startTime, endTime);
             changeTempLabels(false);
         }
-
     }
 
     @FXML
@@ -144,6 +149,7 @@ public class QuickViewController {
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
+            tempErrorLabel.setText("");
             // Sets the date to the next day to hours 00 - 24
             Date now = Calendar.getInstance().getTime();
             Date startTime = sessionData.trimToStart(now, 2);
@@ -156,7 +162,6 @@ public class QuickViewController {
     }
 
     public void loadCombine(ActionEvent event) throws IOException {
-        //TODO: toimii mut kai tän voi tehä paremmi i guess
         if(combineController == null){
             FXMLLoader combineFxmlLoader = new FXMLLoader();
             Parent rootNode = null;

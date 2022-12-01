@@ -23,10 +23,8 @@ public class WeatherController {
 
     enum Datatype {
         TEMPERATURE,
-        WIND,
-        VISIBILITY
+        CHARTS
     }
-    private final Integer timeline = 0;
     private Datatype datatype;
     private SessionData sessionData;
     private final LocalDateTime currentDate = LocalDateTime.now();
@@ -36,12 +34,9 @@ public class WeatherController {
     @FXML
     private Label datatypeLabel;
     @FXML
-    private AnchorPane datePickerPane;
-    @FXML
     private  DatePicker startDatePicker;
     @FXML
     private  DatePicker endDatePicker;
-
 
     @FXML
     private AnchorPane temperaturePane;
@@ -67,28 +62,23 @@ public class WeatherController {
     @FXML
     private DatePicker chooseDay;
 
-    // Wind components
+    // Chart components
     @FXML
-    private AnchorPane windPane;
+    private AnchorPane chartPane;
     @FXML
-    protected LineChart<String, Double> windChart;
-    @FXML
-    private CategoryAxis xAxisWind;
-    @FXML
-    private NumberAxis yAxisWind;
+    protected LineChart<String, Double> lineChart;
     @FXML
     private Label errorLabel;
-
-    // Visibility components
     @FXML
-    private AnchorPane visibilityPane;
+    private CategoryAxis xAxis;
     @FXML
-    private LineChart<String, Double> visibilityChart;
+    private NumberAxis yAxis;
     @FXML
-    private CategoryAxis xAxisVisibility;
+    private Button windButton;
+    private XYChart.Series<String, Double> visibilitySeries;
+    private XYChart.Series<String, Double> windSeries;
     @FXML
-    private NumberAxis yAxisVisibility;
-
+    private Button visibilityButton;
     @FXML
     private Button saveDataButton;
 
@@ -102,57 +92,50 @@ public class WeatherController {
         datatype = Datatype.TEMPERATURE;
         datatypeLabel.setText(datatype.toString());
         setTemperature();
-        visibilityPane.setVisible(false);
-        windPane.setVisible(false);
-        datePickerPane.setVisible(false);
+        chartPane.setVisible(false);
     }
 
     @FXML
     private void changeDatatype() {
         if(comboBox.getValue().equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
             setTemperatureData();
-        }
-        else if(comboBox.getValue().equalsIgnoreCase(Datatype.WIND.toString())) {
-            datatype = Datatype.WIND;
-            datatypeLabel.setText(datatype.toString());
-            temperaturePane.setVisible(false);
-            visibilityPane.setVisible(false);
-            windPane.setVisible(true);
-            windChart.setVisible(true);
-            datePickerPane.setVisible(true);
         } else {
-            datatype = Datatype.VISIBILITY;
+            datatype = Datatype.CHARTS;
             datatypeLabel.setText(datatype.toString());
             temperaturePane.setVisible(false);
-            visibilityPane.setVisible(true);
-            windPane.setVisible(false);
-            visibilityChart.setVisible(true);
-            datePickerPane.setVisible(true);
+            chartPane.setVisible(true);
         }
     }
-
 
     @FXML
     // Calculates visibility data according to start and end date to a linechart
     private void calculateVisibilityData() throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
-        visibilityChart.setVisible(true);
         if(datePickerErrorCheck()){
-            visibilityChart.setAnimated(false);
-            visibilityChart.getData().clear();
-            sessionData.createWeatherData(getStartDate(), getEndDate());
-            Thread.sleep(1000);
+            // Second button press, time to clear data.
+            if(visibilityButton.getStyleClass().contains("basicButtonGreen")) {
+                visibilityButton.getStyleClass().remove("basicButtonGreen");
+                visibilityButton.getStyleClass().add("basicButton");
+                lineChart.getData().removeAll(visibilitySeries);
 
-            XYChart.Series<String, Double> visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
+            } else { // Button has not been pressed
+                visibilityButton.getStyleClass().removeAll();
+                visibilityButton.getStyleClass().add("basicButtonGreen");
 
-            if(visibilitySeries.getData().size() != 0){
-                visibilitySeries.setName("Visibility");
-                visibilityChart.getData().add(visibilitySeries);
-                windChart.setVisible(false);
-                xAxisVisibility.setLabel("Time");
-                yAxisVisibility.setLabel("km");
-            }
-            else{
-                errorLabel.setText("No Data");
+                lineChart.setAnimated(false);
+                sessionData.createWeatherData(getStartDate(), getEndDate());
+                Thread.sleep(1000);
+
+                visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
+
+                if(visibilitySeries.getData().size() != 0){
+                    visibilitySeries.setName("Visibility");
+                    lineChart.getData().add(visibilitySeries);
+                    xAxis.setLabel("Time");
+                    yAxis.setLabel("km");
+                }
+                else{
+                    errorLabel.setText("No Data");
+                }
             }
         }
     }
@@ -160,26 +143,33 @@ public class WeatherController {
     @FXML
     // Calculates wind data according to start and end date to a linechart
     private void calculateWindData() throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
-        windChart.setVisible(true);
         if(datePickerErrorCheck()){
-            windChart.setAnimated(false);
-            windChart.getData().clear();
-            errorLabel.setText("");
-            sessionData.createWeatherData(getStartDate(), getEndDate());
-            Thread.sleep(1000);
+            // Second button press, time to clear data.
+            if(windButton.getStyleClass().contains("basicButtonGreen")) {
+                windButton.getStyleClass().remove("basicButtonGreen");
+                windButton.getStyleClass().add("basicButton");
+                lineChart.getData().removeAll(windSeries);
 
-            XYChart.Series<String, Double> windSeries = sessionData.createGraphSeries("WIND");
+            } else { // Button has not been pressed
+                windButton.getStyleClass().removeAll();
+                windButton.getStyleClass().add("basicButtonGreen");
 
-            if(windSeries.getData().size() != 0){
-                windSeries.setName("Wind");
-                windChart.getData().add(windSeries);
+                lineChart.setAnimated(false);
+                errorLabel.setText("");
+                sessionData.createWeatherData(getStartDate(), getEndDate());
+                Thread.sleep(1000);
 
-                visibilityChart.setVisible(false);
-                xAxisWind.setLabel("Time");
-                yAxisWind.setLabel("m/s");
-            }
-            else{
-                errorLabel.setText("No Data");
+                windSeries = sessionData.createGraphSeries("WIND");
+
+                if(windSeries.getData().size() != 0){
+                    windSeries.setName("Wind");
+                    lineChart.getData().add(windSeries);
+                    xAxis.setLabel("Time");
+                    yAxis.setLabel("m/s");
+                }
+                else{
+                    errorLabel.setText("No Data");
+                }
             }
         }
     }
@@ -209,7 +199,7 @@ public class WeatherController {
     }
 
     @FXML
-    private void saveDate() throws ParseException {
+    private void saveDate() {
         LocalDate localDate = chooseDay.getValue();
         Instant instant = Instant.from(localDate.atStartOfDay(ZoneOffset.UTC));
         savedDate = Date.from(instant);
@@ -306,15 +296,6 @@ public class WeatherController {
             sessionData.createWeatherData(startTime, endTime);
             changeTempLabels(false);
         }
-    }
-
-    @FXML
-    private void changeTimeColors(Label selected, Label l2, Label l3) {
-        selected.getStyleClass().add("basicHeadingGreen");
-        l2.getStyleClass().removeAll("basicHeadingGreen");
-        l2.getStyleClass().add("basicHeading");
-        l3.getStyleClass().removeAll("basicHeadingGreen");
-        l3.getStyleClass().add("basicHeading");
     }
 
 
