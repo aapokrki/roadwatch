@@ -46,6 +46,8 @@ public class RoadWatchController {
 
     private SessionData sessionData;
 
+    private HelperFunctions helperFunctions;
+
     //MAINWINDOW
     @FXML
     private Label logo;
@@ -65,6 +67,12 @@ public class RoadWatchController {
     private Label siteLabel;
     @FXML
     private Label trafficMessageCount;
+
+
+    public void setDates(HelperFunctions helperFunctions){
+        this.helperFunctions = helperFunctions;
+    }
+
 
     public void setSessionData(SessionData sessionData) throws IOException {
         this.sessionData = sessionData;
@@ -115,6 +123,8 @@ public class RoadWatchController {
             Parent rootNode = weatherFxmlLoader.load(getClass().getResourceAsStream("fxml/weather.fxml"));
             weatherController = weatherFxmlLoader.getController();
             weatherController.setSessionData(sessionData);
+            sessionData.setHelperFunctions(helperFunctions);
+            helperFunctions.setSessionData(sessionData);
             weather = (Pane) rootNode;
         }
 

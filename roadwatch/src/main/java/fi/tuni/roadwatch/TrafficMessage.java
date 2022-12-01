@@ -37,8 +37,15 @@ public class TrafficMessage {
         return amount;
     }
 
-    public Map<String, Integer> getTrafficMessagesByType(CoordinateConstraints c){
-        Map<String, Integer> trafficMessagesByType = new HashMap<>();
+    /**
+     * Returns the amount of messages in the area within the given time frame
+     * @param c CoordinateConstraints for the area
+     * @param start Start time Date object
+     * @param end End time Date object
+     * @return Integer amount of messages
+     */
+    public Integer messagesInArea(CoordinateConstraints c, Date start, Date end){
+        int amount = 0;
         for (TrafficMessage.Feature feature : features){
             if(feature.geometry != null){
                 for (ArrayList<ArrayList<Double>> coordinates : feature.geometry.coordinates) {
@@ -48,10 +55,10 @@ public class TrafficMessage {
                                     coordinate.get(0) < c.maxLon &&
                                     coordinate.get(1) > c.minLat &&
                                     coordinate.get(1) < c.maxLat){
-                                trafficMessagesByType.compute(feature.properties.situationType, (key, val) -> {
-                                    if(val == null){return 1;}return val + 1;
-                                });
-                                break;
+                                if (dataUpdatedTime.after(start) && dataUpdatedTime.before(end)){
+                                    amount = amount +1;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -59,7 +66,8 @@ public class TrafficMessage {
                 }
             }
         }
-        return trafficMessagesByType;
+        System.out.println(amount + " Traffic messages in the area within timeframe");
+        return amount;
     }
 
 

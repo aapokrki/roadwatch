@@ -4,16 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.ParseException;
-import java.util.Objects;
 
 public class RoadWatchApplication extends Application {
 
@@ -25,7 +20,10 @@ public class RoadWatchApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         final RoadWatchController roadWatchController = fxmlLoader.getController();
         SessionData sessionData = new SessionData();
+        HelperFunctions helperFunctions = new HelperFunctions();
+        WeatherAPILogic weatherAPILogic = new WeatherAPILogic();
         roadWatchController.setSessionData(sessionData);
+        roadWatchController.setDates(helperFunctions);
         roadWatchController.loadMap();
         //roadWatchController.setScreenBounds(screenBounds);
         //roadWatchController.setScreenSize();

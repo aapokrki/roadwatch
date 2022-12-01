@@ -23,41 +23,29 @@ public class WeatherAPILogic {
     private double tempMIN;
     private double tempMAX;
 
-
     private Date dateAndTime = Calendar.getInstance().getTime();
 
     private final ArrayList<WeatherData> weatherData = new ArrayList<>();
     private final ArrayList<WeatherDataMinMaxAvg> weatherAVGMinMax = new ArrayList<>();
 
 
-
-    // Changes date in to string 8601Format to use in urlstring
-    public String timeAndDateToIso8601Format(Date date){
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                .format(date);
-    }
-
-    // Changes date String in to string 8601Format to use in urlstring
-    public Date timeAndDateAsDate(String datestring) throws ParseException {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
-    }
-
-    // Creates URL String based on given parameters to be used in creating API document
+    /**
+     * Creates URL String based on given parameters to be used in creating API document
+     * @param coordinates CoordinateConstraints of selected coordinates
+     * @param startime Start time of wanted observation/forecast
+     * @param endtime End time of wanted observation/forecast
+     * @return String of wanted API url
+     * @throws ParseException
+     */
     public String createURLString(CoordinateConstraints coordinates, String startime, String endtime) throws ParseException {
-//        String coordinates = latitude.toString() + "," + longitude.toString();
         StringBuilder str = new StringBuilder();
         String latLonCoords = coordinates.minLat.toString() + ',' + coordinates.minLon.toString();
-        // Compares given starttime date to current time to see if forecast or observation
+
         if(timeAndDateAsDate(startime).after(dateAndTime)){
             str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::forecast::harmonie::surface::point::simple&latlon=").append(latLonCoords)
                     .append("&timestep=10&starttime=").append(startime).append("&endtime=").append(endtime).append("&parameters=temperature,windspeedms");
         }
         else{
-//            double longitude2 = longitude +0.5;
-//            double latitude2 = latitude+0.5;
-//            String coordinateBbox = longitude + "," + latitude + "," + longitude2 + "," + latitude2;
-
-
             str.append("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&bbox=").append(coordinates.getAsString(','))
                     .append("&starttime=").append(startime).append("&endtime=").append(endtime).append("&timestep=120&parameters=t2m,ws_10min,n_man");
         }
@@ -66,17 +54,26 @@ public class WeatherAPILogic {
 
     }
 
+    /**
+     * Creates URL String based on given parameters to be used in creating API document
+     * @param coordinates CoordinateConstraints of selected coordinates
+     * @param startime Start time of wanted observation/forecast
+     * @param endtime End time of wanted observation/forecast
+     * @return String of wanted API url
+     */
     public String createAVGMINMAXurlString(CoordinateConstraints coordinates, String startime, String endtime){
-
         String str = "https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::hourly::simple&bbox=" + coordinates.getAsString(',') +
                 "&starttime=" + startime + "&endtime=" + endtime + "&parameters=TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN";
-
         return str;
-
     }
 
+    /**
+     * Read of AVG MIN MAX API and saving into ArrayList containing WeatherDataMinMaxAvg objects
+     * @param doc wanted API document
+     * @return ArrayList containing WeatherDataMinMaxAvg objects
+     * @throws ParseException
+     */
     public ArrayList<WeatherDataMinMaxAvg> creatingAvgMinMax(Document doc) throws ParseException {
-
         NodeList nList = doc.getElementsByTagName("wfs:member");
         int counter = 0;
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -121,9 +118,15 @@ public class WeatherAPILogic {
         return weatherAVGMinMax;
     }
 
-    // Creates Document element based on given url. Used in creadingWeatherData
+    /**
+     * Creates Document element based on given url. Used in creatingWeatherData
+     * @param url of the wanted API
+     * @return Document object of wanted urlstring
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     public Document GetApiDocument(String url) throws ParserConfigurationException, IOException, SAXException {
-
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(new URL(url).openStream());
@@ -132,7 +135,13 @@ public class WeatherAPILogic {
         return doc;
     }
 
-    // Creates observations weather data. Has to be different function due to different parameter names versus forecast
+
+    /**
+     * Creates observations weather data. Has to be different function due to different parameter names versus forecast
+     * @param doc wanted API document
+     * @return ArrayList containing WeatherData objects
+     * @throws ParseException
+     */
     public ArrayList<WeatherData> creatingWeatherObservations(Document doc) throws ParseException {
         NodeList nList = doc.getElementsByTagName("wfs:member");
         int counter = 0;
@@ -183,7 +192,12 @@ public class WeatherAPILogic {
         return weatherData;
     }
 
-    // Creates forecast weather data. Has to be different function due to different parameter names versus observations
+    /**
+     * Creates forecast weather data. Has to be different function due to different parameter names versus observations
+     * @param doc wanted API document
+     * @return ArrayList containing WeatherData objects
+     * @throws ParseException
+     */
     public ArrayList<WeatherData> creatingWeatherForecast(Document doc) throws ParseException {
         NodeList nList = doc.getElementsByTagName("wfs:member");
         int counter = 0;
@@ -229,8 +243,14 @@ public class WeatherAPILogic {
         return weatherData;
     }
 
-
-
-
+    /**
+     * Transforms string in ISO8601 format to Date object
+     * @param datestring string in ISO8601 format
+     * @return Date object of datestring
+     * @throws ParseException
+     */
+    public Date timeAndDateAsDate(String datestring) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
+    }
 
 }
