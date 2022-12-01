@@ -1,18 +1,13 @@
 package fi.tuni.roadwatch;
 
-import fi.tuni.roadwatch.CombineController;
-import fi.tuni.roadwatch.SessionData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -83,7 +78,7 @@ public class QuickViewController {
             if(wd.getTemperature() >= max){
                 max = wd.getTemperature();
             }
-            if(Objects.equals(wd.getDate(), sessionData.getClosestDate())){
+            if(Objects.equals(wd.getDate(), sessionData.helperFunctions.getClosestDate())){
                 if(now){
                     tempRightNowLabel.setVisible(true);
                     tempRightNowLabel.setText(wd.getTemperature() + "°");
@@ -108,7 +103,7 @@ public class QuickViewController {
             Calendar cal = Calendar.getInstance();
             long timeInSecs = cal.getTimeInMillis();
             Date startTime = new Date(timeInSecs + (10*60*10));
-            Date endTime = sessionData.timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
+            Date endTime = sessionData.helperFunctions.timeAndDateAsDate(LocalDate.now().atTime(23, 59, 59) + "Z");
 
             // Creates weather data according to new start and end time to sessionData
             sessionData.createWeatherData(startTime, endTime);
@@ -126,8 +121,8 @@ public class QuickViewController {
         else {
             // Sets the date to the next day to hours 00 - 24
             Date now = Calendar.getInstance().getTime();
-            Date startTime = sessionData.trimToStart(now, 1);
-            Date endTime = sessionData.trimToEnd(now, 1);
+            Date startTime = sessionData.helperFunctions.trimToStart(now, 1);
+            Date endTime = sessionData.helperFunctions.trimToEnd(now, 1);
 
             // Creates weather data according to new start and end time to sessionData
             sessionData.createWeatherData(startTime, endTime);
@@ -146,8 +141,8 @@ public class QuickViewController {
         else {
             // Sets the date to the next day to hours 00 - 24
             Date now = Calendar.getInstance().getTime();
-            Date startTime = sessionData.trimToStart(now, 2);
-            Date endTime = sessionData.trimToEnd(now, 2);
+            Date startTime = sessionData.helperFunctions.trimToStart(now, 2);
+            Date endTime = sessionData.helperFunctions.trimToEnd(now, 2);
 
             // Creates weather data according to new start and end time
             sessionData.createWeatherData(startTime, endTime);

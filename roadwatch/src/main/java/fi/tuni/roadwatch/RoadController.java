@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -18,8 +17,6 @@ import java.util.Objects;
 
 public class RoadController {
     private final ArrayList<Label> RCLabels = new ArrayList<>();
-
-
 
 
     int timeFrame = 0;
@@ -162,7 +159,7 @@ public class RoadController {
         Instant instant = Instant.from(startLocalDate.atStartOfDay(ZoneId.systemDefault()));
         Date startDate = Date.from(instant);
 
-        return sessionData.trimToStart(startDate,0);
+        return sessionData.helperFunctions.trimToStart(startDate,0);
     }
 
     private Date getEndDate(){
@@ -174,6 +171,6 @@ public class RoadController {
         Instant instant2 = Instant.from(endLocalDate.atStartOfDay(ZoneId.systemDefault()));
         Date endDate = Date.from(instant2);
 
-        return  sessionData.trimToEnd(endDate,0);
+        return  sessionData.helperFunctions.trimToEnd(endDate,0);
     }
 }

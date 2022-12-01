@@ -1,12 +1,10 @@
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.Projection;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +12,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.controlsfx.control.spreadsheet.Grid;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -48,6 +45,8 @@ public class RoadWatchController {
 
     private SessionData sessionData;
 
+    private HelperFunctions helperFunctions;
+
     //MAINWINDOW
     @FXML
     private Label logo;
@@ -67,6 +66,12 @@ public class RoadWatchController {
     private Label siteLabel;
     @FXML
     private Label trafficMessageCount;
+
+
+    public void setDates(HelperFunctions helperFunctions){
+        this.helperFunctions = helperFunctions;
+    }
+
 
     public void setSessionData(SessionData sessionData) throws IOException {
         this.sessionData = sessionData;
@@ -117,6 +122,8 @@ public class RoadWatchController {
             Parent rootNode = weatherFxmlLoader.load(getClass().getResourceAsStream("fxml/weather.fxml"));
             weatherController = weatherFxmlLoader.getController();
             weatherController.setSessionData(sessionData);
+            sessionData.setHelperFunctions(helperFunctions);
+            helperFunctions.setSessionData(sessionData);
             weather = (Pane) rootNode;
         }
 

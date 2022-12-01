@@ -10,22 +10,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 public class SessionData {
-
-//    private RoadWatchController roadWatchController;
-//    private MapController mapController;
-
     private static final DecimalFormat df = new DecimalFormat("0.000");
 
-
     public List<Coordinate> polyCoordinates = new ArrayList<>();
-    private Date dateAndTime = Calendar.getInstance().getTime();
-
+    public Date dateAndTime = Calendar.getInstance().getTime();
 
     public ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
@@ -35,17 +27,16 @@ public class SessionData {
     public RoadData roadData;
     public ArrayList<Maintenance> maintenancesInTimeLine;
 
-    // Used in creation of wantedWeatherData
-    private double currentTemp;
-    private double currentWind;
-    private double currentCloud;
-
     public CoordinateConstraints coordinateConstraints;
+
+    public HelperFunctions helperFunctions;
 
     public static RoadAPILogic roadAPILogic;
     public static WeatherAPILogic weatherAPILogic;
 
     public static SavedDataLogic savedDataLogic;
+
+
 
 
     public SessionData() throws URISyntaxException, IOException {
@@ -56,12 +47,19 @@ public class SessionData {
 
     }
 
+    /**
+     * Sets helper functions to sessionData
+     * @param helperFunctions HelperFunctions object
+     */
+    public void setHelperFunctions(HelperFunctions helperFunctions){
+        this.helperFunctions = helperFunctions;
+    }
+
     public void setPolygonCoordinates(List<Coordinate> polyCoordinates){
         this.polyCoordinates.addAll(polyCoordinates);
     }
 
     public void calculateMinMaxCoordinates() {
-
         // TODO: Make more efficient
         if(polyCoordinates != null){
             if(!polyCoordinates.isEmpty()){
@@ -96,20 +94,30 @@ public class SessionData {
         System.out.println(startDate + " -- " + endDate);
         for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
             System.out.println(date);
-            Date dayIndex = convertToDateViaInstant(date);
-            Maintenance maintenance = roadAPILogic.getMaintenances(taskId,coordinateConstraints.getAsMaintenanceString(), trimToStart(dayIndex,0), trimToEnd(dayIndex,0));
+            Date dayIndex = helperFunctions.convertToDateViaInstant(date);
+            Maintenance maintenance = roadAPILogic.getMaintenances(taskId,coordinateConstraints.getAsMaintenanceString(), helperFunctions.trimToStart(dayIndex,0), helperFunctions.trimToEnd(dayIndex,0));
             maintenance.setTasksAndDate(dayIndex);
             maintenancesInTimeLine.add(maintenance);
         }
         System.out.println(getMaintenanceAverages());
     }
 
+    /**
+     * wantedWeatherAVGMinMax creation to sessionData
+     * @param startTime Date startTime of data creation
+     * @param endTime Date endTime of data creation
+     * @return null checker
+     * @throws ParseException
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     public boolean createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
         this.wantedWeatherAVGMinMax.clear();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
-        String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
-        String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
+        String startTimeString = helperFunctions.timeAndDateToIso8601Format(startTime);
+        String endTimeString = helperFunctions.timeAndDateToIso8601Format(endTime);
 
         String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints,  startTimeString, endTimeString);
         System.out.println(urlstring);
@@ -120,13 +128,21 @@ public class SessionData {
         return wantedWeatherAVGMinMax.size() != 0;
     }
 
-    // WeatherData creation to sessionData
+    /**
+     * WeatherData creation to sessionData
+     * @param startTime Date startTime of data creation
+     * @param endTime Date endTime of data creation
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParseException
+     */
     public void createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
         this.wantedWeatherData.clear();
         // Creates the URL String to be used according to parameters wanted that include coordinates and start and end time
         // than creates the document used to create the arraylist of WeatherData
-        String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
-        String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
+        String startTimeString = helperFunctions.timeAndDateToIso8601Format(startTime);
+        String endTimeString = helperFunctions.timeAndDateToIso8601Format(endTime);
         String urlstring = weatherAPILogic.createURLString(coordinateConstraints,  startTimeString, endTimeString);
         System.out.println(urlstring);
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
@@ -137,8 +153,12 @@ public class SessionData {
         this.wantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
     }
 
+    /**
+     * Creates XYChart.Series from wanted objects
+     * @param chart_type String specifying what type of data wanted
+     * @return created XYChart.Series<String, Double>
+     */
     public XYChart.Series<String, Double> createGraphSeries(String chart_type){
-
         XYChart.Series<String, Double> series = new XYChart.Series<>();
         Map<String, Double> seriesMap = new TreeMap<>();
         Double Y = null;
@@ -174,7 +194,6 @@ public class SessionData {
                         return finalY+val;
                     });
                 }
-
         }
 
         //Calculate data averages of coordinates in area
@@ -182,9 +201,9 @@ public class SessionData {
         for(Map.Entry<String,Double> entry : seriesMap.entrySet()){
             series.getData().add(new XYChart.Data<>(entry.getKey(),entry.getValue()));
         }
-
         return series;
     }
+
 
     // Returns the average amount of tasks per day based on set timeline
     public Map<String, Double> getMaintenanceAverages(){
@@ -203,107 +222,14 @@ public class SessionData {
         return averageMaintenanceAmount;
     }
 
-
-
-    //------------------------------------------------------------------------------//
-    //Nää pois sessionDatasta, jotenki paremmin
-    // Date funktiot ja getmin ja getmax jutut
-
-    // Helper function to get the closest date to current
-    public Date getClosestDate(){
-        ArrayList<Date> alldates = new ArrayList<>();
-        for (WeatherData wd : this.wantedWeatherData){
-            alldates.add(wd.getDate());
-        }
-
-        Date closest = Collections.min(alldates, new Comparator<Date>() {
-            @Override
-            public int compare(Date o1, Date o2) {
-                long diff1 = Math.abs(o1.getTime() - dateAndTime.getTime());
-                long diff2 = Math.abs(o2.getTime() - dateAndTime.getTime());
-                return diff1 < diff2 ? -1:1;
-            }
-        });
-        return closest;
-    }
-
-
-    public double getMIN_value(){
-        double min = wantedWeatherAVGMinMax.get(0).getTempMIN();
-        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
-            if(wd.getTempMIN() <= min){
-                min = wd.getTempMIN();
-            }
-        }
-
-        return min;
-    }
-
-    public double getMAX_value(){
-        double max = wantedWeatherAVGMinMax.get(0).getTempMAX();
-        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
-            if(wd.getTempMAX() >= max){
-                max = wd.getTempMAX();
-            }
-        }
-
-        return max;
-    }
-
-    public String getAVG_value(){
-        double average = wantedWeatherAVGMinMax.get(0).getTempAverage();;
-        for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
-            average += wd.getTempAverage();
-        }
-
-        DecimalFormat df = new DecimalFormat("0.00");
-        average = average/wantedWeatherAVGMinMax.size();
-
-        return df.format(average);
-    }
-
-    // Helper function to set the time of day to 00:00:00, also can add days to date
-    public Date trimToStart(Date date, int Days){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, Days);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-
-        return cal.getTime();
-    }
-
-    // Helper function to set the time of day to 23:59:59, also can add days to date
-    public Date trimToEnd(Date date, int Days){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, Days);
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE,59);
-        cal.set(Calendar.SECOND,59);
-
-        return cal.getTime();
-    }
-
-    // Changes date String in to string 8601Format to use in urlstring
-    public Date timeAndDateAsDate(String datestring) throws ParseException {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
-    }
-
-    public Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-    }
-    public LocalDate convertToLocalDateViaInstant(Date dateToConvert){
-        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
+    /**
+     * Saves weatherData from given day to map
+     * @param savedDate wanted date to be saved
+     */
     public void saveWeatherData(Date savedDate){
         for(WeatherData wd : wantedWeatherData){
-            Date startDate = trimToStart(savedDate, 0);
-            Date endDate = trimToEnd(savedDate, 0);
+            Date startDate = helperFunctions.trimToStart(savedDate, 0);
+            Date endDate = helperFunctions.trimToEnd(savedDate, 0);
             if (wd.getDate() == startDate && wd.getDate().after(startDate) && wd.getDate().before(endDate)
             && wd.getDate() == endDate){
                 if(!savedWeatherData.containsKey(wd.getDate())){
@@ -313,13 +239,16 @@ public class SessionData {
         }
     }
 
+    /**
+     * Coordinate null checker
+     * @return boolean true or false
+     */
     public boolean coordinateCheck(){
         if(coordinateConstraints == null){
             return false;
         }
         return true;
     }
-
 
     public boolean writeWeatherDataToFile(String fileName){
         for (WeatherData data : wantedWeatherData) {
@@ -367,13 +296,12 @@ public class SessionData {
             System.out.println(startDate + " -- " + endDate);
             for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
                 System.out.println(date);
-                Date dayIndex = convertToDateViaInstant(date);
+                Date dayIndex = helperFunctions.convertToDateViaInstant(date);
                 Maintenance maintenance = savedDataLogic.readMaintenance(fileName);
                 maintenance.setTasksAndDate(dayIndex);
                 maintenancesInTimeLine.add(maintenance);
             }
             System.out.println(getMaintenanceAverages());
             return true;
-        }
-
+    }
 }
