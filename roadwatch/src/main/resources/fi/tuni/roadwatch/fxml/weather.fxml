@@ -14,30 +14,25 @@
 <AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
    <children>
 
-       <AnchorPane fx:id="windPane" layoutX="3.0" layoutY="125.0" prefHeight="548.0" prefWidth="823.0">
-           <LineChart fx:id="windChart" layoutX="20.0" layoutY="14.0" prefHeight="400.0" prefWidth="700.0">
+       <AnchorPane fx:id="chartPane" layoutX="3.0" layoutY="125.0" prefHeight="548.0" prefWidth="823.0">
+           <LineChart fx:id="lineChart" layoutX="20.0" layoutY="-45.0" prefHeight="479.0" prefWidth="700.0">
                <xAxis>
-                   <CategoryAxis side="BOTTOM" fx:id="xAxisWind" />
+                   <CategoryAxis side="BOTTOM" fx:id="xAxis" />
                </xAxis>
                <yAxis>
-                   <NumberAxis fx:id="yAxisWind" side="LEFT" />
+                   <NumberAxis fx:id="yAxis" side="LEFT" />
                </yAxis>
            </LineChart>
-           <Label fx:id="windLabel" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-           <Button fx:id="windButton" layoutX="319.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="CALCULATE" />
-       </AnchorPane>
-
-       <AnchorPane fx:id="visibilityPane" layoutX="3.0" layoutY="125.0" prefHeight="450.0" prefWidth="823.0">
-           <LineChart fx:id="visibilityChart" layoutX="20.0" layoutY="14.0" prefHeight="400.0" prefWidth="700.0">
-               <xAxis>
-                   <CategoryAxis side="BOTTOM" fx:id="xAxisVisibility" />
-               </xAxis>
-               <yAxis>
-                   <NumberAxis fx:id="yAxisVisibility" side="LEFT" />
-               </yAxis>
-           </LineChart>
-           <Label fx:id="visibilityLabel" layoutX="276.0" layoutY="496.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
-           <Button fx:id="visibilityButton" layoutX="319.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="CALCULATE" />
+           <Label fx:id="label" layoutX="43.0" layoutY="493.0" prefHeight="58.0" prefWidth="138.0" styleClass="valueText" />
+           <Button fx:id="windButton" layoutX="230.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="WIND" />
+           <Button fx:id="visibilityButton" layoutX="380.0" layoutY="427.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="VISIBILITY" />
+           <AnchorPane fx:id="datePickerPane" layoutX="740.0" layoutY="102.0" prefHeight="264.0" prefWidth="191.0">
+               <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />
+               <Label fx:id="endDateLabel" layoutX="17.0" layoutY="170.0" styleClass="smallText" text="Select end date" />
+               <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
+               <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="200.0" />
+           </AnchorPane>
+          <Label fx:id="errorLabel" layoutX="225.0" layoutY="493.0" prefHeight="30.0" prefWidth="460.0" styleClass="smallText" />
        </AnchorPane>
 
       <Label contentDisplay="CENTER" layoutX="34.0" layoutY="33.0" styleClass="bigTextGreen" text="Choose datatype" />
@@ -45,21 +40,20 @@
        <items>
            <FXCollections fx:factory="observableArrayList">
                <String fx:id="temperatureItem" fx:value="TEMPERATURE" />
-               <String fx:id="windItem" fx:value="WIND" />
-               <String fx:id="visibilityItem" fx:value="VISIBILITY" />
+               <String fx:id="chartItem" fx:value="CHARTS" />
            </FXCollections>
        </items>
       </ComboBox>
        <Label fx:id="datatypeLabel" contentDisplay="CENTER" layoutX="466.0" layoutY="21.0" prefHeight="70.0" prefWidth="360.0" styleClass="basicHeadingLightBlue" />
 
-       <AnchorPane fx:id="temperaturePane" layoutX="3.0" layoutY="62.0" prefHeight="523.0" prefWidth="823.0">
+             <AnchorPane fx:id="temperaturePane" layoutX="3.0" layoutY="62.0" prefHeight="523.0" prefWidth="823.0">
            <Label fx:id="weatherLabel" layoutX="50.0" layoutY="40.0" styleClass="basicText" text="WEATHER" />
            <Label fx:id="dateLabel" layoutX="212.0" layoutY="40.0" prefHeight="35.0" prefWidth="498.0" styleClass="basicText" />
            <Label fx:id="todayLabel" layoutX="50.0" layoutY="105.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="122.0" styleClass="basicHeading" text="TODAY" />
            <Label fx:id="tomorrowLabel" layoutX="212.0" layoutY="105.0" onMouseClicked="#onTomorrowClick" prefHeight="47.0" prefWidth="212.0" styleClass="basicHeading" text="TOMORROW" />
            <Label fx:id="dATomorrowLabel" layoutX="464.0" layoutY="105.0" onMouseClicked="#onDATomorrowClick" prefHeight="47.0" prefWidth="381.0" styleClass="basicHeading" text="DAY AFTER TOMORROW" />
 
-           <Label fx:id="nowLabel" layoutX="140.0" layoutY="162.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Now" />
+                 <Label fx:id="nowLabel" layoutX="140.0" layoutY="162.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Now" />
            <Label fx:id="tempRightNowLabel" layoutX="140.0" layoutY="209.0" prefHeight="47.0" prefWidth="139.0" styleClass="basicHeadingWhite" />
            <Label layoutX="320.0" layoutY="162.0" prefHeight="47.0" prefWidth="139.0" styleClass="basicHeadingWhite" text="Highest" />
            <Label fx:id="tempMaxLabel" layoutX="320.0" layoutY="209.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
@@ -67,7 +61,7 @@
            <Label fx:id="tempMinLabel" layoutX="500.0" layoutY="209.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
            <Label fx:id="tempErrorLabel" layoutX="140.0" layoutY="256.0" prefHeight="47.0" styleClass="smallText" />
 
-           <Label layoutX="50.0" layoutY="355.0" styleClass="bigTextGreen" text="Calculate values from given date" />
+                 <Label layoutX="50.0" layoutY="355.0" styleClass="bigTextGreen" text="Calculate values from given date" />
            <Label layoutX="141.0" layoutY="405.0" styleClass="basicTextWhite" text="Select date" />
            <DatePicker fx:id="chooseDay" layoutX="116.0" layoutY="447.0" onAction="#saveDate" />
            <Button fx:id="avgTempButton" layoutX="366.0" layoutY="410.0" mnemonicParsing="false" onAction="#onAvgBtnClick" styleClass="basicButton" text="AVERAGE TEMP" />
@@ -77,13 +71,5 @@
            <Label fx:id="maxLabel" layoutX="618.0" layoutY="500.0" prefHeight="17.0" prefWidth="100.0" styleClass="smallText" />
            <Button fx:id="saveDataButton" layoutX="750.0" layoutY="450.0" mnemonicParsing="false" onAction="#saveWeatherData" styleClass="basicButton" text="Save Data" />
        </AnchorPane>
-
-       <AnchorPane fx:id="datePickerPane" layoutX="740.0" layoutY="225.0" prefHeight="245.0" prefWidth="191.0">
-           <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />
-           <Label fx:id="endDateLabel" layoutX="17.0" layoutY="170.0" styleClass="smallText" text="Select end date" />
-           <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
-           <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="200.0" />
-       </AnchorPane>
-       <Label fx:id="errorLabel" layoutX="366.0" layoutY="620.0" prefHeight="30.0" prefWidth="500.0" styleClass="smallText" />
    </children>
 </AnchorPane>
