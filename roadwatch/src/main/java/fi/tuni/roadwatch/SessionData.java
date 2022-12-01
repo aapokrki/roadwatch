@@ -45,11 +45,14 @@ public class SessionData {
     public static RoadAPILogic roadAPILogic;
     public static WeatherAPILogic weatherAPILogic;
 
+    public static SavedDataLogic savedDataLogic;
+
 
     public SessionData() throws URISyntaxException, IOException {
         roadAPILogic = new RoadAPILogic();
         weatherAPILogic = new WeatherAPILogic();
         trafficMessage = roadAPILogic.getTrafficMessages();
+        savedDataLogic = new SavedDataLogic();
 
     }
 
@@ -318,6 +321,59 @@ public class SessionData {
     }
 
 
+    public boolean writeWeatherDataToFile(String fileName){
+        for (WeatherData data : wantedWeatherData) {
+            try {
+                savedDataLogic.writeWeatherData(fileName, data);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    public boolean writeWeatherDataMinMaxAvgToFile(String fileName){
+        for (WeatherDataMinMaxAvg data : wantedWeatherAVGMinMax) {
+            try {
+                savedDataLogic.writeWeatherDataMinMaxAvg(fileName, data);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Writes the stored maintenance data to the file
+     * @param fileName the name of the file to write to
+     * @return true if the writing was successful, false otherwise
+     */
+    public boolean writeMaintenanceToFile(String fileName){
+        for (Maintenance data : maintenancesInTimeLine) {
+            try {
+                savedDataLogic.writeMaintenance(fileName, data);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // TODO: Enable reading of multiple days
+    public boolean readMaintenanceFromFile(String fileName, String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
+
+            maintenancesInTimeLine = new ArrayList<>();
+
+            System.out.println(startDate + " -- " + endDate);
+            for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+                System.out.println(date);
+                Date dayIndex = convertToDateViaInstant(date);
+                Maintenance maintenance = savedDataLogic.readMaintenance(fileName);
+                maintenance.setTasksAndDate(dayIndex);
+                maintenancesInTimeLine.add(maintenance);
+            }
+            System.out.println(getMaintenanceAverages());
+            return true;
+        }
 
 }
