@@ -11,7 +11,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
+<AnchorPane maxHeight="610.0" maxWidth="950.0" minHeight="610.0" minWidth="950.0" prefHeight="620.0" prefWidth="840.0" styleClass="background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.WeatherController">
    <children>
 
        <AnchorPane fx:id="chartPane" layoutX="3.0" layoutY="125.0" prefHeight="548.0" prefWidth="823.0">
@@ -28,11 +28,12 @@
            <Button fx:id="visibilityButton" layoutX="380.0" layoutY="427.0" mnemonicParsing="false" onAction="#onVisibilityButtonClicked" styleClass="basicButton" text="VISIBILITY" />
            <AnchorPane fx:id="datePickerPane" layoutX="740.0" layoutY="102.0" prefHeight="264.0" prefWidth="191.0">
                <Label fx:id="startDateLabel" layoutX="17.0" styleClass="smallText" text="Select start date" />
-               <Label fx:id="endDateLabel" layoutX="17.0" layoutY="170.0" styleClass="smallText" text="Select end date" />
+               <Label fx:id="endDateLabel" layoutX="17.0" layoutY="92.0" styleClass="smallText" text="Select end date" />
                <DatePicker fx:id="startDatePicker" layoutX="17.0" layoutY="30.0" />
-               <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="200.0" />
+               <DatePicker fx:id="endDatePicker" layoutX="17.0" layoutY="122.0" />
+             <Button layoutX="24.0" layoutY="178.0" mnemonicParsing="false" onMouseClicked="#onUpdateClick" prefWidth="161.0" styleClass="basicButton" text=" UPDATE" />
            </AnchorPane>
-           <Label fx:id="chartErrorLabel" layoutX="230.0" layoutY="500.0" prefHeight="30.0" prefWidth="460.0" styleClass="smallText" text="t"/>
+           <Label fx:id="chartErrorLabel" layoutX="230.0" layoutY="500.0" prefHeight="30.0" prefWidth="460.0" styleClass="smallText" text="t" />
        </AnchorPane>
 
       <Label contentDisplay="CENTER" layoutX="34.0" layoutY="33.0" styleClass="bigTextGreen" text="Choose datatype" />
@@ -46,14 +47,14 @@
       </ComboBox>
        <Label fx:id="datatypeLabel" contentDisplay="CENTER" layoutX="466.0" layoutY="21.0" prefHeight="70.0" prefWidth="360.0" styleClass="basicHeadingLightBlue" />
 
-       <AnchorPane fx:id="temperaturePane" layoutX="3.0" layoutY="62.0" prefHeight="523.0" prefWidth="823.0">
+                            <AnchorPane fx:id="temperaturePane" layoutX="3.0" layoutY="62.0" prefHeight="523.0" prefWidth="823.0">
            <Label fx:id="weatherLabel" layoutX="50.0" layoutY="40.0" styleClass="basicText" text="WEATHER" />
            <Label fx:id="dateLabel" layoutX="212.0" layoutY="40.0" prefHeight="35.0" prefWidth="498.0" styleClass="basicText" />
            <Label fx:id="todayLabel" layoutX="50.0" layoutY="105.0" onMouseClicked="#onNowClick" prefHeight="47.0" prefWidth="122.0" styleClass="basicHeading" text="TODAY" />
            <Label fx:id="tomorrowLabel" layoutX="212.0" layoutY="105.0" onMouseClicked="#onTomorrowClick" prefHeight="47.0" prefWidth="212.0" styleClass="basicHeading" text="TOMORROW" />
            <Label fx:id="dATomorrowLabel" layoutX="464.0" layoutY="105.0" onMouseClicked="#onDATomorrowClick" prefHeight="47.0" prefWidth="381.0" styleClass="basicHeading" text="DAY AFTER TOMORROW" />
 
-           <Label fx:id="nowLabel" layoutX="140.0" layoutY="162.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Now" />
+                                <Label fx:id="nowLabel" layoutX="140.0" layoutY="162.0" prefHeight="47.0" prefWidth="113.0" styleClass="basicHeadingWhite" text="Now" />
            <Label fx:id="tempRightNowLabel" layoutX="140.0" layoutY="209.0" prefHeight="47.0" prefWidth="139.0" styleClass="basicHeadingWhite" />
            <Label layoutX="320.0" layoutY="162.0" prefHeight="47.0" prefWidth="139.0" styleClass="basicHeadingWhite" text="Highest" />
            <Label fx:id="tempMaxLabel" layoutX="320.0" layoutY="209.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
@@ -61,7 +62,7 @@
            <Label fx:id="tempMinLabel" layoutX="500.0" layoutY="209.0" prefHeight="47.0" prefWidth="138.0" styleClass="basicHeadingWhite" />
            <Label fx:id="tempErrorLabel" layoutX="140.0" layoutY="256.0" prefHeight="47.0" styleClass="smallText" />
 
-           <Label layoutX="50.0" layoutY="355.0" styleClass="bigTextGreen" text="Calculate values from given date" />
+                                <Label layoutX="50.0" layoutY="355.0" styleClass="bigTextGreen" text="Calculate values from given date" />
            <Label layoutX="141.0" layoutY="405.0" styleClass="basicTextWhite" text="Select date" />
            <DatePicker fx:id="chooseDay" layoutX="116.0" layoutY="447.0" onAction="#saveDate" />
            <Button fx:id="avgTempButton" layoutX="366.0" layoutY="410.0" mnemonicParsing="false" onAction="#onAvgBtnClick" styleClass="basicButton" text="AVERAGE TEMP" />

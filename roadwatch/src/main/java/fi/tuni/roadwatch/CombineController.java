@@ -93,7 +93,7 @@ public class CombineController {
     @FXML
     private Button saveDataButton;
 
-    public void initializeController(SessionData sessionData) throws IOException, URISyntaxException {
+    public void initializeController(SessionData sessionData) throws IOException, URISyntaxException, ParserConfigurationException, ParseException, InterruptedException, SAXException {
         this.sessionData = sessionData;
         ObservableList<String> taskTypesObservable= FXCollections.observableArrayList(sessionData.taskTypes);
         taskTypesObservable.add(0,"ALL");
@@ -111,22 +111,31 @@ public class CombineController {
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now());
 
-        // INITALIZATION OF DEFAULT VALUES IN ROADWINDOW
+        // INITALIZATION OF DEFAULT VALUES IN COMBINEWINDOW
+
+        //ROAD CONDITION INIT
+        sessionData.createRoadData();
+        changeTimeFrame();
+
+        //MAINTENANCE INIT
+        //sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
+        //maintenanceChart.setData(sessionData.createMaintenanceChart());
+
+        //INITIALIZE TO START WITH CONDITION SHOWING
+        conditionChart.setVisible(false);
+        conditionInputPane.setVisible(false);
+    }
+
+    @FXML
+    private void onUpdateClick() throws IOException, URISyntaxException, InterruptedException, ParseException, ParserConfigurationException, SAXException {
 
         //ROAD CONDITION
         sessionData.createRoadData();
-        changeTimeFrame();
         sessionData.roadData.setForecastConditions(timeFrame);
-//        alertsLabel.setText(sessionData.roadData.trafficMessageAmount + " ALERTS");
+        changeTimeFrame();
 
         //MAINTENANCE
-        //sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
-        //conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
-
-        //INITIALIZE TO START WITH CONDITION SHOWING
-        maintenanceInputPane.setVisible(false);
-        maintenanceChart.setVisible(false);
-
+        onApplyMaintenanceClick();
     }
 
     @FXML

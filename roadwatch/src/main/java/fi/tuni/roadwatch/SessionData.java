@@ -252,7 +252,7 @@ public class SessionData {
                 });
             });
         }
-        averageMaintenanceAmount.replaceAll( (k,v) -> v/maintenancesInTimeLine.size());
+        averageMaintenanceAmount.replaceAll( (k,v) -> Double.valueOf(df.format(v/maintenancesInTimeLine.size()).replace(',','.')));
         return averageMaintenanceAmount;
     }
 

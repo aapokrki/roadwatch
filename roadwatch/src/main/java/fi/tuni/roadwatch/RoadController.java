@@ -102,8 +102,8 @@ public class RoadController {
         //ROAD CONDITION
         sessionData.createRoadData();
         sessionData.roadData.setForecastConditions(timeFrame);
-
         alertsLabel.setText(sessionData.roadData.trafficMessageAmount + " ALERTS");
+        changeTimeFrame();
 
         //MAINTENANCE
         onApplyMaintenanceClick();

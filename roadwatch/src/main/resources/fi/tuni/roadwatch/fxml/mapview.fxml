@@ -68,9 +68,7 @@
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
                <children>
-                  <Button fx:id="buttonZoomOut1" alignment="CENTER_RIGHT" text="In" />
-      
-                     <Button fx:id="buttonZoomOut" alignment="CENTER_RIGHT" text="Out" />
+                     <Button fx:id="buttonZoomOut" alignment="CENTER_RIGHT" text="Zoom out" styleClass="map-button" />
                </children>
             </HBox>
          </children>

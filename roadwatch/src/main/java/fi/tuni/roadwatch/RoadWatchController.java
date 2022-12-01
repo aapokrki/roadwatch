@@ -8,13 +8,15 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.Objects;
 
 
@@ -106,7 +108,7 @@ public class RoadWatchController {
             FXMLLoader weatherFxmlLoader = new FXMLLoader();
             Parent rootNode = weatherFxmlLoader.load(getClass().getResourceAsStream("fxml/weather.fxml"));
             weatherController = weatherFxmlLoader.getController();
-            weatherController.setSessionData(sessionData);
+            weatherController.initializeController(sessionData);
             sessionData.setHelperFunctions(helperFunctions);
             weather = (Pane) rootNode;
         }
@@ -117,7 +119,7 @@ public class RoadWatchController {
 
     }
 
-    public void loadCombine() throws IOException, URISyntaxException {
+    public void loadCombine() throws IOException, URISyntaxException, ParserConfigurationException, ParseException, InterruptedException, SAXException {
         if(combineController == null){
             FXMLLoader combineFxmlLoader = new FXMLLoader();
             Parent rootNode = combineFxmlLoader.load(getClass().getResourceAsStream("fxml/combine.fxml"));

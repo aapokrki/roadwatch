@@ -1,7 +1,5 @@
 package fi.tuni.roadwatch;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 
 import javafx.scene.chart.CategoryAxis;
@@ -16,6 +14,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.*;
 import java.util.*;
@@ -93,20 +92,32 @@ public class WeatherController {
      * Sets sessionData to the current state
      * @param sessionData
      */
-    public void setSessionData(SessionData sessionData) {
+    public void initializeController(SessionData sessionData) {
         this.sessionData = sessionData;
-        setTemperatureData();
+        setTemperatureView();
+        startDatePicker.setValue(LocalDate.now());
+        endDatePicker.setValue(LocalDate.now());
+        chooseDay.setValue(LocalDate.now().minusDays(1));
+        saveDate();
     }
 
 
     /**
      * Sets the temperature fxml right
      */
-    private void setTemperatureData() {
+    private void setTemperatureView() {
         datatype = Datatype.TEMPERATURE;
         datatypeLabel.setText(datatype.toString());
         setTemperature();
         chartPane.setVisible(false);
+    }
+
+    private void setChartView(){
+        datatype = Datatype.CHARTS;
+        datatypeLabel.setText(datatype.toString());
+        temperaturePane.setVisible(false);
+        chartPane.setVisible(true);
+
     }
 
     @FXML
@@ -115,12 +126,9 @@ public class WeatherController {
      */
     private void changeDatatype() {
         if(comboBox.getValue().equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
-            setTemperatureData();
+            setTemperatureView();
         } else {
-            datatype = Datatype.CHARTS;
-            datatypeLabel.setText(datatype.toString());
-            temperaturePane.setVisible(false);
-            chartPane.setVisible(true);
+            setChartView();
         }
     }
 
@@ -144,7 +152,7 @@ public class WeatherController {
     private void calculateWindData(boolean show) throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
         if(datePickerErrorCheck()){
             chartErrorLabel.setText("");
-            // Second button press, time to clear data.
+            // Button is already pressed, time to clear data.
             if(!show) {
                 lineChart.getData().removeAll(windSeries);
 
@@ -190,7 +198,7 @@ public class WeatherController {
     private void calculateVisibilityData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
         if(datePickerErrorCheck()){
             chartErrorLabel.setText("");
-            // Second button press, time to clear data.
+            // Button is already pressed, time to clear data.
             if(!show) {
                 lineChart.getData().removeAll(visibilitySeries);
 
@@ -216,6 +224,19 @@ public class WeatherController {
         }
     }
 
+    @FXML
+    private void onUpdateClick() throws IOException, URISyntaxException, InterruptedException, ParseException, ParserConfigurationException, SAXException {
+
+        sessionData.createRoadData();
+        // Reapply weathercharts
+        if(windButton.getStyleClass().contains("basicButtonGreen")){
+            calculateWindData(true);
+        }
+        if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
+            calculateVisibilityData(true);
+        }
+
+    }
 
     /**
      * Gets the start date of datepicker

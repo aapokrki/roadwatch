@@ -14,7 +14,7 @@
    <children>
       <Label fx:id="infoLabel" alignment="CENTER" layoutX="347.0" layoutY="14.0" prefHeight="35.0" prefWidth="446.0" styleClass="smallHeading" />
       <Label fx:id="alertsLabel" alignment="CENTER" layoutX="752.0" layoutY="544.0" prefHeight="35.0" prefWidth="152.0" styleClass="smallHeading" text="X ALERTS" />
-      <AnchorPane fx:id="datePickerPane" layoutX="696.0" layoutY="217.0" prefHeight="309.0" prefWidth="240.0" style="-fx-border-color: blue; -fx-border-width: 3;">
+      <AnchorPane fx:id="datePickerPane" layoutX="696.0" layoutY="217.0" prefHeight="309.0" prefWidth="240.0">
          <children>
             <Label layoutX="32.0" styleClass="smallHeading" text="MAINTENANCE" />
             <Label fx:id="startDateLabel" layoutX="9.0" layoutY="88.0" styleClass="smallText" text="Select start date" />
@@ -36,7 +36,7 @@
          </children>
       </AnchorPane>
       <Button layoutX="291.0" layoutY="519.0" mnemonicParsing="false" onMouseClicked="#onUpdateClick" styleClass="basicButton" text=" UPDATE" />
-      <AnchorPane layoutX="696.0" layoutY="49.0" prefHeight="128.0" prefWidth="240.0" style="-fx-border-color: blue; -fx-border-width: 3;">
+      <AnchorPane layoutX="696.0" layoutY="49.0" prefHeight="128.0" prefWidth="240.0">
          <children>
             <Label layoutX="9.0" layoutY="85.0" styleClass="smallText" text="Time of day" />
             <ComboBox fx:id="timeFrameComboBox" layoutX="132.0" layoutY="89.0" maxWidth="95.0" onAction="#changeTimeFrame" prefWidth="95.0" styleClass="combo-box">
