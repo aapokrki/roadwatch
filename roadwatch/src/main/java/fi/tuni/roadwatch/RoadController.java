@@ -152,8 +152,6 @@ public class RoadController {
 
         }
 
-
-
     }
     @FXML
     public void changeTaskType() {

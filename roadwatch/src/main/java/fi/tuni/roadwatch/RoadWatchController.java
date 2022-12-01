@@ -156,7 +156,7 @@ public class RoadWatchController {
         }
         infoPane.setCenter(preferences);
         siteLabel.setText("PREFERENCES");
-        //changeLayout("WIDE");
+        changeLayout("NORMAL");
 
     }
 
@@ -171,6 +171,7 @@ public class RoadWatchController {
         }
         infoPane.setCenter(road);
         siteLabel.setText("ROAD DATA");
+        changeLayout("NORMAL");
 
     }
 

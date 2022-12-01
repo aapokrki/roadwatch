@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -156,7 +157,7 @@ public class QuickViewController {
         }
     }
 
-    public void loadCombine(ActionEvent event) throws IOException {
+    public void loadCombine(ActionEvent event) throws IOException, URISyntaxException {
         if(combineController == null){
             FXMLLoader combineFxmlLoader = new FXMLLoader();
             Parent rootNode = null;
@@ -166,7 +167,7 @@ public class QuickViewController {
                 ex.printStackTrace();
             }
             combineController = combineFxmlLoader.getController();
-            combineController.setSessionData(sessionData);
+            combineController.initializeController(sessionData);
             combine = (Pane) rootNode;
         }
 

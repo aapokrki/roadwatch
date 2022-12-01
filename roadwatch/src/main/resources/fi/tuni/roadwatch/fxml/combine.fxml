@@ -1,46 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="542.0" prefWidth="1250.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.CombineController">
+<AnchorPane maxHeight="610.0" maxWidth="1450.0" minHeight="610.0" minWidth="1450.0" prefHeight="610.0" prefWidth="1450.0" styleClass="background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.CombineController">
    <children>
-      <MenuButton layoutX="1170.0" layoutY="37.0" mnemonicParsing="false" styleClass="menu-bar">
-         <items>
-            <MenuItem mnemonicParsing="false" styleClass="menu-item" text="2H" />
-            <MenuItem mnemonicParsing="false" styleClass="menu-item" text="4H" />
-            <MenuItem mnemonicParsing="false" styleClass="menu-item" text="6H" />
-            <MenuItem mnemonicParsing="false" styleClass="menu-item" text="12H" />
-         </items>
-      </MenuButton>
-      <Label layoutX="1002.0" layoutY="42.0" styleClass="smallText" text="Choose timeline" />
-      <Label layoutX="1048.0" layoutY="145.0" styleClass="smallHeading" text="LOCATION" />
-      <Label layoutX="1002.0" layoutY="363.0" styleClass="smallText" text="Compare data" />
-      <Label layoutX="1043.0" layoutY="303.0" styleClass="smallHeading" text="SAVE DATA" />
-      <Button layoutX="1037.0" layoutY="440.0" mnemonicParsing="false" styleClass="basicButton" text="FETCH DATA" />
-      <CheckBox alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="45.0" layoutY="95.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="184.0" text="Weather" textFill="WHITE" />
-      <CheckBox alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="45.0" layoutY="130.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="184.0" text="Visibility" textFill="WHITE" />
-      <CheckBox alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="45.0" layoutY="162.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="184.0" text="Wind" textFill="WHITE" />
-      <CheckBox alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="45.0" layoutY="200.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="184.0" text="Temperature" textFill="WHITE" />
-      <CheckBox alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="45.0" layoutY="234.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="184.0" text="Road condition" textFill="WHITE" />
-      <CheckBox alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="45.0" layoutY="275.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="184.0" text="Maintenance" textFill="WHITE" />
-      <CheckBox alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="45.0" layoutY="320.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="184.0" text="Alerts" textFill="WHITE" />
-      <ToggleButton layoutX="1179.0" layoutY="366.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="35.0" />
-      <LineChart layoutX="351.0" layoutY="49.0">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </LineChart>
+       <AnchorPane fx:id="chartPane" layoutX="14.0" layoutY="7.0" maxHeight="596.0" maxWidth="672.0" minHeight="514.0" minWidth="500.0" prefHeight="596.0" prefWidth="672.0">
+           <LineChart fx:id="lineChart" layoutX="-39.0" maxWidth="737.0" minWidth="500.0" prefHeight="573.0" prefWidth="737.0">
+               <xAxis>
+                   <CategoryAxis side="BOTTOM" fx:id="xAxis" />
+               </xAxis>
+               <yAxis>
+                   <NumberAxis fx:id="yAxis" side="LEFT" />
+               </yAxis>
+           </LineChart>
+           <Button fx:id="windButton" layoutX="135.0" layoutY="531.0" mnemonicParsing="false" onAction="#calculateWindData" styleClass="basicButton" text="WIND" />
+           <Button fx:id="visibilityButton" layoutX="247.0" layoutY="531.0" mnemonicParsing="false" onAction="#calculateVisibilityData" styleClass="basicButton" text="VISIBILITY" />
+
+           <Label fx:id="chartErrorLabel" layoutX="411.0" layoutY="542.0" prefHeight="30.0" prefWidth="152.0" styleClass="smallText" />
+       </AnchorPane>
+       <PieChart fx:id="conditionChart" labelLineLength="0.0" labelsVisible="false" layoutX="717.0" layoutY="31.0" maxHeight="500.0" maxWidth="360.0" minHeight="500.0" minWidth="360.0" prefHeight="500.0" prefWidth="360.0" title="ConditionChart" />
+       <PieChart fx:id="maintenanceChart" labelLineLength="0.0" labelsVisible="false" layoutX="717.0" layoutY="25.0" maxHeight="500.0" maxWidth="360.0" minHeight="500.0" minWidth="360.0" prefHeight="500.0" prefWidth="360.0" title="MaintenanceChart" />
+       <AnchorPane fx:id="datePickerPane" layoutX="1148.0" layoutY="223.0" prefHeight="224.0" prefWidth="203.0" style="-fx-border-color: blue; -fx-border-width: 3;">
+           <children>
+               <Label fx:id="startDateLabel" layoutX="11.0" layoutY="14.0" styleClass="smallText" text="Select start date" />
+               <DatePicker fx:id="startDatePicker" layoutX="11.0" layoutY="46.0" />
+               <DatePicker fx:id="endDatePicker" layoutX="11.0" layoutY="117.0" />
+               <Label fx:id="endDateLabel" layoutX="11.0" layoutY="87.0" styleClass="smallText" text="Select end date" />
+               <Button fx:id="applyMaintenanceButton" layoutX="45.0" layoutY="154.0" mnemonicParsing="false" onMouseClicked="#onApplyMaintenanceClick" styleClass="basicButton" text="APPLY" />
+
+           </children>
+       </AnchorPane>
+      <Button fx:id="conditionModeButton" layoutX="1083.0" layoutY="25.0" mnemonicParsing="false" onAction="#onConditionModeClicked" onMouseClicked="#onApplyMaintenanceClick" styleClass="basicButton" text="Condition" />
+      <Button fx:id="maintenanceModeButton" layoutX="1237.0" layoutY="25.0" mnemonicParsing="false" onAction="#onMaintenanceModeClicked" onMouseClicked="#onApplyMaintenanceClick" styleClass="basicButton" text="Maintenance" />
+      <AnchorPane fx:id="maintenanceInputPane" layoutX="1086.0" layoutY="85.0" prefHeight="37.0" prefWidth="321.0" style="-fx-border-color: blue; -fx-border-width: 3;">
+         <children>
+               <ComboBox fx:id="maintenanceTaskCombobox" layoutX="191.0" layoutY="10.0" maxWidth="130.0" minWidth="130.0" onAction="#changeTaskType" prefWidth="130.0" styleClass="combo-box">
+                   <items>
+                       <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="OVERALL" />
+                           <String fx:value="FRICTION" />
+                           <String fx:value="SLIPPERINESS" />
+                           <String fx:value="PRECIPICATION" />
+                       </FXCollections>
+                   </items>
+               </ComboBox>
+               <Label layoutX="14.0" layoutY="6.0" styleClass="smallText" text="Maintenance Task" />
+         </children>
+      </AnchorPane>
+
+      <AnchorPane fx:id="conditionInputPane" layoutX="1086.0" layoutY="85.0" prefHeight="37.0" prefWidth="321.0" style="-fx-border-color: blue; -fx-border-width: 3;">
+         <children>
+            <ComboBox fx:id="conditionTypeComboBox" layoutX="191.0" layoutY="10.0" maxWidth="130.0" minWidth="130.0" onAction="#changeTaskType" prefWidth="130.0" styleClass="combo-box">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="OVERALL" />
+                     <String fx:value="FRICTION" />
+                     <String fx:value="SLIPPERINESS" />
+                     <String fx:value="PRECIPICATION" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+             <ComboBox fx:id="timeFrameComboBox" layoutX="226.0" layoutY="36.0" maxWidth="95.0" onAction="#changeTimeFrame" prefWidth="95.0" styleClass="combo-box">
+                 <items>
+                     <FXCollections fx:factory="observableArrayList">
+                         <String fx:value="CURRENT" />
+                         <String fx:value="2H" />
+                         <String fx:value="4H" />
+                         <String fx:value="6H" />
+                         <String fx:value="12H" />
+                     </FXCollections>
+                 </items>
+             </ComboBox>
+             <Label layoutX="14.0" layoutY="6.0" styleClass="smallText" text="Condition Type" />
+            <Label layoutX="14.0" layoutY="32.0" styleClass="smallText" text="Timeframe" />
+         </children>
+      </AnchorPane>
+         <Label fx:id="dateErrorLabel" layoutX="1140.0" layoutY="193.0" prefHeight="30.0" prefWidth="220.0" styleClass="smallText" />
    </children>
 </AnchorPane>
