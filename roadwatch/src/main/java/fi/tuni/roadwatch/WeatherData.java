@@ -39,4 +39,10 @@ public class WeatherData {
     public double getWind(){return this.wind;}
 
     public double getTemperature(){return this.temperature;}
+
+
+
+
+
+
 }

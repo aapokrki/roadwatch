@@ -6,8 +6,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Array;
+
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -109,7 +108,6 @@ public class SessionData {
         String startTimeString = weatherAPILogic.timeAndDateToIso8601Format(startTime);
         String endTimeString = weatherAPILogic.timeAndDateToIso8601Format(endTime);
 
-
         String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints,  startTimeString, endTimeString);
         System.out.println(urlstring);
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
@@ -145,9 +143,6 @@ public class SessionData {
         ArrayList<String> coordsInArea = new ArrayList<>();
 
         for(WeatherData wd : this.wantedWeatherData){
-
-
-
             if(!coordsInArea.contains(wd.getCoordinates())){
                 coordsInArea.add(wd.getCoordinates());
             }
@@ -229,14 +224,13 @@ public class SessionData {
         return closest;
     }
 
+
     public double getMIN_value(){
         double min = wantedWeatherAVGMinMax.get(0).getTempMIN();
-
         for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
             if(wd.getTempMIN() <= min){
                 min = wd.getTempMIN();
             }
-
         }
 
         return min;
@@ -244,7 +238,6 @@ public class SessionData {
 
     public double getMAX_value(){
         double max = wantedWeatherAVGMinMax.get(0).getTempMAX();
-
         for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
             if(wd.getTempMAX() >= max){
                 max = wd.getTempMAX();
@@ -255,7 +248,6 @@ public class SessionData {
     }
 
     public String getAVG_value(){
-
         double average = wantedWeatherAVGMinMax.get(0).getTempAverage();;
         for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
             average += wd.getTempAverage();
@@ -317,4 +309,15 @@ public class SessionData {
             }
         }
     }
+
+    public boolean coordinateCheck(){
+        if(coordinateConstraints == null){
+            return false;
+        }
+        return true;
+    }
+
+
+
+
 }
