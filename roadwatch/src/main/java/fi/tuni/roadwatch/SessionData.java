@@ -49,6 +49,10 @@ public class SessionData {
 
     public static SavedDataLogic savedDataLogic;
 
+    private enum DataClassType {
+        WEATHER, WEATHERMINMAXAVG, ROAD, TRAFFIC, MAINTENANCE
+    }
+
 
     public SessionData() throws URISyntaxException, IOException {
         roadAPILogic = new RoadAPILogic();
@@ -327,60 +331,74 @@ public class SessionData {
         return true;
     }
 
+    /**
+     * Writes data to either a JSON or XML file, based on dataClassType
+     * @param fileName the name of the file to write to
+     * @param dataClassType the type of data to write
+     * @return true if write was successful, false otherwise
+     */
+    public boolean writeDataToFile(String fileName, DataClassType dataClassType) {
+        try {
+            switch (dataClassType) {
+                case WEATHER:
+                    for(WeatherData wd : wantedWeatherData){
+                        savedDataLogic.writeWeatherData(fileName, wd);
+                    }
+                case WEATHERMINMAXAVG:
+                    for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
+                        savedDataLogic.writeWeatherDataMinMaxAvg(fileName, wd);
+                    }
+                case MAINTENANCE:
+                    for (Maintenance maintenance : this.maintenancesInTimeLine) {
+                        savedDataLogic.writeMaintenance(fileName + dateAsDayString(maintenance.date), maintenance);
+                    }
+                case ROAD:
+                    savedDataLogic.writeRoadData(fileName, this.roadData);
+                case TRAFFIC:
+                    savedDataLogic.writeTrafficMessage(fileName, this.trafficMessage);
 
-    public boolean writeWeatherDataToFile(String fileName){
-        for (WeatherData data : wantedWeatherData) {
-            try {
-                savedDataLogic.writeWeatherData(fileName, data);
-            } catch (IOException e) {
-                return false;
-            }
+
         }
-        return true;
-    }
-
-    public boolean writeWeatherDataMinMaxAvgToFile(String fileName){
-        for (WeatherDataMinMaxAvg data : wantedWeatherAVGMinMax) {
-            try {
-                savedDataLogic.writeWeatherDataMinMaxAvg(fileName, data);
-            } catch (IOException e) {
-                return false;
-            }
+    } catch (IOException e) {
+            return false;
         }
         return true;
     }
 
     /**
-     * Writes the stored maintenance data to the file
-     * @param fileName the name of the file to write to
-     * @return true if the writing was successful, false otherwise
+     * Reads data from either a JSON or XML file, based on dataClassType
+     * @param fileName the name of the file to read from
+     * @param dataClassType the type of data to read
+     * @return true if read was successful, false otherwise
      */
-    public boolean writeMaintenanceToFile(String fileName){
-        for (Maintenance data : maintenancesInTimeLine) {
-            try {
-                savedDataLogic.writeMaintenance(fileName, data);
-            } catch (IOException e) {
+    public boolean readDataFromFile(String fileName, DataClassType dataClassType) throws IOException, URISyntaxException {
+        switch (dataClassType){
+            case WEATHER:
+                wantedWeatherData.add(savedDataLogic.readWeatherData(fileName));
+                return true;
+            case WEATHERMINMAXAVG:
+                wantedWeatherAVGMinMax.add(savedDataLogic.readWeatherDataMinMaxAvg(fileName));
+                return true;
+            case ROAD:
+                roadData = savedDataLogic.readRoadData(fileName);
+                return true;
+            case TRAFFIC:
+                trafficMessage = savedDataLogic.readTrafficMessage(fileName);
+                roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
+                return true;
+            case MAINTENANCE:
+                maintenancesInTimeLine.add(savedDataLogic.readMaintenance(fileName));
+                return true;
+            default:
                 return false;
-            }
         }
-        return true;
     }
 
-    // TODO: Enable reading of multiple days
-    public boolean readMaintenanceFromFile(String fileName, String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
-
-            maintenancesInTimeLine = new ArrayList<>();
-
-            System.out.println(startDate + " -- " + endDate);
-            for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
-                System.out.println(date);
-                Date dayIndex = convertToDateViaInstant(date);
-                Maintenance maintenance = savedDataLogic.readMaintenance(fileName);
-                maintenance.setTasksAndDate(dayIndex);
-                maintenancesInTimeLine.add(maintenance);
-            }
-            System.out.println(getMaintenanceAverages());
-            return true;
-        }
-
+    /**
+     * Helper function for converting a date to a string
+     * @return String of the date in the format yyyy-MM-dd
+     */
+    public String dateAsDayString(Date date){
+        return new SimpleDateFormat("EEEE").format(date);
+    }
 }
