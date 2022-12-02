@@ -47,8 +47,6 @@ public class MapController {
 
     private SessionData sessionData;
 
-    private HelperFunctions helperFunctions;
-
     /** Coordinates to border Finland */
     private static final Coordinate coordNorhWest= new Coordinate(70.30824014125528, 16.352667758380154);
     private static final Coordinate coordNorthEast = new Coordinate(70.291002382638, 35.52837666547143);
@@ -235,7 +233,7 @@ public class MapController {
             polygonLine.setVisible(true);
 
             // Set polygon data to sessiondata for weather and roaddata
-            helperFunctions.setPolygonCoordinates(coordKotka);
+            sessionData.helperFunctions.setPolygonCoordinates(coordKotka);
             buttonAddPolygon.fire();
 
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
@@ -255,7 +253,7 @@ public class MapController {
             polygonLine.setVisible(true);
 
             // Set polygon data to sessiondata for weather and roaddata
-            helperFunctions.setPolygonCoordinates(coordTampere);
+            sessionData.helperFunctions.setPolygonCoordinates(coordTampere);
             buttonAddPolygon.fire();
 
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
@@ -274,7 +272,7 @@ public class MapController {
             polygonLine.setVisible(true);
 
             // Set polygon data to sessiondata for weather and roaddata
-            helperFunctions.setPolygonCoordinates(coordLahti);
+            sessionData.helperFunctions.setPolygonCoordinates(coordLahti);
             buttonAddPolygon.fire();
 
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
@@ -296,7 +294,7 @@ public class MapController {
             polygonLine.setVisible(true);
 
             // Set polygon data to sessiondata for weather and roaddata
-            helperFunctions.setPolygonCoordinates(coordSmallRoadSegment);
+            sessionData.helperFunctions.setPolygonCoordinates(coordSmallRoadSegment);
             buttonAddPolygon.fire();
 
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
@@ -319,7 +317,7 @@ public class MapController {
             polygonLine.setVisible(true);
 
             // Set polygon data to sessiondata for weather and roaddata
-            helperFunctions.setPolygonCoordinates(coordMediumRoadSegment);
+            sessionData.helperFunctions.setPolygonCoordinates(coordMediumRoadSegment);
             buttonAddPolygon.fire();
 
             Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
@@ -342,7 +340,7 @@ public class MapController {
             polygonLine.setVisible(true);
 
             // Set polygon data to sessiondata for weather and roaddata
-            helperFunctions.setPolygonCoordinates(coordLargeRoadSegment);
+            sessionData.helperFunctions.setPolygonCoordinates(coordLargeRoadSegment);
             buttonAddPolygon.fire();
 
             // Set mapview to location
@@ -497,7 +495,7 @@ public class MapController {
         mapView.addCoordinateLine(polygonLine);
         polygonLine.setVisible(true);
         //System.out.println(coordinates);
-        helperFunctions.setPolygonCoordinates(coordinates);
+        sessionData.helperFunctions.setPolygonCoordinates(coordinates);
     }
 
     /**
@@ -560,9 +558,5 @@ public class MapController {
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
-    }
-
-    public void setHelperFunctions(HelperFunctions helperFunctions) {
-        this.helperFunctions = helperFunctions;
     }
 }

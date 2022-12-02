@@ -47,7 +47,6 @@ public class RoadWatchController {
     public RoadController roadController;
 
     private SessionData sessionData;
-    private HelperFunctions helperFunctions;
 
     //MAINWINDOW
     @FXML
@@ -57,7 +56,7 @@ public class RoadWatchController {
 
     public void initialize(SessionData sessionData, HelperFunctions helperFunctions) throws IOException {
         this.sessionData = sessionData;
-        this.helperFunctions = helperFunctions;
+        sessionData.helperFunctions = helperFunctions;
 
         helperFunctions.setSessionData(sessionData);
         sessionData.setHelperFunctions(helperFunctions);
@@ -76,7 +75,7 @@ public class RoadWatchController {
 
         // init map controls and set sessiondata and helperfunctions
         mapController.setSessionData(sessionData);
-        mapController.setHelperFunctions(helperFunctions);
+        mapController.setHelperFunctions(sessionData.helperFunctions);
         mapController.initMapAndControls(projection);
 
         Pane mapView = (Pane) rootNode;
@@ -110,7 +109,7 @@ public class RoadWatchController {
             Parent rootNode = weatherFxmlLoader.load(getClass().getResourceAsStream("fxml/weather.fxml"));
             weatherController = weatherFxmlLoader.getController();
             weatherController.initializeController(sessionData);
-            sessionData.setHelperFunctions(helperFunctions);
+            sessionData.setHelperFunctions(sessionData.helperFunctions);
             weather = (Pane) rootNode;
         }
 

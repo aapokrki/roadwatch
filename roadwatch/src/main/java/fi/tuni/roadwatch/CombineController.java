@@ -335,7 +335,7 @@ public class CombineController {
             chartErrorLabel.setText("Date picker can't be null");
             return false;
         }
-        else if(!sessionData.coordinateCheck()) {
+        else if(!sessionData.helperFunctions.coordinateCheck()) {
             dateErrorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
