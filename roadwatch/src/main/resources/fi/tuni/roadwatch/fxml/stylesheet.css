@@ -430,7 +430,13 @@
 .map-button:focused{
     -fx-background-color: grey ;
 }
+.map-label {
+    -fx-font-family: "Ubuntu";
+    -fx-text-fill: #78e2a2;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left
 
+}
 
 .chart-content {
     -fx-padding: 30px;

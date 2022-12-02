@@ -68,6 +68,8 @@ public class CombineController {
     // WEATHER CHART COMPONENTS
     private XYChart.Series<String, Double> visibilitySeries;
     private XYChart.Series<String, Double> windSeries;
+    private XYChart.Series<String, Double> temperatureSeries;
+
     @FXML
     protected LineChart<String, Double> lineChart;
     @FXML
@@ -76,6 +78,8 @@ public class CombineController {
     private CategoryAxis xAxis;
     @FXML
     private NumberAxis yAxis;
+    @FXML
+    private Button temperatureButton;
     @FXML
     private Button windButton;
     @FXML
@@ -267,6 +271,9 @@ public class CombineController {
         if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
             calculateVisibilityData(true);
         }
+        if(temperatureButton.getStyleClass().contains("basicButtonGreen")){
+            calculateTemperatureData(true);
+        }
     }
 
     /**
@@ -431,7 +438,51 @@ public class CombineController {
             }
         }
     }
+    @FXML
+    private void onTemperatureButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
+        if(temperatureButton.getStyleClass().contains("basicButtonGreen")){
+            temperatureButton.getStyleClass().remove("basicButtonGreen");
+            temperatureButton.getStyleClass().add("basicButton");
+            calculateTemperatureData(false);
+        }else{
+            temperatureButton.getStyleClass().removeAll();
+            temperatureButton.getStyleClass().add("basicButtonGreen");
+            calculateTemperatureData(true);
 
+        }
+    }
+    /**
+     * Calculates temperature data according to start and end date to a lineChart.
+     */
+    @FXML
+    private void calculateTemperatureData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
+        if(datePickerErrorCheck()){
+            chartErrorLabel.setText("");
+            // Button is already pressed, time to clear data.
+            if(!show) {
+                lineChart.getData().removeAll(temperatureSeries);
+
+            } else { // Button has not been pressed
+                lineChart.getData().removeAll(temperatureSeries);
+
+                lineChart.setAnimated(false);
+                sessionData.createWeatherData(getStartDate(), getEndDate());
+                Thread.sleep(1000);
+
+                temperatureSeries = sessionData.createGraphSeries("TEMPERATURE");
+
+                if(temperatureSeries.getData().size() != 0){
+                    temperatureSeries.setName("Temperature");
+                    lineChart.getData().add(temperatureSeries);
+                    xAxis.setLabel("Time");
+                    yAxis.setLabel("°");
+                }
+                else{
+                    chartErrorLabel.setText("No Data");
+                }
+            }
+        }
+    }
     public void onSaveButtonClick() throws IOException {
         String dataToSave = dataTypeCombobox.getValue();
         sessionData.writeDataToFile(dataTypeCombobox.getValue(), SessionData.DataClassType.valueOf(dataTypeCombobox.getValue()));

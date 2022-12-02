@@ -176,9 +176,12 @@ public class MapController {
     @FXML
     private Button buttonZoomOut;
     @FXML
-    public Button buttonAddPolygon;
+    private Button buttonAddPolygon;
     @FXML
-    public Button buttonClearPolygon;
+    private Button buttonClearPolygon;
+
+    @FXML
+    private Label mapInfoLabel;
 
     /**
      * Calculates the middle of a polygon
@@ -266,8 +269,10 @@ public class MapController {
 
         //wire the add button
         buttonAddPolygon.setOnAction(event -> {
-            sessionData.calculateMinMaxCoordinates();
-
+            if(polygonLine != null){
+                sessionData.calculateMinMaxCoordinates();
+                mapInfoLabel.setText("Area added!");
+            }
         });
         //wire the clear button
         buttonClearPolygon.setOnAction(event -> {
@@ -275,6 +280,8 @@ public class MapController {
                 mapView.removeCoordinateLine(polygonLine);
                 polygonLine = null;
                 sessionData.polyCoordinates.clear();
+                mapInfoLabel.setText("Area cleared!");
+
             }
         });
 

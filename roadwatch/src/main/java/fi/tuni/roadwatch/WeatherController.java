@@ -28,6 +28,8 @@ import java.util.*;
  */
 public class WeatherController {
 
+
+
     enum Datatype {
         TEMPERATURE,
         CHARTS
@@ -50,6 +52,8 @@ public class WeatherController {
     private Label dateLabel;
     @FXML
     private Label todayLabel;
+    @FXML
+    public Label todayDataLabel;
     @FXML
     private Label tempRightNowLabel;
     @FXML
@@ -87,6 +91,8 @@ public class WeatherController {
     private Button windButton;
     @FXML
     private Button visibilityButton;
+    @FXML
+    private Button temperatureButton;
     @FXML
     private  DatePicker startDatePicker;
     @FXML
@@ -214,7 +220,7 @@ public class WeatherController {
      */
     @FXML
     private void onTodayClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        todayLabel.setVisible(true);
+        todayDataLabel.setVisible(true);
         if(sessionData.helperFunctions.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
@@ -238,7 +244,8 @@ public class WeatherController {
      */
     @FXML
     private void onTomorrowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        todayLabel.setVisible(false);
+        todayDataLabel.setVisible(false);
+
         if(sessionData.helperFunctions.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
@@ -259,7 +266,8 @@ public class WeatherController {
      */
     @FXML
     private void onDATomorrowClick() throws ParserConfigurationException, IOException, ParseException, SAXException {
-        todayLabel.setVisible(false);
+        todayDataLabel.setVisible(false);
+
         if(sessionData.helperFunctions.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
@@ -486,6 +494,20 @@ public class WeatherController {
     }
 
 
+    @FXML
+    private void onTemperatureButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
+        if(temperatureButton.getStyleClass().contains("basicButtonGreen")){
+            temperatureButton.getStyleClass().remove("basicButtonGreen");
+            temperatureButton.getStyleClass().add("basicButton");
+            calculateTemperatureData(false);
+        }else{
+            temperatureButton.getStyleClass().removeAll();
+            temperatureButton.getStyleClass().add("basicButtonGreen");
+            calculateTemperatureData(true);
+
+        }
+    }
+
     /**
      * Calculates temperature data according to start and end date to a lineChart.
      */
@@ -537,6 +559,9 @@ public class WeatherController {
         }
         if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
             calculateVisibilityData(true);
+        }
+        if(temperatureButton.getStyleClass().contains("basicButtonGreen")){
+            calculateTemperatureData(true);
         }
     }
 

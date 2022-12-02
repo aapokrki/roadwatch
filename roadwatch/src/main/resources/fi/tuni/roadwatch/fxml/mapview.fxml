@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -47,9 +48,9 @@
                                 <CheckBox fx:id="checkTampereMarker" maxWidth="Infinity" text="Tampere" />
                                 <CheckBox fx:id="checkLahtiMarker" maxWidth="Infinity" text="Lahti" />
                                 <CheckBox fx:id="checkTurkuMarker" maxWidth="Infinity" text="Turku" />
-                                <CheckBox fx:id="checkHyvinkaaMarker" maxWidth="Infinity"  text="Hyvinkää" />
-                                <CheckBox fx:id="checkPorvooMarker" maxWidth="Infinity"  text="Porvoo" />
-                                <CheckBox fx:id="checkHelsinkiMarker" maxWidth="Infinity"  text="Helsinki" />
+                                <CheckBox fx:id="checkHyvinkaaMarker" maxWidth="Infinity" text="Hyvinkää" />
+                                <CheckBox fx:id="checkPorvooMarker" maxWidth="Infinity" text="Porvoo" />
+                                <CheckBox fx:id="checkHelsinkiMarker" maxWidth="Infinity" text="Helsinki" />
                                 <CheckBox fx:id="checkJyvaskylaMarker" maxWidth="Infinity" text="Jyväskylä" />
                                 <CheckBox fx:id="checkOuluMarker" maxWidth="Infinity" text="Oulu" />
                                 <CheckBox fx:id="checkRovaniemiMarker" maxWidth="Infinity" text="Rovaniemi" />
@@ -62,9 +63,9 @@
         </Accordion>
     </left>
    <bottom>
-      <HBox prefHeight="33.0" prefWidth="440.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="33.0" prefWidth="440.0" BorderPane.alignment="CENTER">
          <children>
-              <HBox fx:id="botControls" alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="427.0" spacing="5.0">
+              <HBox fx:id="botControls" alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="221.0" spacing="5.0">
 
                   <padding>
                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -72,15 +73,16 @@
                <children>
                      <Button fx:id="buttonAddPolygon" styleClass="map-button" text="Add" />
                      <Button fx:id="buttonClearPolygon" styleClass="map-button" text="Clear" />
-                     <CheckBox fx:id="checkDrawPolygon" maxWidth="Infinity" styleClass="map-checkbox" text="Draw" />
+                  <Label fx:id="mapInfoLabel" styleClass="map-label" />
                </children>
               </HBox>
-            <HBox fx:id="zoomControls" alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="133.0" spacing="5.0">
+            <HBox fx:id="zoomControls" alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="214.0" spacing="5.0">
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
                <children>
-                     <Button fx:id="buttonZoomOut" alignment="CENTER_RIGHT" styleClass="map-button" text="Zoom out" />
+                     <Button fx:id="buttonZoomOut" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="83.0" styleClass="map-button" text="Zoom out" />
+                     <CheckBox fx:id="checkDrawPolygon" maxWidth="Infinity" prefHeight="21.0" prefWidth="96.0" styleClass="map-checkbox" text="Draw" />
                </children>
             </HBox>
          </children>
