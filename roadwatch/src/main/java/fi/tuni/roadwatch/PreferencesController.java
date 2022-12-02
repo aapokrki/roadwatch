@@ -1,19 +1,12 @@
 package fi.tuni.roadwatch;
 
-import fi.tuni.roadwatch.SessionData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
-import java.util.Objects;
-
 public class PreferencesController {
-    private String locationPreference;
-    private String weatherPreference;
-    private String roadDataPreference;
-    private String maintenancePreference;
 
     // TODO: Aapo linkkaa karttaan tai sit poistan.
     @FXML
@@ -25,18 +18,30 @@ public class PreferencesController {
     @FXML
     public ComboBox<String> maintenanceTaskCombobox;
     private SessionData sessionData;
+    @FXML
+    private Label preferencesSavedLabel;
 
-    public void setSessionData(SessionData sessionData) {
+    public void initializeController(SessionData sessionData) {
         this.sessionData = sessionData;
 
         ObservableList<String> taskTypesObservable= FXCollections.observableArrayList(sessionData.taskTypes);
         taskTypesObservable.add(0,"ALL");
         maintenanceTaskCombobox.setItems(taskTypesObservable);
+
+        weatherComboBox.getSelectionModel().selectFirst();
+        weatherComboBox.setValue("TEMPERATURE");
+
+        conditionTypeComboBox.getSelectionModel().selectFirst();
+        conditionTypeComboBox.setValue("OVERALL");
+
+        maintenanceTaskCombobox.getSelectionModel().selectFirst();
+        maintenanceTaskCombobox.setValue("ALL");
     }
 
     public void setPreferences() {
-        weatherPreference = weatherComboBox.getValue();
-        roadDataPreference = conditionTypeComboBox.getValue();
-        maintenancePreference = maintenanceTaskCombobox.getValue();
+        sessionData.weatherPreference = weatherComboBox.getValue();
+        sessionData.conditionPreference = conditionTypeComboBox.getValue();
+        sessionData.maintenancePreference = maintenanceTaskCombobox.getValue();
+        preferencesSavedLabel.setText("Preferences saved for next login!");
     }
 }

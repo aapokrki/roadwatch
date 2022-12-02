@@ -3,7 +3,6 @@ package fi.tuni.roadwatch;
 import com.sothawo.mapjfx.Coordinate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.SubScene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import org.xml.sax.SAXException;
@@ -16,7 +15,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 public class SessionData {
@@ -25,6 +23,9 @@ public class SessionData {
     public List<Coordinate> polyCoordinates = new ArrayList<>();
     public Date dateAndTime = Calendar.getInstance().getTime();
 
+    public String weatherPreference = "TEMPERATURE";
+    public String conditionPreference = "OVERALL";
+    public String maintenancePreference = "ALL";
 
     public ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
@@ -334,5 +335,4 @@ public class SessionData {
                 }
         return true;
     }
-
 }

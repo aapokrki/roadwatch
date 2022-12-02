@@ -2,7 +2,6 @@ package fi.tuni.roadwatch;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
@@ -22,8 +21,8 @@ public class RoadController {
 
 
     int timeFrame = 0;
-    String conditionType = "OVERALL";
-    String taskType = "ALL";
+    String conditionType;
+    String taskType;
 
     @FXML
     public Label alertsLabel;
@@ -71,11 +70,13 @@ public class RoadController {
         timeFrameComboBox.getSelectionModel().selectFirst();
         timeFrameComboBox.setValue("CURRENT");
 
+        conditionType = sessionData.conditionPreference;
         conditionTypeComboBox.getSelectionModel().selectFirst();
-        conditionTypeComboBox.setValue("OVERALL");
+        conditionTypeComboBox.setValue(conditionType);
 
+        taskType = sessionData.maintenancePreference;
         maintenanceTaskCombobox.getSelectionModel().selectFirst();
-        maintenanceTaskCombobox.setValue("ALL");
+        maintenanceTaskCombobox.setValue(taskType);
 
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now());

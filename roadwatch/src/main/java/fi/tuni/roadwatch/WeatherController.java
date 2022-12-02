@@ -100,8 +100,16 @@ public class WeatherController {
      */
     public void initializeController(SessionData sessionData) {
         this.sessionData = sessionData;
-        // TODO: preference
-        setTemperatureView();
+        datatype = Datatype.valueOf(sessionData.weatherPreference);
+
+        if(datatype == Datatype.TEMPERATURE) {
+            setTemperatureView();
+        } else {
+            setChartView();
+        }
+
+        comboBox.getSelectionModel().selectFirst();
+        comboBox.setValue(datatype.toString());
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now());
         tempDatePicker.setValue(LocalDate.now().minusDays(1));
@@ -134,6 +142,16 @@ public class WeatherController {
     @FXML
     private void changeDatatype() {
         if(comboBox.getValue().equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
+            setTemperatureView();
+        } else {
+            setChartView();
+        }
+    }
+
+    //TODO
+    @FXML
+    private void preferenceChange(String preference) {
+        if(preference.equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
             setTemperatureView();
         } else {
             setChartView();

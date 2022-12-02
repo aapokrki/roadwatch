@@ -20,13 +20,13 @@ import java.text.ParseException;
 import java.util.Objects;
 
 
+/**
+ * This class controls the main UX components for the program. It contains the navigator bar
+ * and launches new fxml site's when navigator bar's icons are clicked.
+ */
 public class RoadWatchController {
     // Components
-    private Rectangle2D screen;
-    private Stage stage;
-    private Scene scene;
     public GridPane root;
-    public StackPane contentPane;
     public BorderPane mapPane;
     public BorderPane infoPane;
     public MapController mapController;
@@ -48,12 +48,18 @@ public class RoadWatchController {
 
     private SessionData sessionData;
 
-    //MAINWINDOW
+    // MainWindow
     @FXML
     private Label siteLabel;
     @FXML
     private Label trafficMessageCount;
 
+    /**
+     * Initializes the main window.
+     * @param sessionData
+     * @param helperFunctions Help controllers navigate with sessionData.
+     * @throws IOException
+     */
     public void initialize(SessionData sessionData, HelperFunctions helperFunctions) throws IOException {
         this.sessionData = sessionData;
         sessionData.helperFunctions = helperFunctions;
@@ -137,7 +143,7 @@ public class RoadWatchController {
             FXMLLoader preferencesFxmlLoader = new FXMLLoader();
             Parent rootNode = preferencesFxmlLoader.load(getClass().getResourceAsStream("fxml/preferences.fxml"));
             preferencesController = preferencesFxmlLoader.getController();
-            preferencesController.setSessionData(sessionData);
+            preferencesController.initializeController(sessionData);
             preferences = (Pane) rootNode;
         }
         infoPane.setCenter(preferences);
