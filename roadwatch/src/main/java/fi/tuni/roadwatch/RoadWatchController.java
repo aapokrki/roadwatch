@@ -73,9 +73,8 @@ public class RoadWatchController {
         mapController = mapFxmlLoader.getController();
         final Projection projection = Projection.WEB_MERCATOR;
 
-        // init map controls and set sessiondata and helperfunctions
+        // init map controls and set sessiondata
         mapController.setSessionData(sessionData);
-        mapController.setHelperFunctions(sessionData.helperFunctions);
         mapController.initMapAndControls(projection);
 
         Pane mapView = (Pane) rootNode;
