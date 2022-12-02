@@ -1,12 +1,15 @@
 package fi.tuni.roadwatch;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class SavedDataLogic {
 
@@ -110,5 +113,51 @@ public class SavedDataLogic {
     // TODO: Check reading of multiple days
     public Maintenance readMaintenance(String fileName) throws IOException {
         return jsonMapper.readValue(new File(fileName + ".json"), Maintenance.class);
+    }
+
+    public void writePreferences(String fileName, Map<String,String> preferences) throws IOException {
+        jsonMapper.writeValue(new File(fileName + ".json"), preferences);
+    }
+
+    public Map<String,String> readPreferences(String fileName) throws IOException {
+        Preferences preferences = jsonMapper.readValue(new File(fileName + ".json"), Preferences.class);
+        return preferences.getPreferencesAsMap();
+    }
+
+    private static class Preferences {
+        private String weatherPreference;
+        private String conditionPreference;
+        private String maintenancePreference;
+
+        @JsonProperty("weatherPreference")
+        public String getWeatherPreference() {
+            return weatherPreference;
+        }
+        public void setWeatherPreference(String weatherPreference) {
+            this.weatherPreference = weatherPreference;
+        }
+
+        @JsonProperty("conditionPreference")
+        public String getConditionPreference() {
+            return conditionPreference;
+        }
+        public void setConditionPreference(String conditionPreference) {
+            this.conditionPreference = conditionPreference;
+        }
+
+        @JsonProperty("maintenancePreference")
+        public String getMaintenancePreference() {
+            return maintenancePreference;
+        }
+        public void setMaintenancePreference(String maintenancePreference) {
+            this.maintenancePreference = maintenancePreference;
+        }
+
+
+        public Map<String, String> getPreferencesAsMap() {
+            return Map.of("weatherPreference", weatherPreference,
+                    "conditionPreference", conditionPreference,
+                    "maintenancePreference", maintenancePreference);
+        }
     }
 }

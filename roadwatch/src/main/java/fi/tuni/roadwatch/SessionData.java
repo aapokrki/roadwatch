@@ -335,4 +335,28 @@ public class SessionData {
                 }
         return true;
     }
+
+    /**
+     * Saves the preferences to a JSON file
+     * @param fileName the name of the file to write to
+     */
+    public void savePreferencesToJSON(String fileName) throws IOException {
+        Map<String,String> preferences = new HashMap<>();
+        preferences.put("weatherpreference", weatherPreference);
+        preferences.put("conditionPreference", conditionPreference);
+        preferences.put("maintenancepreference", maintenancePreference);
+        savedDataLogic.writePreferences(fileName, preferences);
+    }
+
+    /**
+     * Reads the preferences from a JSON file
+     * @param fileName the name of the file to read from
+     */
+    public void loadPreferencesFromJSON(String fileName) throws IOException {
+        Map<String,String> preferences = savedDataLogic.readPreferences(fileName);
+        weatherPreference = preferences.get("weatherpreference");
+        conditionPreference = preferences.get("conditionPreference");
+        maintenancePreference = preferences.get("maintenancepreference");
+    }
+
 }
