@@ -8,10 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -77,6 +81,9 @@ public class CombineController {
     @FXML
     private Button visibilityButton;
 
+    @FXML
+    public ComboBox<String> dataTypeCombobox;
+
     // Mutual actions.
     /**
      * Initializes all components and data.
@@ -113,6 +120,10 @@ public class CombineController {
         //INITIALIZE TO START WITH CONDITION SHOWING
         conditionChart.setVisible(false);
         conditionInputPane.setVisible(false);
+
+
+        dataTypeCombobox.setItems(FXCollections.observableArrayList(sessionData.getDataClassTypesAsList()));
+
     }
 
     /**
@@ -419,5 +430,38 @@ public class CombineController {
                 }
             }
         }
+    }
+
+    public void onSaveButtonClick() throws IOException {
+        String dataToSave = dataTypeCombobox.getValue();
+        if(dataToSave.equals("WEATHER")){
+            //sessionData.savedDataLogic.writeWeatherData("weatherdatafile", sessionData.wantedWeatherData);
+        }
+        if(dataToSave.equals("WEATHERMINMAXAVG")){
+            //sessionData.savedDataLogic.writeWeatherDataMinMaxAvg("weatherAvgMinMaxFile", sessionData.wantedWeatherAVGMinMax);
+        }
+        if(dataToSave.equals("ROAD")){
+            //sessionData.savedDataLogic.writeRoadData("roadFile", sessionData.roadData);
+        }
+        if(dataToSave.equals("TRAFFIC")){
+            //sessionData.savedDataLogic.writeTrafficMessage("trafficFile", sessionData.trafficMessage);
+        }
+        if(dataToSave.equals("MAINTENANCE")){
+            //sessionData.savedDataLogic.writeMaintenance("maintenanceFile",sessionData.maintenancesInTimeLine);
+        }
+
+    }
+
+    public void onLoadButtonClick() {
+        Stage fileChooserStage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.json", ".xml"));
+
+        // Matias tää sitte selectedfile readfunctioiden parametrics
+        File selectedFile = fileChooser.showOpenDialog(fileChooserStage);
+        System.out.println(selectedFile);
+
     }
 }

@@ -45,7 +45,7 @@ public class SessionData {
     public static RoadAPILogic roadAPILogic;
     public static WeatherAPILogic weatherAPILogic;
 
-    public static SavedDataLogic savedDataLogic;
+    public SavedDataLogic savedDataLogic;
 
     private enum DataClassType {
         WEATHER, WEATHERMINMAXAVG, ROAD, TRAFFIC, MAINTENANCE
@@ -360,6 +360,14 @@ public class SessionData {
         conditionPreference = preferences.get("conditionPreference");
         maintenancePreference = preferences.get("maintenancepreference");
         locationPreference = preferences.get("locationpreference");
+    }
+
+    public ArrayList<String> getDataClassTypesAsList(){
+        ArrayList<String> classTypes = new ArrayList<>();
+        for (DataClassType value : DataClassType.values()) {
+            classTypes.add(value.toString());
+        }
+        return classTypes;
     }
 
 }

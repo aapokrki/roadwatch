@@ -30,7 +30,7 @@
        </AnchorPane>
        <PieChart fx:id="conditionChart" labelLineLength="0.0" labelsVisible="false" layoutX="717.0" layoutY="31.0" maxHeight="500.0" maxWidth="360.0" minHeight="500.0" minWidth="360.0" prefHeight="500.0" prefWidth="360.0" title="ConditionChart" />
        <PieChart fx:id="maintenanceChart" labelLineLength="0.0" labelsVisible="false" layoutX="717.0" layoutY="25.0" maxHeight="500.0" maxWidth="360.0" minHeight="500.0" minWidth="360.0" prefHeight="500.0" prefWidth="360.0" title="MaintenanceChart" />
-       <AnchorPane fx:id="datePickerPane" layoutX="1148.0" layoutY="223.0" prefHeight="224.0" prefWidth="203.0">
+       <AnchorPane fx:id="datePickerPane" layoutX="1164.0" layoutY="181.0" prefHeight="224.0" prefWidth="203.0">
            <children>
                <Label fx:id="startDateLabel" layoutX="11.0" layoutY="14.0" styleClass="smallText" text="Select start date" />
                <DatePicker fx:id="startDatePicker" layoutX="11.0" layoutY="46.0" />
@@ -78,6 +78,9 @@
          </children>
       </AnchorPane>
          <Label fx:id="dateErrorLabel" layoutX="1140.0" layoutY="193.0" prefHeight="30.0" prefWidth="220.0" styleClass="smallText" />
-       <Button layoutX="1111.0" layoutY="531.0" mnemonicParsing="false" onMouseClicked="#onUpdateClick" styleClass="basicButton" text=" UPDATE" />
+       <Button layoutX="1199.0" layoutY="405.0" mnemonicParsing="false" onMouseClicked="#onUpdateClick" styleClass="basicButton" text=" UPDATE" />
+      <Button fx:id="saveButton" layoutX="1327.0" layoutY="481.0" mnemonicParsing="false" onMouseClicked="#onSaveButtonClick" styleClass="basicButton" text="SAVE" />
+      <Button fx:id="loadButton" layoutX="1324.0" layoutY="538.0" mnemonicParsing="false" onMouseClicked="#onLoadButtonClick" styleClass="basicButton" text="LOAD" />
+      <ComboBox fx:id="dataTypeCombobox" layoutX="1218.0" layoutY="484.0" maxWidth="95.0" prefWidth="95.0" styleClass="combo-box"/>
    </children>
 </AnchorPane>
