@@ -49,8 +49,6 @@ public class RoadController {
     /**
      * Initializes all roadData data and components.
      * @param sessionData
-     * @throws IOException
-     * @throws URISyntaxException
      */
     public void initializeController(SessionData sessionData) throws IOException, URISyntaxException {
         this.sessionData = sessionData;
@@ -79,10 +77,7 @@ public class RoadController {
 
 
     /**
-     * Updates data in needed components.
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws InterruptedException
+     * Updates data in charts
      */
     @FXML
     private void onUpdateClick() throws IOException, URISyntaxException, InterruptedException {
@@ -97,7 +92,7 @@ public class RoadController {
     }
 
     /**
-     * Changes the time frame.
+     * Changes the time frame for Conditionchart
      */
     @FXML
     private void changeTimeFrame() {
@@ -152,8 +147,6 @@ public class RoadController {
 
     /**
      * Creates maintenance chart according to selected timeframe.
-     * @throws IOException
-     * @throws URISyntaxException
      */
     @FXML
     private void onApplyMaintenanceClick() throws IOException, URISyntaxException {

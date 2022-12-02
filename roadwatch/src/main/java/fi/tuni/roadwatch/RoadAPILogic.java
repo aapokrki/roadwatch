@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Creates the data classes from digitraffic API and returns them to SessionData
+ */
 public class RoadAPILogic {
 
     // Static URI for fetching traffic messages for all locations
@@ -103,9 +106,7 @@ public class RoadAPILogic {
 
     /**
      * Retrieves all maintenance task types
-     * @return
-     * @throws URISyntaxException
-     * @throws IOException
+     * @return arraylist of tasktypes as strings
      */
     public ArrayList<String> getTaskTypes() throws URISyntaxException, IOException {
         ArrayList<String> taskTypes = new ArrayList<>();

@@ -34,7 +34,6 @@ public class WeatherAPILogic {
      * @param startime Start time of wanted observation/forecast
      * @param endtime End time of wanted observation/forecast
      * @return String of wanted API url
-     * @throws ParseException
      */
     public String createURLString(CoordinateConstraints coordinates, String startime, String endtime) throws ParseException {
         StringBuilder str = new StringBuilder();
@@ -70,7 +69,6 @@ public class WeatherAPILogic {
      * Read of AVG MIN MAX API and saving into ArrayList containing WeatherDataMinMaxAvg objects
      * @param doc wanted API document
      * @return ArrayList containing WeatherDataMinMaxAvg objects
-     * @throws ParseException
      */
     public ArrayList<WeatherDataMinMaxAvg> creatingAvgMinMax(Document doc) throws ParseException {
         NodeList nList = doc.getElementsByTagName("wfs:member");
@@ -121,9 +119,6 @@ public class WeatherAPILogic {
      * Creates Document element based on given url. Used in creatingWeatherData
      * @param url of the wanted API
      * @return Document object of wanted urlstring
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
      */
     public Document GetApiDocument(String url) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -139,7 +134,6 @@ public class WeatherAPILogic {
      * Creates observations weather data. Has to be different function due to different parameter names versus forecast
      * @param doc wanted API document
      * @return ArrayList containing WeatherData objects
-     * @throws ParseException
      */
     public ArrayList<WeatherData> creatingWeatherObservations(Document doc) throws ParseException {
         NodeList nList = doc.getElementsByTagName("wfs:member");
@@ -195,7 +189,6 @@ public class WeatherAPILogic {
      * Creates forecast weather data. Has to be different function due to different parameter names versus observations
      * @param doc wanted API document
      * @return ArrayList containing WeatherData objects
-     * @throws ParseException
      */
     public ArrayList<WeatherData> creatingWeatherForecast(Document doc) throws ParseException {
         NodeList nList = doc.getElementsByTagName("wfs:member");

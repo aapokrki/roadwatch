@@ -52,7 +52,6 @@ public class RoadWatchController {
      * Initializes the main window.
      * @param sessionData
      * @param helperFunctions Helps controllers navigate with sessionData.
-     * @throws IOException
      */
     public void initialize(SessionData sessionData, HelperFunctions helperFunctions) throws IOException {
         this.sessionData = sessionData;
@@ -68,7 +67,6 @@ public class RoadWatchController {
 
     /**
      * Setups map.
-     * @throws IOException
      */
     public void loadMap() throws IOException {
         FXMLLoader mapFxmlLoader = new FXMLLoader();
@@ -88,7 +86,6 @@ public class RoadWatchController {
 
     /**
      * Sets home fxml.
-     * @throws IOException
      */
     public void loadHome() throws IOException {
         if(homeController == null){
@@ -107,7 +104,6 @@ public class RoadWatchController {
 
     /**
      * Sets weather fxml.
-     * @throws IOException
      */
     public void loadWeather() throws IOException {
         if(weatherController == null){
@@ -126,12 +122,6 @@ public class RoadWatchController {
 
     /**
      * Sets combine fxml.
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws ParserConfigurationException
-     * @throws ParseException
-     * @throws InterruptedException
-     * @throws SAXException
      */
     public void loadCombine() throws IOException, URISyntaxException, ParserConfigurationException, ParseException, InterruptedException, SAXException {
         if(combineController == null){
@@ -148,7 +138,6 @@ public class RoadWatchController {
 
     /**
      * Sets preference fxml.
-     * @throws IOException
      */
     public void loadPreferences() throws IOException {
         if(preferencesController == null){
@@ -165,8 +154,6 @@ public class RoadWatchController {
 
     /**
      * Sets road data fxml.
-     * @throws IOException
-     * @throws URISyntaxException
      */
     public void loadRoadData() throws IOException, URISyntaxException {
         if(roadController == null){

@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * Contains small helper functions that would make SessionData too bloated
+ */
 public class HelperFunctions {
 
     SessionData sessionData;
@@ -84,7 +87,6 @@ public class HelperFunctions {
      * Transforms string in ISO8601 format to Date object
      * @param datestring string in ISO8601 format
      * @return Date object of datestring
-     * @throws ParseException
      */
     public Date timeAndDateAsDate(String datestring) throws ParseException {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
