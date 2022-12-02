@@ -273,17 +273,6 @@ public class SessionData {
     }
 
     /**
-     * Coordinate null checker
-     * @return boolean true or false
-     */
-    public boolean coordinateCheck(){
-        if(coordinateConstraints == null){
-            return false;
-        }
-        return true;
-    }
-    
-    /**
      * Writes data to either a JSON or XML file, based on dataClassType
      * @param fileName the name of the file to write to
      * @param dataClassType the type of data to write
@@ -308,12 +297,11 @@ public class SessionData {
                     savedDataLogic.writeRoadData(fileName, this.roadData);
                 case TRAFFIC:
                     savedDataLogic.writeTrafficMessage(fileName, this.trafficMessage);
-                    
 
         }
-    } catch (IOException e) {
-            return false;
-        }
+            } catch (IOException e) {
+                    return false;
+                }
         return true;
     }
 
@@ -323,27 +311,27 @@ public class SessionData {
      * @param dataClassType the type of data to read
      * @return true if read was successful, false otherwise
      */
-    public boolean readDataFromFile(String fileName, DataClassType dataClassType) throws IOException, URISyntaxException {
-        switch (dataClassType){
-            case WEATHER:
-                wantedWeatherData.add(savedDataLogic.readWeatherData(fileName));
-                return true;
-            case WEATHERMINMAXAVG:
-                wantedWeatherAVGMinMax.add(savedDataLogic.readWeatherDataMinMaxAvg(fileName));
-                return true;
-            case ROAD:
-                roadData = savedDataLogic.readRoadData(fileName);
-                return true;
-            case TRAFFIC:
-                trafficMessage = savedDataLogic.readTrafficMessage(fileName);
-                roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
-                return true;
-            case MAINTENANCE:
-                maintenancesInTimeLine.add(savedDataLogic.readMaintenance(fileName));
-                return true;
-            default:
+    public boolean readDataFromFile(String fileName, DataClassType dataClassType) throws URISyntaxException {
+
+        try {
+            switch (dataClassType) {
+                case WEATHER:
+                    wantedWeatherData.add(savedDataLogic.readWeatherData(fileName));
+                case WEATHERMINMAXAVG:
+                    wantedWeatherAVGMinMax.add(savedDataLogic.readWeatherDataMinMaxAvg(fileName));
+                case ROAD:
+                    roadData = savedDataLogic.readRoadData(fileName);
+                case TRAFFIC:
+                    trafficMessage = savedDataLogic.readTrafficMessage(fileName);
+                    roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
+                case MAINTENANCE:
+                    maintenancesInTimeLine.add(savedDataLogic.readMaintenance(fileName));
+
+                }
+            } catch (IOException e) {
                 return false;
-        }
+                }
+        return true;
     }
 
 }

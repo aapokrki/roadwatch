@@ -17,7 +17,7 @@ public class HelperFunctions {
 
     /**
      * Sets sessionData to the current state
-     * @param sessionData
+     * @param sessionData Reference to sessionData
      */
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
@@ -180,5 +180,16 @@ public class HelperFunctions {
      */
     public void createTaskTypes(RoadAPILogic roadAPILogic) throws URISyntaxException, IOException {
         sessionData.taskTypes = roadAPILogic.getTaskTypes();
+    }
+
+    /**
+     * Coordinate null checker
+     * @return boolean true or false
+     */
+    public boolean coordinateCheck(){
+        if(sessionData.coordinateConstraints == null){
+            return false;
+        }
+        return true;
     }
 }
