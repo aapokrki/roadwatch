@@ -1,10 +1,7 @@
 package fi.tuni.roadwatch;
-
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import java.util.Date;
 
 public class WeatherData {
 
@@ -99,10 +96,4 @@ public class WeatherData {
      * @param temperature given temperature
      */
     public void setTemperature(double temperature){this.temperature = temperature;}
-
-
-
-
-
-
 }

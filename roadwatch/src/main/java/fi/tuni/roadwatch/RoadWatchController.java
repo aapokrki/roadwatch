@@ -95,7 +95,6 @@ public class RoadWatchController {
             FXMLLoader homeFxmlLoader = new FXMLLoader();
             Parent rootNode = homeFxmlLoader.load(getClass().getResourceAsStream("fxml/home.fxml"));
             homeController = homeFxmlLoader.getController();
-            homeController.setSessionData(sessionData);
             home = (Pane) rootNode;
         }
         infoPane.setCenter(home);

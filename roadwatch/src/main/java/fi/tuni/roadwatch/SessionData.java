@@ -85,9 +85,10 @@ public class SessionData {
     }
 
 
-
+    /**
+     * Calculates the bbox of saved coordinates in map
+     */
     public void calculateMinMaxCoordinates() {
-        // TODO: Make more efficient
         if(polyCoordinates != null){
             if(!polyCoordinates.isEmpty()){
                 Double maxLongtitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
@@ -108,12 +109,21 @@ public class SessionData {
         }
     }
 
+    /**
+     * Creates a RoadData class to SessionData
+     */
     public void createRoadData() throws IOException, URISyntaxException {
         roadData = roadAPILogic.getRoadData(coordinateConstraints.getAsString('/'));
         //TODO: ADD TIMEFRAME FILTERING OF TRAFFICMESSAGES
         roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
     }
 
+    /**
+     * Creates Maintenance class to SessionData based on task type between given timeline
+     * @param taskId
+     * @param startDate
+     * @param endDate
+     */
     public void createMaintenance(String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
 
         maintenancesInTimeLine = new ArrayList<>();
@@ -131,10 +141,6 @@ public class SessionData {
      * @param startTime Date startTime of data creation
      * @param endTime Date endTime of data creation
      * @return null checker
-     * @throws ParseException
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
      */
     public boolean createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
         this.wantedWeatherAVGMinMax.clear();
@@ -156,10 +162,6 @@ public class SessionData {
      * WeatherData creation to sessionData
      * @param startTime Date startTime of data creation
      * @param endTime Date endTime of data creation
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParseException
      */
     public void createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
         this.wantedWeatherData.clear();
@@ -360,6 +362,10 @@ public class SessionData {
         locationPreference = preferences.get("locationPreference");
     }
 
+    /**
+     * Returns all dataClassTypes as list To combinepage for saving data
+     * @return ArrayList<String> of wanted classtypes
+     */
     public ArrayList<String> getDataClassTypesAsList(){
         ArrayList<String> classTypes = new ArrayList<>();
         for (DataClassType value : DataClassType.values()) {

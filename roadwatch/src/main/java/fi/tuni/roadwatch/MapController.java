@@ -236,8 +236,7 @@ public class MapController {
     }
 
     /**
-     * called after the fxml is loaded and all objects are created. This is not called initialize any more,
-     * because we need to pass in the projection before initializing.
+     * Initialize map and controls with basic values
      *
      * @param projection
      *     the projection to use in the map.
@@ -423,7 +422,7 @@ public class MapController {
     }
 
     /**
-     * shows a new polygon with the coordinate from the added.
+     * shows a new polygon form the added coordinates
      *
      * @param event
      *     event with coordinates
@@ -459,7 +458,7 @@ public class MapController {
     }
 
     /**
-     * finishes setup after the mpa is initialzed
+     * finishes setup after the map is initialzed
      */
     private void afterMapIsInitialized() {
 
@@ -495,10 +494,18 @@ public class MapController {
         }
     }
 
+    /**
+     * Set sessionData
+     * @param sessionData
+     */
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
     }
 
+    /**
+     * Gets all presetLocations as list
+     * @return
+     */
     public ArrayList<String> getLocationsAsList(){
         ArrayList<String> locations = new ArrayList<>();
         for(Node location : optionsLocationsVbox.getChildren()){

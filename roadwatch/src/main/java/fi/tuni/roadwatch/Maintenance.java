@@ -25,6 +25,10 @@ public class Maintenance {
     public void setFeatures(ArrayList<Feature> features) {
         this.features = features; }
 
+    /**
+     * Sets tasks based on given date
+     * @param date
+     */
     public void setTasksAndDate(Date date) {
         tasks = new HashMap<>();
         this.date = date;
