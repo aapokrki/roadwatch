@@ -23,19 +23,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * This class combines the UX elements of weather and road data. The user can select a time frame
+ * and compare the data side by side.
+ */
 public class CombineController {
-
-    @FXML
-    public ComboBox<String> timeFrameComboBox;
-
     private final LocalDateTime currentDate = LocalDateTime.now();
     private SessionData sessionData;
     String taskType = "ALL";
     int timeFrame = 0;
     String conditionType = "OVERALL";
 
-
-
+    @FXML
+    public ComboBox<String> timeFrameComboBox;
     @FXML
     public PieChart conditionChart;
     @FXML
@@ -46,52 +46,48 @@ public class CombineController {
     public DatePicker startDatePicker;
     @FXML
     public DatePicker endDatePicker;
-
     @FXML
     public AnchorPane maintenanceInputPane;
-
     @FXML
     public ComboBox<String> maintenanceTaskCombobox;
-
     @FXML
     public AnchorPane conditionInputPane;
-
     @FXML
     public ComboBox<String> conditionTypeComboBox;
-
     @FXML
     public Button conditionModeButton;
     @FXML
     public Button maintenanceModeButton;
-
-    @FXML
-    private Label combineLabel;
-
     @FXML
     private Label dateErrorLabel;
 
     // WEATHER CHART COMPONENTS
-    @FXML
-    private AnchorPane chartPane;
+    private XYChart.Series<String, Double> visibilitySeries;
+    private XYChart.Series<String, Double> windSeries;
     @FXML
     protected LineChart<String, Double> lineChart;
     @FXML
     private Label chartErrorLabel;
-    @FXML
-    private Label dataSavedLabel;
     @FXML
     private CategoryAxis xAxis;
     @FXML
     private NumberAxis yAxis;
     @FXML
     private Button windButton;
-    private XYChart.Series<String, Double> visibilitySeries;
-    private XYChart.Series<String, Double> windSeries;
     @FXML
     private Button visibilityButton;
-    @FXML
-    private Button saveDataButton;
 
+    // Mutual actions.
+    /**
+     * Initializes all components and data.
+     * @param sessionData
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws ParserConfigurationException
+     * @throws ParseException
+     * @throws InterruptedException
+     * @throws SAXException
+     */
     public void initializeController(SessionData sessionData) throws IOException, URISyntaxException, ParserConfigurationException, ParseException, InterruptedException, SAXException {
         this.sessionData = sessionData;
         ObservableList<String> taskTypesObservable= FXCollections.observableArrayList(sessionData.taskTypes);
@@ -110,24 +106,26 @@ public class CombineController {
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now());
 
-        // INITALIZATION OF DEFAULT VALUES IN COMBINEWINDOW
-
         //ROAD CONDITION INIT
         sessionData.createRoadData();
         changeTimeFrame();
-
-        //MAINTENANCE INIT
-        //sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
-        //maintenanceChart.setData(sessionData.createMaintenanceChart());
 
         //INITIALIZE TO START WITH CONDITION SHOWING
         conditionChart.setVisible(false);
         conditionInputPane.setVisible(false);
     }
 
+    /**
+     * Creates charts according to new data.
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     @FXML
     private void onUpdateClick() throws IOException, URISyntaxException, InterruptedException, ParseException, ParserConfigurationException, SAXException {
-
         //ROAD CONDITION
         sessionData.createRoadData();
         sessionData.roadData.setForecastConditions(timeFrame);
@@ -137,59 +135,11 @@ public class CombineController {
         onApplyMaintenanceClick();
     }
 
+    /**
+     * Updates timeframe according to the user's selection.
+     */
     @FXML
-    public void changeTaskType() {
-        this.taskType = maintenanceTaskCombobox.getValue();
-    }
-
-    @FXML
-    public void onApplyMaintenanceClick() throws IOException, URISyntaxException, ParseException, ParserConfigurationException, InterruptedException, SAXException {
-
-        System.out.println(taskType);
-        if(Objects.equals(taskType, "ALL")){
-            sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
-        }else{
-            sessionData.createMaintenance(taskType,startDatePicker.getValue(),endDatePicker.getValue());
-        }
-        maintenanceChart.setData(sessionData.createMaintenanceChart());
-
-        if(maintenanceChart.getData().size() == 0){
-            maintenanceChart.setTitle("NO DATA");
-        }else{
-            maintenanceChart.setTitle(taskType + " TASKS AVERAGE");
-        }
-
-        // Reapply weathercharts
-        if(windButton.getStyleClass().contains("basicButtonGreen")){
-            calculateWindData(true);
-        }
-        if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
-            calculateVisibilityData(true);
-        }
-    }
-
-    @FXML
-    public void onConditionModeClicked() {
-        maintenanceChart.setVisible(false);
-        conditionChart.setVisible(true);
-
-        conditionInputPane.setVisible(true);
-        maintenanceInputPane.setVisible(false);
-
-    }
-
-    @FXML
-    public void onMaintenanceModeClicked() {
-        maintenanceChart.setVisible(true);
-        conditionChart.setVisible(false);
-
-        maintenanceInputPane.setVisible(true);
-        conditionInputPane.setVisible(false);
-
-    }
-
-    @FXML
-    public void changeTimeFrame() {
+    private void changeTimeFrame() {
         String str = timeFrameComboBox.getValue();
         if(Objects.equals(str, "CURRENT")){
             timeFrame = 0;
@@ -198,130 +148,7 @@ public class CombineController {
             timeFrame = Integer.parseInt(subs);
         }
         sessionData.roadData.setForecastConditions(timeFrame);
-        System.out.println(str);
         changeConditionType();
-    }
-    @FXML
-    public void changeConditionType() {
-        this.conditionType = conditionTypeComboBox.getValue();
-        System.out.println(conditionType);
-        // Nää iffit on rumaa koodia don't look ;D
-        if(Objects.equals(conditionType, "OVERALL")){
-            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
-
-        }
-        if(Objects.equals(conditionType, "FRICTION")){
-            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.frictionCondition));
-
-        }
-        if(Objects.equals(conditionType, "SLIPPERINESS")){
-            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.roadCondition));
-
-        }
-        if(Objects.equals(conditionType, "PRECIPICATION")){
-            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.precipicationCondition));
-
-        }
-        if(timeFrame == 0 && !Objects.equals(conditionType, "OVERALL")){
-            conditionChart.setTitle("NO DATA");
-
-        }else{
-            conditionChart.setTitle(conditionType + " CONDITION IN AREA");
-
-        }
-
-    }
-
-    @FXML
-    private void onWindButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
-        if(windButton.getStyleClass().contains("basicButtonGreen")){
-            windButton.getStyleClass().remove("basicButtonGreen");
-            windButton.getStyleClass().add("basicButton");
-            calculateWindData(false);
-        }else{
-            windButton.getStyleClass().removeAll();
-            windButton.getStyleClass().add("basicButtonGreen");
-            calculateWindData(true);
-
-        }
-    }
-    @FXML
-    /**
-     *  Calculates wind data according to start and end date to a linechart
-     */
-    private void calculateWindData(boolean show) throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
-        if(datePickerErrorCheck()){
-            chartErrorLabel.setText("");
-            // Second button press, time to clear data.
-            if(!show) {
-                lineChart.getData().removeAll(windSeries);
-
-            } else { // Button has not been pressed
-                lineChart.getData().removeAll(windSeries);
-
-                lineChart.setAnimated(false);
-                sessionData.createWeatherData(getStartDate(), getEndDate());
-                Thread.sleep(1000);
-
-                windSeries = sessionData.createGraphSeries("WIND");
-
-                if(windSeries.getData().size() != 0){
-                    windSeries.setName("Wind");
-                    lineChart.getData().add(windSeries);
-                    xAxis.setLabel("Time");
-                    yAxis.setLabel("m/s");
-                }
-                else{
-                    chartErrorLabel.setText("No Data");
-                }
-            }
-        }
-    }
-
-    @FXML
-    private void onVisibilityButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
-        if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
-            visibilityButton.getStyleClass().remove("basicButtonGreen");
-            visibilityButton.getStyleClass().add("basicButton");
-            calculateVisibilityData(false);
-        }else{
-            visibilityButton.getStyleClass().removeAll();
-            visibilityButton.getStyleClass().add("basicButtonGreen");
-            calculateVisibilityData(true);
-
-        }
-    }
-    @FXML
-    /**
-     * Calculates visibility data according to start and end date to a linechart
-     */
-    private void calculateVisibilityData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
-        if(datePickerErrorCheck()){
-            chartErrorLabel.setText("");
-            // Second button press, time to clear data.
-            if(!show) {
-                lineChart.getData().removeAll(visibilitySeries);
-
-            } else { // Button has not been pressed
-                lineChart.getData().removeAll(visibilitySeries);
-
-                lineChart.setAnimated(false);
-                sessionData.createWeatherData(getStartDate(), getEndDate());
-                Thread.sleep(1000);
-
-                visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
-
-                if(visibilitySeries.getData().size() != 0){
-                    visibilitySeries.setName("Visibility");
-                    lineChart.getData().add(visibilitySeries);
-                    xAxis.setLabel("Time");
-                    yAxis.setLabel("km");
-                }
-                else{
-                    chartErrorLabel.setText("No Data");
-                }
-            }
-        }
     }
 
     /**
@@ -393,4 +220,204 @@ public class CombineController {
         return  sessionData.helperFunctions.trimToEnd(endDate,0);
     }
 
+    // Road data components.
+    /**
+     * Changes maintenance task type according to selected value.
+     */
+    @FXML
+    private void changeTaskType() {
+        this.taskType = maintenanceTaskCombobox.getValue();
+    }
+
+    /**
+     * Creates maintenance chart according to selected timeframe.
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    @FXML
+    private void onApplyMaintenanceClick() throws IOException, URISyntaxException, ParseException, ParserConfigurationException, InterruptedException, SAXException {
+        if(Objects.equals(taskType, "ALL")){
+            sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
+        }else{
+            sessionData.createMaintenance(taskType,startDatePicker.getValue(),endDatePicker.getValue());
+        }
+        maintenanceChart.setData(sessionData.createMaintenanceChart());
+
+        if(maintenanceChart.getData().size() == 0){
+            maintenanceChart.setTitle("NO DATA");
+        }else{
+            maintenanceChart.setTitle(taskType + " TASKS AVERAGE");
+        }
+
+        // Reapply weathercharts
+        if(windButton.getStyleClass().contains("basicButtonGreen")){
+            calculateWindData(true);
+        }
+        if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
+            calculateVisibilityData(true);
+        }
+    }
+
+    /**
+     * Sets condition components visible and hides maintenance components.
+     */
+    @FXML
+    private void onConditionModeClicked() {
+        maintenanceChart.setVisible(false);
+        conditionChart.setVisible(true);
+
+        conditionInputPane.setVisible(true);
+        maintenanceInputPane.setVisible(false);
+    }
+
+    /**
+     * Sets maintenance components visible and hides condition components.
+     */
+    @FXML
+    private void onMaintenanceModeClicked() {
+        maintenanceChart.setVisible(true);
+        conditionChart.setVisible(false);
+
+        maintenanceInputPane.setVisible(true);
+        conditionInputPane.setVisible(false);
+    }
+
+    /**
+     * Changes road condition type in condition chart.
+     */
+    @FXML
+    private void changeConditionType() {
+        this.conditionType = conditionTypeComboBox.getValue();
+        if(Objects.equals(conditionType, "OVERALL")){
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
+
+        }
+        if(Objects.equals(conditionType, "FRICTION")){
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.frictionCondition));
+
+        }
+        if(Objects.equals(conditionType, "SLIPPERINESS")){
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.roadCondition));
+
+        }
+        if(Objects.equals(conditionType, "PRECIPICATION")){
+            conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.precipicationCondition));
+
+        }
+        if(timeFrame == 0 && !Objects.equals(conditionType, "OVERALL")){
+            conditionChart.setTitle("NO DATA");
+
+        }else{
+            conditionChart.setTitle(conditionType + " CONDITION IN AREA");
+        }
+    }
+
+    // Weather components.
+    /**
+     * Checks if wind button has been clicked already or not and changes its appearance and actions according to it.
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws ParseException
+     * @throws InterruptedException
+     * @throws SAXException
+     */
+    @FXML
+    private void onWindButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
+        if(windButton.getStyleClass().contains("basicButtonGreen")){
+            windButton.getStyleClass().remove("basicButtonGreen");
+            windButton.getStyleClass().add("basicButton");
+            calculateWindData(false);
+        }else{
+            windButton.getStyleClass().removeAll();
+            windButton.getStyleClass().add("basicButtonGreen");
+            calculateWindData(true);
+        }
+    }
+
+    /**
+     *  Calculates wind data according to start and end date to a linechart
+     */
+    @FXML
+    private void calculateWindData(boolean show) throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
+        if(datePickerErrorCheck()){
+            chartErrorLabel.setText("");
+            // Second button press, time to clear data.
+            if(!show) {
+                lineChart.getData().removeAll(windSeries);
+
+            } else { // Button has not been pressed
+                lineChart.getData().removeAll(windSeries);
+
+                lineChart.setAnimated(false);
+                sessionData.createWeatherData(getStartDate(), getEndDate());
+                Thread.sleep(1000);
+
+                windSeries = sessionData.createGraphSeries("WIND");
+
+                if(windSeries.getData().size() != 0){
+                    windSeries.setName("Wind");
+                    lineChart.getData().add(windSeries);
+                    xAxis.setLabel("Time");
+                    yAxis.setLabel("m/s");
+                }
+                else{
+                    chartErrorLabel.setText("No Data");
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if visibility button has been clicked already or not and changes its appearance and actions according to it.
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws ParseException
+     * @throws InterruptedException
+     * @throws SAXException
+     */
+    @FXML
+    private void onVisibilityButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
+        if(visibilityButton.getStyleClass().contains("basicButtonGreen")){
+            visibilityButton.getStyleClass().remove("basicButtonGreen");
+            visibilityButton.getStyleClass().add("basicButton");
+            calculateVisibilityData(false);
+        }else{
+            visibilityButton.getStyleClass().removeAll();
+            visibilityButton.getStyleClass().add("basicButtonGreen");
+            calculateVisibilityData(true);
+        }
+    }
+
+    /**
+     * Calculates visibility data according to start and end date to a lineChart.
+     */
+    @FXML
+    private void calculateVisibilityData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
+        if(datePickerErrorCheck()){
+            chartErrorLabel.setText("");
+            // Second button press, time to clear data.
+            if(!show) {
+                lineChart.getData().removeAll(visibilitySeries);
+
+            } else { // Button has not been pressed
+                lineChart.getData().removeAll(visibilitySeries);
+
+                lineChart.setAnimated(false);
+                sessionData.createWeatherData(getStartDate(), getEndDate());
+                Thread.sleep(1000);
+
+                visibilitySeries = sessionData.createGraphSeries("VISIBILITY");
+
+                if(visibilitySeries.getData().size() != 0){
+                    visibilitySeries.setName("Visibility");
+                    lineChart.getData().add(visibilitySeries);
+                    xAxis.setLabel("Time");
+                    yAxis.setLabel("km");
+                }
+                else{
+                    chartErrorLabel.setText("No Data");
+                }
+            }
+        }
+    }
 }

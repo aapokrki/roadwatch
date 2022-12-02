@@ -95,7 +95,7 @@ public class WeatherController {
 
     // Mutual actions.
     /**
-     * Initializes all components.
+     * Initializes all components and data.
      * @param sessionData
      */
     public void initializeController(SessionData sessionData) {
@@ -280,7 +280,6 @@ public class WeatherController {
      * @return boolean true or false
      */
     private boolean avgMinMaxErrorCheck(boolean flag){
-        System.out.println(sessionData.wantedWeatherAVGMinMax);
         dateErrorLabel.setText("");
         if(savedDate == null){
             dateErrorLabel.setText("Choose a date");

@@ -6,6 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
+/**
+ * Class is used for the user to save their weather, road condition and maintenance preferences.
+ * The preferences saved in the UX are stored in sessionData.
+ */
 public class PreferencesController {
 
     // TODO: Aapo linkkaa karttaan tai sit poistan.
@@ -21,6 +25,10 @@ public class PreferencesController {
     @FXML
     private Label preferencesSavedLabel;
 
+    /**
+     * Initializes all data.
+     * @param sessionData
+     */
     public void initializeController(SessionData sessionData) {
         this.sessionData = sessionData;
 
@@ -38,6 +46,9 @@ public class PreferencesController {
         maintenanceTaskCombobox.setValue("ALL");
     }
 
+    /**
+     * Saves preferences to sessionData.
+     */
     public void setPreferences() {
         sessionData.weatherPreference = weatherComboBox.getValue();
         sessionData.conditionPreference = conditionTypeComboBox.getValue();
