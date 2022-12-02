@@ -155,7 +155,10 @@ public class WeatherController {
         }
     }
 
-    //TODO
+    /**
+     * Saves comboBox value in weatherPage to preference
+     * @param preference String of chosen preference
+     */
     @FXML
     private void preferenceChange(String preference) {
         if(preference.equalsIgnoreCase(Datatype.TEMPERATURE.toString())) {
@@ -168,7 +171,6 @@ public class WeatherController {
     // Temperature actions.
     /**
      * Saves date from datePicker.
-     * @throws ParseException
      */
     @FXML
     private void saveTempDate() {
@@ -316,10 +318,6 @@ public class WeatherController {
     /**
      * Counts the average temperature of a certain day in certain month and year.
      * at certain location
-     * @throws ParseException
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
      */
     @FXML
     private void onAvgBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
@@ -340,10 +338,6 @@ public class WeatherController {
     /**
      * Counts the min and max temperature of a certain day in certain month and year.
      * at certain location
-     * @throws ParseException
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
      */
     @FXML
     private void onMinMaxBtnClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
@@ -365,10 +359,6 @@ public class WeatherController {
 
     /**
      * Saves weatherData to map on button click to access later.
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws ParseException
-     * @throws SAXException
      */
     @FXML
     private void saveWeatherData() throws ParserConfigurationException, IOException, ParseException, SAXException {
@@ -386,11 +376,6 @@ public class WeatherController {
     // Chart actions.
     /**
      * Checks if wind button has been clicked already or not and changes its appearance and actions according to it.
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws ParseException
-     * @throws InterruptedException
-     * @throws SAXException
      */
     @FXML
     private void onWindButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
@@ -440,11 +425,6 @@ public class WeatherController {
 
     /**
      * Checks if visibility button has been clicked already or not and changes its appearance and actions according to it.
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws ParseException
-     * @throws InterruptedException
-     * @throws SAXException
      */
     @FXML
     private void onVisibilityButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
@@ -546,12 +526,6 @@ public class WeatherController {
 
     /**
      * Creates charts according to new data.
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws InterruptedException
-     * @throws ParseException
-     * @throws ParserConfigurationException
-     * @throws SAXException
      */
     @FXML
     private void onUpdateClick() throws IOException, URISyntaxException, InterruptedException, ParseException, ParserConfigurationException, SAXException {

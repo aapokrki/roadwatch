@@ -111,8 +111,6 @@ public class SessionData {
 
     /**
      * Creates a RoadData class to SessionData
-     * @throws IOException
-     * @throws URISyntaxException
      */
     public void createRoadData() throws IOException, URISyntaxException {
         roadData = roadAPILogic.getRoadData(coordinateConstraints.getAsString('/'));
@@ -125,8 +123,6 @@ public class SessionData {
      * @param taskId
      * @param startDate
      * @param endDate
-     * @throws IOException
-     * @throws URISyntaxException
      */
     public void createMaintenance(String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
 
@@ -145,10 +141,6 @@ public class SessionData {
      * @param startTime Date startTime of data creation
      * @param endTime Date endTime of data creation
      * @return null checker
-     * @throws ParseException
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
      */
     public boolean createAvgMinMax(Date startTime, Date endTime) throws ParseException, ParserConfigurationException, IOException, SAXException {
         this.wantedWeatherAVGMinMax.clear();
@@ -170,10 +162,6 @@ public class SessionData {
      * WeatherData creation to sessionData
      * @param startTime Date startTime of data creation
      * @param endTime Date endTime of data creation
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParseException
      */
     public void createWeatherData(Date startTime, Date endTime) throws ParserConfigurationException, IOException, SAXException, ParseException {
         this.wantedWeatherData.clear();
@@ -377,7 +365,7 @@ public class SessionData {
 
     /**
      * Returns all dataClassTypes as list To combinepage for saving data
-     * @return
+     * @return ArrayList<String> of wanted classtypes
      */
     public ArrayList<String> getDataClassTypesAsList(){
         ArrayList<String> classTypes = new ArrayList<>();
