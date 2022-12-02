@@ -27,9 +27,14 @@
                                 <Button fx:id="buttonKotka" maxWidth="Infinity" styleClass="map-button" text="Kotka" />
                                 <Button fx:id="buttonTampere" maxWidth="Infinity" styleClass="map-button" text="Tampere" />
                                 <Button fx:id="buttonLahti" maxWidth="Infinity" styleClass="map-button" text="Lahti" />
-                                <Button fx:id="buttonSmallRoad" maxWidth="Infinity" styleClass="map-button" text="SmaRoadSegment" />
-                                <Button fx:id="buttonMediumRoad" maxWidth="Infinity" styleClass="map-button" text="MedRoadSegment" />
-                                <Button fx:id="buttonLargeRoad" maxWidth="Infinity" styleClass="map-button" text="LargeRoadSegment" />
+                                <Button fx:id="buttonTurku" maxWidth="Infinity" styleClass="map-button" text="Turku" />
+                                <Button fx:id="buttonHyvinkaa" maxWidth="Infinity" styleClass="map-button" text="Hyvinkää" />
+                                <Button fx:id="buttonPorvoo" maxWidth="Infinity" styleClass="map-button" text="Porvoo" />
+                                <Button fx:id="buttonHelsinki" maxWidth="Infinity" styleClass="map-button" text="Helsinki" />
+                                <Button fx:id="buttonJyvaskyla" maxWidth="Infinity" styleClass="map-button" text="Jyväskylä" />
+                                <Button fx:id="buttonOulu" maxWidth="Infinity" styleClass="map-button" text="Oulu" />
+                                <Button fx:id="buttonRovaniemi" maxWidth="Infinity" styleClass="map-button" text="Rovaniemi" />
+
                             </children>
                         </VBox>
                     </content>
@@ -39,9 +44,16 @@
                         <VBox spacing="10.0">
                             <children>
                                 <CheckBox fx:id="checkKotkaMarker" maxWidth="Infinity" text="Kotka" />
-                                <CheckBox fx:id="checkHervantaMarker" maxWidth="Infinity" text="Hervanta" />
+                                <CheckBox fx:id="checkTampereMarker" maxWidth="Infinity" text="Tampere" />
                                 <CheckBox fx:id="checkLahtiMarker" maxWidth="Infinity" text="Lahti" />
-                                <CheckBox fx:id="checkClickMarker" maxWidth="Infinity" text="click location" />
+                                <CheckBox fx:id="checkTurkuMarker" maxWidth="Infinity" text="Turku" />
+                                <CheckBox fx:id="checkHyvinkaaMarker" maxWidth="Infinity"  text="Hyvinkää" />
+                                <CheckBox fx:id="checkPorvooMarker" maxWidth="Infinity"  text="Porvoo" />
+                                <CheckBox fx:id="checkHelsinkiMarker" maxWidth="Infinity"  text="Helsinki" />
+                                <CheckBox fx:id="checkJyvaskylaMarker" maxWidth="Infinity" text="Jyväskylä" />
+                                <CheckBox fx:id="checkOuluMarker" maxWidth="Infinity" text="Oulu" />
+                                <CheckBox fx:id="checkRovaniemiMarker" maxWidth="Infinity" text="Rovaniemi" />
+                                <CheckBox fx:id="checkClickMarker" maxWidth="Infinity" />
                             </children>
                         </VBox>
                     </content>
@@ -52,7 +64,7 @@
    <bottom>
       <HBox prefHeight="33.0" prefWidth="440.0" BorderPane.alignment="CENTER">
          <children>
-              <HBox fx:id="botControls" alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="310.0" spacing="5.0">
+              <HBox fx:id="botControls" alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="427.0" spacing="5.0">
 
                   <padding>
                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -60,15 +72,15 @@
                <children>
                      <Button fx:id="buttonAddPolygon" styleClass="map-button" text="Add" />
                      <Button fx:id="buttonClearPolygon" styleClass="map-button" text="Clear" />
-                     <CheckBox fx:id="checkDrawPolygon" maxWidth="Infinity" text="Draw" />
+                     <CheckBox fx:id="checkDrawPolygon" maxWidth="Infinity" styleClass="map-checkbox" text="Draw" />
                </children>
               </HBox>
-            <HBox fx:id="zoomControls" alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="128.0" spacing="5.0">
+            <HBox fx:id="zoomControls" alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="133.0" spacing="5.0">
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
                <children>
-                     <Button fx:id="buttonZoomOut" alignment="CENTER_RIGHT" text="Zoom out" styleClass="map-button" />
+                     <Button fx:id="buttonZoomOut" alignment="CENTER_RIGHT" styleClass="map-button" text="Zoom out" />
                </children>
             </HBox>
          </children>

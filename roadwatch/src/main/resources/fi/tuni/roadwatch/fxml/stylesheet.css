@@ -289,9 +289,12 @@
 }
 .check-box {
     -fx-font-family: "Ubuntu";
-    -fx-font-size: 20px;
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
+}
+
+.check-box > .box {
+    -fx-padding: 5px;
 }
 
 .homeIcon {
@@ -426,8 +429,8 @@
 }
 .map-button:focused{
     -fx-background-color: grey ;
-
 }
+
 
 .chart-content {
     -fx-padding: 30px;
