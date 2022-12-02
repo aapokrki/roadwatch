@@ -278,35 +278,30 @@ public class SessionData {
 
     /**
      * Writes data to either a JSON or XML file, based on dataClassType
-     * @param fileName the name of the file to write to
+     * @param fileName      the name of the file to write to
      * @param dataClassType the type of data to write
-     * @return true if write was successful, false otherwise
      */
-    public boolean writeDataToFile(String fileName, DataClassType dataClassType) {
-        try {
-            switch (dataClassType) {
-                case WEATHER:
-                    for(WeatherData wd : wantedWeatherData){
-                        savedDataLogic.writeWeatherData(fileName, wd);
-                    }
-                case WEATHERMINMAXAVG:
-                    for(WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax){
-                        savedDataLogic.writeWeatherDataMinMaxAvg(fileName, wd);
-                    }
-                case MAINTENANCE:
-                    for (Maintenance maintenance : this.maintenancesInTimeLine) {
-                        savedDataLogic.writeMaintenance(fileName + helperFunctions.dateAsDayString(maintenance.date), maintenance);
-                    }
-                case ROAD:
-                    savedDataLogic.writeRoadData(fileName, this.roadData);
-                case TRAFFIC:
-                    savedDataLogic.writeTrafficMessage(fileName, this.trafficMessage);
+    public void writeDataToFile(String fileName, DataClassType dataClassType) throws IOException {
+
+        switch (dataClassType) {
+            case WEATHER:
+                for (WeatherData wd : wantedWeatherData) {
+                    savedDataLogic.writeWeatherData(fileName, wd);
+                }
+            case WEATHERMINMAXAVG:
+                for (WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax) {
+                    savedDataLogic.writeWeatherDataMinMaxAvg(fileName, wd);
+                }
+            case MAINTENANCE:
+                for (Maintenance maintenance : this.maintenancesInTimeLine) {
+                    savedDataLogic.writeMaintenance(fileName + helperFunctions.dateAsDayString(maintenance.date), maintenance);
+                }
+            case ROAD:
+                savedDataLogic.writeRoadData(fileName, this.roadData);
+            case TRAFFIC:
+                savedDataLogic.writeTrafficMessage(fileName, this.trafficMessage);
 
         }
-            } catch (IOException e) {
-                    return false;
-                }
-        return true;
     }
 
     /**

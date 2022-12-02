@@ -165,7 +165,7 @@ public class HelperFunctions {
      * @return String of the date in the format yyyy-MM-dd
      */
     public String dateAsDayString(Date date){
-        return new SimpleDateFormat("EEEE").format(date);
+        return new SimpleDateFormat("ddMMyyyy").format(date);
     }
 
     /**
