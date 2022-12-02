@@ -434,34 +434,30 @@ public class CombineController {
 
     public void onSaveButtonClick() throws IOException {
         String dataToSave = dataTypeCombobox.getValue();
-        if(dataToSave.equals("WEATHER")){
-            //sessionData.savedDataLogic.writeWeatherData("weatherdatafile", sessionData.wantedWeatherData);
-        }
-        if(dataToSave.equals("WEATHERMINMAXAVG")){
-            //sessionData.savedDataLogic.writeWeatherDataMinMaxAvg("weatherAvgMinMaxFile", sessionData.wantedWeatherAVGMinMax);
-        }
-        if(dataToSave.equals("ROAD")){
-            //sessionData.savedDataLogic.writeRoadData("roadFile", sessionData.roadData);
-        }
-        if(dataToSave.equals("TRAFFIC")){
-            //sessionData.savedDataLogic.writeTrafficMessage("trafficFile", sessionData.trafficMessage);
-        }
-        if(dataToSave.equals("MAINTENANCE")){
-            //sessionData.savedDataLogic.writeMaintenance("maintenanceFile",sessionData.maintenancesInTimeLine);
-        }
-
+        sessionData.writeDataToFile(dataTypeCombobox.getValue(), SessionData.DataClassType.valueOf(dataTypeCombobox.getValue()));
     }
 
-    public void onLoadButtonClick() {
+    public void onLoadButtonClick() throws URISyntaxException, IOException {
         Stage fileChooserStage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.json", ".xml"));
+                new FileChooser.ExtensionFilter("All Files", "*.json", ".xml"));
 
-        // Matias tää sitte selectedfile readfunctioiden parametrics
         File selectedFile = fileChooser.showOpenDialog(fileChooserStage);
-        System.out.println(selectedFile);
+        if (selectedFile != null) {
+            SessionData.DataClassType temp = SessionData.DataClassType.valueOf(dataTypeCombobox.getValue());
+            sessionData.readDataFromFile(selectedFile, temp);
+
+            maintenanceChart.setData(sessionData.createMaintenanceChart());
+
+            if(maintenanceChart.getData().size() == 0){
+                maintenanceChart.setTitle("NO DATA");
+            }else{
+                maintenanceChart.setTitle(taskType + " TASKS AVERAGE");
+            }
+        }
+
 
     }
 }
