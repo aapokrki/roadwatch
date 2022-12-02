@@ -72,6 +72,7 @@ public class WeatherController {
     // Chart components
     private XYChart.Series<String, Double> visibilitySeries;
     private XYChart.Series<String, Double> windSeries;
+    private XYChart.Series<String, Double> temperatureSeries;
     @FXML
     private AnchorPane chartPane;
     @FXML
@@ -476,6 +477,40 @@ public class WeatherController {
                     lineChart.getData().add(visibilitySeries);
                     xAxis.setLabel("Time");
                     yAxis.setLabel("km");
+                }
+                else{
+                    chartErrorLabel.setText("No Data");
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Calculates temperature data according to start and end date to a lineChart.
+     */
+    @FXML
+    private void calculateTemperatureData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
+        if(datePickerErrorCheck()){
+            chartErrorLabel.setText("");
+            // Button is already pressed, time to clear data.
+            if(!show) {
+                lineChart.getData().removeAll(temperatureSeries);
+
+            } else { // Button has not been pressed
+                lineChart.getData().removeAll(temperatureSeries);
+
+                lineChart.setAnimated(false);
+                sessionData.createWeatherData(getChartStartDate(), getChartEndDate());
+                Thread.sleep(1000);
+
+                temperatureSeries = sessionData.createGraphSeries("TEMPERATURE");
+
+                if(temperatureSeries.getData().size() != 0){
+                    temperatureSeries.setName("Temperature");
+                    lineChart.getData().add(temperatureSeries);
+                    xAxis.setLabel("Time");
+                    yAxis.setLabel("°");
                 }
                 else{
                     chartErrorLabel.setText("No Data");
