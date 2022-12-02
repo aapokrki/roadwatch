@@ -2,11 +2,8 @@ package fi.tuni.roadwatch;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -14,22 +11,16 @@ import java.util.Map;
 public class SavedDataLogic {
 
     private static final ObjectMapper jsonMapper = new ObjectMapper();
-    private static final XmlMapper xmlMapper = new XmlMapper();
 
 
     /**
-    * Constructor for SavedDataLogic, used for setting up the mappers.
+    * Constructor for SavedDataLogic, used for setting up jsonMapper
      */
     public SavedDataLogic() {
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         jsonMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
-        xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        xmlMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        xmlMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
 
@@ -38,7 +29,7 @@ public class SavedDataLogic {
      * @param weatherData WeatherData object
      */
     public void writeWeatherData(String fileName, WeatherData weatherData) throws IOException {
-        xmlMapper.writeValue(new File(fileName + ".xml"), weatherData);
+        jsonMapper.writeValue(new File(fileName + ".xml"), weatherData);
     }
 
     /**
@@ -46,7 +37,7 @@ public class SavedDataLogic {
      * @param weatherDataMinMaxAvg WeatherDataMinMaxAvg object
      */
     public void writeWeatherDataMinMaxAvg(String fileName, WeatherDataMinMaxAvg weatherDataMinMaxAvg) throws IOException {
-        xmlMapper.writeValue(new File(fileName + ".xml"), weatherDataMinMaxAvg);
+        jsonMapper.writeValue(new File(fileName + ".xml"), weatherDataMinMaxAvg);
     }
 
     /**
@@ -75,44 +66,44 @@ public class SavedDataLogic {
     }
 
     /**
-     * @param fileName name of the file to be read from
+     * @param file name of the file to be read from
      * @return WeatherData object
      */
-    public WeatherData readWeatherData(String fileName) throws IOException {
-        return xmlMapper.readValue(new File(fileName + ".json"), WeatherData.class);
+    public WeatherData readWeatherData(File file) throws IOException {
+        return jsonMapper.readValue(new File(file + ".json"), WeatherData.class);
     }
 
     /**
-     * @param fileName name of the file to be read from
+     * @param file name of the file to be read from
      * @return WeatherDataMinMaxAvg object
      */
-    public WeatherDataMinMaxAvg readWeatherDataMinMaxAvg(String fileName) throws IOException {
-        return xmlMapper.readValue(new File(fileName + ".json"), WeatherDataMinMaxAvg.class);
+    public WeatherDataMinMaxAvg readWeatherDataMinMaxAvg(File file) throws IOException {
+        return jsonMapper.readValue(new File(file + ".json"), WeatherDataMinMaxAvg.class);
     }
 
     /**
-     * @param fileName name of the file to be read from
+     * @param file name of the file to be read from
      * @return Maintenance object
      */
-    public RoadData readRoadData(String fileName) throws IOException {
-        return jsonMapper.readValue(new File(fileName + ".json"), RoadData.class);
+    public RoadData readRoadData(File file) throws IOException {
+        return jsonMapper.readValue(file, RoadData.class);
     }
 
     /**
-     * @param fileName name of the file to be read from
+     * @param file name of the file to be read from
      * @return TrafficMessage object
      */
-    public TrafficMessage readTrafficMessage(String fileName) throws IOException {
-        return jsonMapper.readValue(new File(fileName + ".json"), TrafficMessage.class);
+    public TrafficMessage readTrafficMessage(File file) throws IOException {
+        return jsonMapper.readValue(file, TrafficMessage.class);
     }
 
     /**
-     * @param fileName name of the file to be read from
+     * @param file name of the file to be read from
      * @return Maintenance object
      */
     // TODO: Check reading of multiple days
-    public Maintenance readMaintenance(String fileName) throws IOException {
-        return jsonMapper.readValue(new File(fileName + ".json"), Maintenance.class);
+    public Maintenance readMaintenance(File file) throws IOException {
+        return jsonMapper.readValue(file, Maintenance.class);
     }
 
     public void writePreferences(String fileName, Map<String,String> preferences) throws IOException {

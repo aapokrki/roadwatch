@@ -8,6 +8,7 @@ import javafx.scene.chart.XYChart;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
 
 import java.net.URISyntaxException;
@@ -47,7 +48,7 @@ public class SessionData {
 
     public SavedDataLogic savedDataLogic;
 
-    private enum DataClassType {
+    public enum DataClassType {
         WEATHER, WEATHERMINMAXAVG, ROAD, TRAFFIC, MAINTENANCE
     }
 
@@ -310,31 +311,23 @@ public class SessionData {
 
     /**
      * Reads data from either a JSON or XML file, based on dataClassType
-     * @param fileName the name of the file to read from
+     * @param file the name of the file to read from
      * @param dataClassType the type of data to read
-     * @return true if read was successful, false otherwise
      */
-    public boolean readDataFromFile(String fileName, DataClassType dataClassType) throws URISyntaxException {
-
-        try {
-            switch (dataClassType) {
-                case WEATHER:
-                    wantedWeatherData.add(savedDataLogic.readWeatherData(fileName));
-                case WEATHERMINMAXAVG:
-                    wantedWeatherAVGMinMax.add(savedDataLogic.readWeatherDataMinMaxAvg(fileName));
-                case ROAD:
-                    roadData = savedDataLogic.readRoadData(fileName);
-                case TRAFFIC:
-                    trafficMessage = savedDataLogic.readTrafficMessage(fileName);
-                    roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
-                case MAINTENANCE:
-                    maintenancesInTimeLine.add(savedDataLogic.readMaintenance(fileName));
-
-                }
-            } catch (IOException e) {
-                return false;
-                }
-        return true;
+    public void readDataFromFile(File file, DataClassType dataClassType) throws URISyntaxException, IOException {
+        switch (dataClassType) {
+            case WEATHER:
+                wantedWeatherData.add(savedDataLogic.readWeatherData(file));
+            case WEATHERMINMAXAVG:
+                wantedWeatherAVGMinMax.add(savedDataLogic.readWeatherDataMinMaxAvg(file));
+            case ROAD:
+                roadData = savedDataLogic.readRoadData(file);
+            case TRAFFIC:
+                trafficMessage = savedDataLogic.readTrafficMessage(file);
+                roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
+            case MAINTENANCE:
+                maintenancesInTimeLine.add(savedDataLogic.readMaintenance(file));
+            }
     }
 
     /**
