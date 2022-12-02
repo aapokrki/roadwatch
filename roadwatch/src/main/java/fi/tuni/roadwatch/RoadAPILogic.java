@@ -101,6 +101,12 @@ public class RoadAPILogic {
         return RoadAPImapper.treeToValue(roadMaintenanceNode, Maintenance.class);
     }
 
+    /**
+     * Retrieves all maintenance task types
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     */
     public ArrayList<String> getTaskTypes() throws URISyntaxException, IOException {
         ArrayList<String> taskTypes = new ArrayList<>();
         URI uriTaskTypes = new URI("https://tie.digitraffic.fi/api/maintenance/v1/tracking/tasks");

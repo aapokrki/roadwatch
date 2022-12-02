@@ -438,6 +438,14 @@ public class CombineController {
             }
         }
     }
+    /**
+     * Checks if temperature button has been clicked already or not and changes its appearance and actions according to it.
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws ParseException
+     * @throws InterruptedException
+     * @throws SAXException
+     */
     @FXML
     private void onTemperatureButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
         if(temperatureButton.getStyleClass().contains("basicButtonGreen")){
@@ -483,11 +491,21 @@ public class CombineController {
             }
         }
     }
+
+    /**
+     * Saves data to json/xml
+     * @throws IOException
+     */
     public void onSaveButtonClick() throws IOException {
         String dataToSave = dataTypeCombobox.getValue();
         sessionData.writeDataToFile(dataTypeCombobox.getValue(), SessionData.DataClassType.valueOf(dataTypeCombobox.getValue()));
     }
 
+    /**
+     * Loads Data from json/xml
+     * @throws URISyntaxException
+     * @throws IOException
+     */
     public void onLoadButtonClick() throws URISyntaxException, IOException {
         Stage fileChooserStage = new Stage();
         FileChooser fileChooser = new FileChooser();
@@ -508,7 +526,5 @@ public class CombineController {
                 maintenanceChart.setTitle(taskType + " TASKS AVERAGE");
             }
         }
-
-
     }
 }
