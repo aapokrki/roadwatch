@@ -22,10 +22,12 @@ public class SessionData {
 
     public List<Coordinate> polyCoordinates = new ArrayList<>();
     public Date dateAndTime = Calendar.getInstance().getTime();
+    public ArrayList<String> presetLocations;
 
     public String weatherPreference = "TEMPERATURE";
     public String conditionPreference = "OVERALL";
     public String maintenancePreference = "ALL";
+    public String locationPreference = "Tampere";
 
     public ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
@@ -59,7 +61,6 @@ public class SessionData {
         savedDataLogic = new SavedDataLogic();
         helperFunctions = new HelperFunctions();
         helperFunctions.createTaskTypes(roadAPILogic, this);
-
 
     }
 

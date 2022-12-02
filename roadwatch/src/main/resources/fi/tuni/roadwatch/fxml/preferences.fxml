@@ -7,8 +7,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="542.0" prefWidth="1250.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.PreferencesController">
+<AnchorPane prefHeight="542.0" prefWidth="1250.0" styleClass="background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.tuni.roadwatch.PreferencesController">
    <children>
+      <ComboBox fx:id="locationCombobox" layoutX="284.0" layoutY="50.0" maxWidth="150.0" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box" />
       <Label layoutX="58.0" layoutY="50.0" styleClass="smallHeading" text="LOCATION" />
       <Label layoutX="58.0" layoutY="140.0" styleClass="smallHeading" text="WEATHER DATA" />
       <ComboBox fx:id="weatherComboBox" layoutX="284.0" layoutY="140.0" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">

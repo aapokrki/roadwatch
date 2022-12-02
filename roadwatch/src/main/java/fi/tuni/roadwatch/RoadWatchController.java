@@ -80,9 +80,9 @@ public class RoadWatchController {
         // init map controls and set sessiondata
         mapController.setSessionData(sessionData);
         mapController.initMapAndControls(projection);
+        sessionData.presetLocations = mapController.getLocationsAsList();
 
-        Pane mapView = (Pane) rootNode;
-
+                Pane mapView = (Pane) rootNode;
         mapPane.setCenter(mapView);
     }
 

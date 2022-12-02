@@ -1,49 +1,22 @@
-/*
- Copyright 2015-2020 Peter-Josef Meisch (pj.meisch@sothawo.com)
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
 package fi.tuni.roadwatch;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import javafx.animation.Transition;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-/**
- * Controller for the FXML defined code.
- *
- * @author P.J. Meisch (pj.meisch@sothawo.com).
- */
 public class MapController {
-
-
 
     private SessionData sessionData;
 
@@ -60,7 +33,6 @@ public class MapController {
                     new Coordinate(61.523, 23.903),
                     new Coordinate(61.42, 23.903),
                     new Coordinate(61.42, 23.645))
-
     );
     private static final ArrayList<Coordinate> coordLahti = new ArrayList<Coordinate>(
             Arrays.asList( new Coordinate(60.922, 25.57),
@@ -117,7 +89,6 @@ public class MapController {
                     new Coordinate(67.1794991, 24.73658))
     );
 
-
     /** the markers. */
     private final Marker markerKotka;
     private final Marker markerTampere;
@@ -135,62 +106,48 @@ public class MapController {
     @FXML
     private MapView mapView;
 
-    /** the box containing the top controls, must be enabled when mapView is initialized */
-
     /** Accordion for all the different options */
     @FXML
     private Accordion leftControls;
-
     @FXML
     private HBox botControls;
     @FXML
     private HBox zoomControls;
-    /** section containing the location button */
     @FXML
     private TitledPane optionsLocations;
+    @FXML
+    private VBox optionsLocationsVbox;
 
+
+    // Locationbuttons
     @FXML
     private Button buttonKotka;
-
     @FXML
     private Button buttonTampere;
-
     @FXML
     private Button buttonLahti;
-
     @FXML
     private Button buttonTurku;
-
     @FXML
     private Button buttonHyvinkaa;
-
     @FXML
     private Button buttonPorvoo;
-
     @FXML
     private Button buttonHelsinki;
-
     @FXML
     public Button buttonJyvaskyla;
-
     @FXML
     public Button buttonOulu;
-
     @FXML
     public Button buttonRovaniemi;
 
-    /** Check button for harbour marker */
+    // Checkboxes for markers
     @FXML
     private CheckBox checkKotkaMarker;
-
-    /** Check button for castle marker */
     @FXML
     private CheckBox checkTampereMarker;
-
-    /** Check button for Lahti marker */
     @FXML
     private CheckBox checkLahtiMarker;
-
     @FXML
     public CheckBox checkTurkuMarker;
     @FXML
@@ -223,6 +180,11 @@ public class MapController {
     @FXML
     public Button buttonClearPolygon;
 
+    /**
+     * Calculates the middle of a polygon
+     * @param coordinates
+     * @return
+     */
     public Coordinate getPolygonMiddle(ArrayList<Coordinate> coordinates){
         Double lat  = coordinates.stream().map(Coordinate::getLatitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
         Double lon  = coordinates.stream().map(Coordinate::getLongitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
@@ -264,7 +226,6 @@ public class MapController {
         markerRovaniemi = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
                 .setPosition(getPolygonMiddle(coordRovaniemi))
                 .setVisible(false);
-
 
         // no position for click marker yet
         markerClick = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-click-icon.png")),-5,-5).setVisible(false);
@@ -324,7 +285,6 @@ public class MapController {
             }
         });
 
-        // Set map type
         mapView.setMapType(MapType.OSM);
         setupEventHandlers();
 
@@ -370,6 +330,9 @@ public class MapController {
 
     }
 
+    /**
+     * sets the focus on given location, selects it on the Map
+     */
     private void setLocationTo(ArrayList<Coordinate> location){
         buttonClearPolygon.fire(); //Clear any previous polygons from map
 
@@ -425,6 +388,11 @@ public class MapController {
 
     }
 
+    /**
+     * Animates the clickmarker movement between coordinates
+     * @param oldPosition
+     * @param newPosition
+     */
     private void animateClickMarker(Coordinate oldPosition, Coordinate newPosition) {
         // animate the marker to the new position
         final Transition transition = new Transition() {
@@ -513,34 +481,25 @@ public class MapController {
         // now enable the controls
         setControlsDisable(false);
 
-        //Initialize to Tampere
-        buttonTampere.fire();
-    }
-
-    /**
-     * load a coordinateLine from the given uri in lat;lon csv format
-     *
-     * @param url
-     *     url where to load from
-     * @return optional CoordinateLine object
-     * @throws NullPointerException
-     *     if uri is null
-     */
-    private Optional<CoordinateLine> loadCoordinateLine(URL url) {
-        try (
-            Stream<String> lines = new BufferedReader(
-                new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).lines()
-        ) {
-            return Optional.of(new CoordinateLine(
-                lines.map(line -> line.split(";")).filter(array -> array.length == 2)
-                    .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
-                    .collect(Collectors.toList())));
-        } catch (IOException | NumberFormatException e) {
+        //Initialize to preference
+        for(Node location : optionsLocationsVbox.getChildren()){
+            final Button button = (Button) location;
+            if(Objects.equals(button.getText(), sessionData.locationPreference)){
+                button.fire();
+            }
         }
-        return Optional.empty();
     }
 
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
+    }
+
+    public ArrayList<String> getLocationsAsList(){
+        ArrayList<String> locations = new ArrayList<>();
+        for(Node location : optionsLocationsVbox.getChildren()){
+            final Button button = (Button) location;
+            locations.add(button.getText());
+        }
+        return locations;
     }
 }

@@ -16,6 +16,8 @@ public class PreferencesController {
     @FXML
     private Label locationLabel;
     @FXML
+    private ComboBox<String> locationCombobox;
+    @FXML
     private ComboBox<String> weatherComboBox;
     @FXML
     private ComboBox<String> conditionTypeComboBox;
@@ -31,10 +33,15 @@ public class PreferencesController {
      */
     public void initializeController(SessionData sessionData) {
         this.sessionData = sessionData;
+        ObservableList<String> locationsObservable = FXCollections.observableArrayList(sessionData.presetLocations);
+        locationCombobox.setItems(locationsObservable);
 
         ObservableList<String> taskTypesObservable= FXCollections.observableArrayList(sessionData.taskTypes);
         taskTypesObservable.add(0,"ALL");
         maintenanceTaskCombobox.setItems(taskTypesObservable);
+
+        locationCombobox.getSelectionModel().selectFirst();
+        weatherComboBox.setValue("Tampere");
 
         weatherComboBox.getSelectionModel().selectFirst();
         weatherComboBox.setValue("TEMPERATURE");
@@ -50,6 +57,7 @@ public class PreferencesController {
      * Saves preferences to sessionData.
      */
     public void setPreferences() {
+        sessionData.locationPreference = locationCombobox.getValue();
         sessionData.weatherPreference = weatherComboBox.getValue();
         sessionData.conditionPreference = conditionTypeComboBox.getValue();
         sessionData.maintenancePreference = maintenanceTaskCombobox.getValue();

@@ -22,10 +22,10 @@
             <panes>
                 <TitledPane fx:id="optionsLocations" animated="true" text="locations">
                     <content>
-                        <VBox spacing="4">
+                        <VBox fx:id="optionsLocationsVbox" spacing="4">
                             <children>
-                                <Button fx:id="buttonKotka" maxWidth="Infinity" styleClass="map-button" text="Kotka" />
                                 <Button fx:id="buttonTampere" maxWidth="Infinity" styleClass="map-button" text="Tampere" />
+                                <Button fx:id="buttonKotka" maxWidth="Infinity" styleClass="map-button" text="Kotka" />
                                 <Button fx:id="buttonLahti" maxWidth="Infinity" styleClass="map-button" text="Lahti" />
                                 <Button fx:id="buttonTurku" maxWidth="Infinity" styleClass="map-button" text="Turku" />
                                 <Button fx:id="buttonHyvinkaa" maxWidth="Infinity" styleClass="map-button" text="Hyvinkää" />
