@@ -6,7 +6,9 @@ import javafx.scene.chart.PieChart;
 
 import java.util.*;
 
-// Data class for road condition data from Digitraffic
+/**
+ * Data class for road condition data from Digitraffic
+ * */
 public class RoadData {
 
     //CUSTOM
@@ -35,7 +37,7 @@ public class RoadData {
 
     /**
      * Counts the amount of different condition statuses in the area to their corresponding maps
-     * @param time
+     * @param time input timeslot (2,4,6 or 12)
      */
     public void setForecastConditions(int time){
 

@@ -4,7 +4,6 @@ import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import javafx.animation.Transition;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -16,6 +15,9 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import java.util.*;
 
+/**
+ * Contains the controls of the Map
+ */
 public class MapController {
 
     private SessionData sessionData;
@@ -135,13 +137,14 @@ public class MapController {
     @FXML
     private Button buttonHelsinki;
     @FXML
-    public Button buttonJyvaskyla;
+    private Button buttonJyvaskyla;
     @FXML
-    public Button buttonOulu;
+    private Button buttonOulu;
     @FXML
-    public Button buttonRovaniemi;
+    private Button buttonRovaniemi;
 
-    // Checkboxes for markers
+    /** Checkboxes for markers */
+
     @FXML
     private CheckBox checkKotkaMarker;
     @FXML
@@ -149,19 +152,19 @@ public class MapController {
     @FXML
     private CheckBox checkLahtiMarker;
     @FXML
-    public CheckBox checkTurkuMarker;
+    private CheckBox checkTurkuMarker;
     @FXML
-    public CheckBox checkHyvinkaaMarker;
+    private CheckBox checkHyvinkaaMarker;
     @FXML
-    public CheckBox checkPorvooMarker;
+    private CheckBox checkPorvooMarker;
     @FXML
-    public CheckBox checkHelsinkiMarker;
+    private CheckBox checkHelsinkiMarker;
     @FXML
-    public CheckBox checkJyvaskylaMarker;
+    private CheckBox checkJyvaskylaMarker;
     @FXML
-    public CheckBox checkOuluMarker;
+    private CheckBox checkOuluMarker;
     @FXML
-    public CheckBox checkRovaniemiMarker;
+    private CheckBox checkRovaniemiMarker;
 
     /** Check button for click marker */
     @FXML
@@ -169,10 +172,9 @@ public class MapController {
 
     /** Coordinateline for polygon drawing. */
     private CoordinateLine polygonLine;
-    /** Check Button for polygon drawing mode. */
+
     @FXML
     private CheckBox checkDrawPolygon;
-
     @FXML
     private Button buttonZoomOut;
     @FXML
@@ -185,8 +187,8 @@ public class MapController {
 
     /**
      * Calculates the middle of a polygon
-     * @param coordinates
-     * @return
+     * @param coordinates polygon to extract the middlepoint of
+     * @return coordinate in the middle
      */
     public Coordinate getPolygonMiddle(ArrayList<Coordinate> coordinates){
         Double lat  = coordinates.stream().map(Coordinate::getLatitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
@@ -197,7 +199,7 @@ public class MapController {
 
     public MapController(){
 
-        // a couple of markers using the provided ones
+        // Sets markers for preset locations
         markerKotka = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
                 .setPosition(getPolygonMiddle(coordKotka))
                 .setVisible(true);
@@ -273,6 +275,7 @@ public class MapController {
                 mapInfoLabel.setText("Area added!");
             }
         });
+
         //wire the clear button
         buttonClearPolygon.setOnAction(event -> {
             if(polygonLine != null){
@@ -395,8 +398,8 @@ public class MapController {
 
     /**
      * Animates the clickmarker movement between coordinates
-     * @param oldPosition
-     * @param newPosition
+     * @param oldPosition old coordinates
+     * @param newPosition new coordinates to move marker to
      */
     private void animateClickMarker(Coordinate oldPosition, Coordinate newPosition) {
         // animate the marker to the new position
@@ -448,8 +451,7 @@ public class MapController {
     /**
      * enables / disables the different controls
      *
-     * @param flag
-     *     if true the controls are disabled
+     * @param flag if true the controls are disabled
      */
     private void setControlsDisable(boolean flag) {
         leftControls.setDisable(flag);
@@ -496,7 +498,7 @@ public class MapController {
 
     /**
      * Set sessionData
-     * @param sessionData
+     * @param sessionData Sessiondata that holds relevant info
      */
     public void setSessionData(SessionData sessionData) {
         this.sessionData = sessionData;
@@ -504,7 +506,7 @@ public class MapController {
 
     /**
      * Gets all presetLocations as list
-     * @return
+     * @return Arraylist of preset location names as strings
      */
     public ArrayList<String> getLocationsAsList(){
         ArrayList<String> locations = new ArrayList<>();
