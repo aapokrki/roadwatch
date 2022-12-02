@@ -292,13 +292,12 @@ public class SessionData {
      * @param fileName      the name of the file to write to
      * @param dataClassType the type of data to write
      */
-    public void writeDataToFile(String fileName, DataClassType dataClassType) throws IOException {
+    public void writeDataToFile(String fileName, DataClassType dataClassType) throws IOException, NullPointerException {
 
         switch (dataClassType) {
             case WEATHER:
-                for (WeatherData wd : wantedWeatherData) {
-                    savedDataLogic.writeWeatherData(fileName, wd);
-                }
+                    savedDataLogic.writeWeatherData(fileName, wantedWeatherData);
+
             case WEATHERMINMAXAVG:
                 for (WeatherDataMinMaxAvg wd : wantedWeatherAVGMinMax) {
                     savedDataLogic.writeWeatherDataMinMaxAvg(fileName, wd);
@@ -323,7 +322,7 @@ public class SessionData {
     public void readDataFromFile(File file, DataClassType dataClassType) throws URISyntaxException, IOException {
         switch (dataClassType) {
             case WEATHER:
-                wantedWeatherData.add(savedDataLogic.readWeatherData(file));
+                wantedWeatherData.addAll(savedDataLogic.readWeatherData(file));
             case WEATHERMINMAXAVG:
                 wantedWeatherAVGMinMax.add(savedDataLogic.readWeatherDataMinMaxAvg(file));
             case ROAD:

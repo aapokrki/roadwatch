@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class SavedDataLogic {
@@ -28,8 +29,8 @@ public class SavedDataLogic {
      * @param fileName name of the file to be written to
      * @param weatherData WeatherData object
      */
-    public void writeWeatherData(String fileName, WeatherData weatherData) throws IOException {
-        jsonMapper.writeValue(new File(fileName + ".xml"), weatherData);
+    public void writeWeatherData(String fileName, ArrayList<WeatherData> weatherData) throws IOException {
+        jsonMapper.writeValue(new File(fileName), weatherData);
     }
 
     /**
@@ -37,14 +38,13 @@ public class SavedDataLogic {
      * @param weatherDataMinMaxAvg WeatherDataMinMaxAvg object
      */
     public void writeWeatherDataMinMaxAvg(String fileName, WeatherDataMinMaxAvg weatherDataMinMaxAvg) throws IOException {
-        jsonMapper.writeValue(new File(fileName + ".xml"), weatherDataMinMaxAvg);
+        jsonMapper.writeValue(new File(fileName), weatherDataMinMaxAvg);
     }
 
     /**
      * @param fileName name of the file to be written to
      * @param maintenance Maintenance object
      */
-    // TODO: Check writing of multiple days
     public void writeMaintenance(String fileName, Maintenance maintenance) throws IOException {
         jsonMapper.writeValue(new File(fileName + ".json"), maintenance);
     }
@@ -67,39 +67,60 @@ public class SavedDataLogic {
 
     /**
      * @param file name of the file to be read from
-     * @return WeatherData object
+     * @return WeatherData object     * @return WeatherData object
      */
-    public WeatherData readWeatherData(File file) throws IOException {
-        return jsonMapper.readValue(new File(file + ".json"), WeatherData.class);
+    public ArrayList<WeatherData> readWeatherData(File file) throws IOException {
+        try{
+            return jsonMapper.readValue(file, jsonMapper.getTypeFactory().constructCollectionType(ArrayList.class, WeatherData.class));
+        } catch (IOException e) {
+            e.printStackTrace();;
+            return null;
+        }
     }
 
     /**
      * @param file name of the file to be read from
-     * @return WeatherDataMinMaxAvg object
+     * @return WeatherDataMinMaxAvg object, null if file read fails
      */
     public WeatherDataMinMaxAvg readWeatherDataMinMaxAvg(File file) throws IOException {
-        return jsonMapper.readValue(new File(file + ".json"), WeatherDataMinMaxAvg.class);
+
+        try{
+            return jsonMapper.readValue(file, WeatherDataMinMaxAvg.class);
+        } catch (IOException e) {
+            e.printStackTrace();;
+            return null;
+        }
     }
 
     /**
      * @param file name of the file to be read from
-     * @return Maintenance object
+     * @return Maintenance object, null if file read fails
      */
     public RoadData readRoadData(File file) throws IOException {
-        return jsonMapper.readValue(file, RoadData.class);
+        try{
+            return jsonMapper.readValue(file, RoadData.class);
+        } catch (IOException e) {
+            e.printStackTrace();;
+            return null;
+        }
     }
 
     /**
      * @param file name of the file to be read from
-     * @return TrafficMessage object
+     * @return TrafficMessage object, null if file read fails
      */
     public TrafficMessage readTrafficMessage(File file) throws IOException {
-        return jsonMapper.readValue(file, TrafficMessage.class);
+        try{
+            return jsonMapper.readValue(file, TrafficMessage.class);
+        } catch (IOException e) {
+            e.printStackTrace();;
+            return null;
+        }
     }
 
     /**
      * @param file name of the file to be read from
-     * @return Maintenance object
+     * @return Maintenance object, null if file read fails
      */
 
     public Maintenance readMaintenance(File file) throws IOException {
@@ -122,7 +143,6 @@ public class SavedDataLogic {
         Preferences preferences = jsonMapper.readValue(new File(fileName), Preferences.class);
         return preferences.getPreferencesAsMap();
     }
-
 
     /**
      * Data class for reading/writing of preferences to/from json
