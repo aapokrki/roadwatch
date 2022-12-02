@@ -178,8 +178,10 @@ public class HelperFunctions {
     /**
      * Constructor for maintenance task types in SessionData
      */
-    public void createTaskTypes(RoadAPILogic roadAPILogic) throws URISyntaxException, IOException {
-        sessionData.taskTypes = roadAPILogic.getTaskTypes();
+    public void createTaskTypes(RoadAPILogic roadAPILogic, SessionData sessionData) throws URISyntaxException, IOException {
+        if (sessionData != null) {
+            sessionData.taskTypes = roadAPILogic.getTaskTypes();
+        }
     }
 
     /**
@@ -187,9 +189,6 @@ public class HelperFunctions {
      * @return boolean true or false
      */
     public boolean coordinateCheck(){
-        if(sessionData.coordinateConstraints == null){
-            return false;
-        }
-        return true;
+        return sessionData.coordinateConstraints == null;
     }
 }

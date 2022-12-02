@@ -326,7 +326,7 @@ public class WeatherController {
     private void onNowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         //changeTimeColors(todayLabel, tomorrowLabel, dATomorrowLabel);
         nowLabel.setVisible(true);
-        if(!sessionData.helperFunctions.coordinateCheck()){
+        if(sessionData.helperFunctions.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else{
@@ -351,7 +351,7 @@ public class WeatherController {
     private void onTomorrowClick() throws ParseException, ParserConfigurationException, IOException, SAXException {
         //changeTimeColors(tomorrowLabel, todayLabel, dATomorrowLabel);
         nowLabel.setVisible(false);
-        if(!sessionData.helperFunctions.coordinateCheck()){
+        if(sessionData.helperFunctions.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
@@ -373,7 +373,7 @@ public class WeatherController {
     private void onDATomorrowClick() throws ParserConfigurationException, IOException, ParseException, SAXException {
         //changeTimeColors(dATomorrowLabel, todayLabel, tomorrowLabel);
         nowLabel.setVisible(false);
-        if(!sessionData.helperFunctions.coordinateCheck()){
+        if(sessionData.helperFunctions.coordinateCheck()){
             tempErrorLabel.setText("Choose coordinates, remember to add on map!");
         }
         else {
@@ -414,7 +414,7 @@ public class WeatherController {
             chartErrorLabel.setText("Date picker can't be null");
             return false;
         }
-        else if(!sessionData.helperFunctions.coordinateCheck()) {
+        else if(sessionData.helperFunctions.coordinateCheck()) {
             dateErrorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
@@ -453,7 +453,7 @@ public class WeatherController {
             dateErrorLabel.setText("Choose a date");
             return false;
         }
-        else if(!sessionData.helperFunctions.coordinateCheck()) {
+        else if(sessionData.helperFunctions.coordinateCheck()) {
             dateErrorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }

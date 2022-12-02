@@ -2,7 +2,6 @@ package fi.tuni.roadwatch;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
@@ -335,7 +334,7 @@ public class CombineController {
             chartErrorLabel.setText("Date picker can't be null");
             return false;
         }
-        else if(!sessionData.helperFunctions.coordinateCheck()) {
+        else if(sessionData.helperFunctions.coordinateCheck()) {
             dateErrorLabel.setText("Choose coordinates, remember to add on map!");
             return false;
         }
