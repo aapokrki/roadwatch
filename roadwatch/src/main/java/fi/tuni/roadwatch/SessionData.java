@@ -346,6 +346,7 @@ public class SessionData {
         preferences.put("weatherpreference", weatherPreference);
         preferences.put("conditionPreference", conditionPreference);
         preferences.put("maintenancepreference", maintenancePreference);
+        preferences.put("locationpreference", locationPreference);
         savedDataLogic.writePreferences(fileName, preferences);
     }
 
@@ -358,6 +359,7 @@ public class SessionData {
         weatherPreference = preferences.get("weatherpreference");
         conditionPreference = preferences.get("conditionPreference");
         maintenancePreference = preferences.get("maintenancepreference");
+        locationPreference = preferences.get("locationpreference");
     }
 
 }

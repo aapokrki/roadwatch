@@ -128,6 +128,7 @@ public class SavedDataLogic {
         private String weatherPreference;
         private String conditionPreference;
         private String maintenancePreference;
+        private String locationPreference;
 
         @JsonProperty("weatherPreference")
         public String getWeatherPreference() {
@@ -153,11 +154,19 @@ public class SavedDataLogic {
             this.maintenancePreference = maintenancePreference;
         }
 
+        @JsonProperty("locationPreference")
+        public String getLocationPreference() {
+            return locationPreference;
+        }
+        public void setLocationPreference(String locationPreference) {
+            this.locationPreference = locationPreference;
+        }
 
         public Map<String, String> getPreferencesAsMap() {
             return Map.of("weatherPreference", weatherPreference,
                     "conditionPreference", conditionPreference,
-                    "maintenancePreference", maintenancePreference);
+                    "maintenancePreference", maintenancePreference,
+                        "locationPreference", locationPreference);
         }
     }
 }
