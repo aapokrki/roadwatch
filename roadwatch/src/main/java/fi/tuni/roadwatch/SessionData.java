@@ -212,6 +212,9 @@ public class SessionData {
                 if(chart_type.equals("VISIBILITY")){
                     Y = wd.getCloudiness();
                 }
+                if(chart_type.equals("TEMPERATURE")){
+                    Y = wd.getTemperature();
+                }
 
                 assert Y != null;
                 // Do not add NaN data to chart. It will break the charting.
