@@ -101,21 +101,33 @@ public class SavedDataLogic {
      * @param file name of the file to be read from
      * @return Maintenance object
      */
-    // TODO: Check reading of multiple days
+
     public Maintenance readMaintenance(File file) throws IOException {
         return jsonMapper.readValue(file, Maintenance.class);
     }
 
+    /**
+     * Writes preferences to json when closing the program
+     * @param fileName name of the file to be read from
+     */
     public void writePreferences(String fileName, Map<String,String> preferences) throws IOException {
-        jsonMapper.writeValue(new File(fileName + ".json"), preferences);
+        jsonMapper.writeValue(new File(fileName), preferences);
     }
 
+    /**
+     * Reads preferences from json when opening the program
+     * @param fileName name of the file to be read from
+     */
     public Map<String,String> readPreferences(String fileName) throws IOException {
-        Preferences preferences = jsonMapper.readValue(new File(fileName + ".json"), Preferences.class);
+        Preferences preferences = jsonMapper.readValue(new File(fileName), Preferences.class);
         return preferences.getPreferencesAsMap();
     }
 
-    private static class Preferences {
+
+    /**
+     * Data class for reading/writing of preferences to/from json
+     */
+    public static class Preferences {
         private String weatherPreference;
         private String conditionPreference;
         private String maintenancePreference;

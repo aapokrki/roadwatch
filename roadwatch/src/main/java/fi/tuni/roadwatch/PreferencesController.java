@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
+
 /**
  * Class is used for the user to save their weather, road condition and maintenance preferences.
  * The preferences saved in the UX are stored in sessionData.
@@ -41,26 +43,27 @@ public class PreferencesController {
         maintenanceTaskCombobox.setItems(taskTypesObservable);
 
         locationCombobox.getSelectionModel().selectFirst();
-        weatherComboBox.setValue("Tampere");
+        locationCombobox.setValue(sessionData.locationPreference);
 
         weatherComboBox.getSelectionModel().selectFirst();
-        weatherComboBox.setValue("TEMPERATURE");
+        weatherComboBox.setValue(sessionData.weatherPreference);
 
         conditionTypeComboBox.getSelectionModel().selectFirst();
-        conditionTypeComboBox.setValue("OVERALL");
+        conditionTypeComboBox.setValue(sessionData.conditionPreference);
 
         maintenanceTaskCombobox.getSelectionModel().selectFirst();
-        maintenanceTaskCombobox.setValue("ALL");
+        maintenanceTaskCombobox.setValue(sessionData.maintenancePreference);
     }
 
     /**
      * Saves preferences to sessionData.
      */
-    public void setPreferences() {
+    public void setPreferences() throws IOException {
         sessionData.locationPreference = locationCombobox.getValue();
         sessionData.weatherPreference = weatherComboBox.getValue();
         sessionData.conditionPreference = conditionTypeComboBox.getValue();
         sessionData.maintenancePreference = maintenanceTaskCombobox.getValue();
+        sessionData.savePreferencesToJSON("preferences.json");
         preferencesSavedLabel.setText("Preferences saved for next login!");
     }
 }

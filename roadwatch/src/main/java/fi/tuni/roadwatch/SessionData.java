@@ -25,10 +25,10 @@ public class SessionData {
     public Date dateAndTime = Calendar.getInstance().getTime();
     public ArrayList<String> presetLocations;
 
-    public String weatherPreference = "TEMPERATURE";
-    public String conditionPreference = "OVERALL";
-    public String maintenancePreference = "ALL";
-    public String locationPreference = "Tampere";
+    public String weatherPreference;
+    public String conditionPreference;
+    public String maintenancePreference;
+    public String locationPreference;
 
     public ArrayList<WeatherData> wantedWeatherData = new ArrayList<>();
     public ArrayList<WeatherDataMinMaxAvg> wantedWeatherAVGMinMax = new ArrayList<>();
@@ -62,6 +62,17 @@ public class SessionData {
         savedDataLogic = new SavedDataLogic();
         helperFunctions = new HelperFunctions();
         helperFunctions.createTaskTypes(roadAPILogic, this);
+
+        try {
+            loadPreferencesFromJSON("preferences.json");
+        } catch (IOException e) {
+            weatherPreference = "TEMPERATURE";
+            conditionPreference = "OVERALL";
+            maintenancePreference = "ALL";
+            locationPreference = "Tampere";
+        }
+
+
 
     }
 
@@ -297,9 +308,9 @@ public class SessionData {
                     savedDataLogic.writeMaintenance(fileName + helperFunctions.dateAsDayString(maintenance.date), maintenance);
                 }
             case ROAD:
-                savedDataLogic.writeRoadData(fileName, this.roadData);
+                savedDataLogic.writeRoadData(fileName + helperFunctions.dateAsDayString(this.roadData.getDataUpdatedTime()), this.roadData);
             case TRAFFIC:
-                savedDataLogic.writeTrafficMessage(fileName, this.trafficMessage);
+                savedDataLogic.writeTrafficMessage(fileName + helperFunctions.dateAsDayString(this.trafficMessage.getDataUpdatedTime()), this.trafficMessage);
 
         }
     }
@@ -331,10 +342,10 @@ public class SessionData {
      */
     public void savePreferencesToJSON(String fileName) throws IOException {
         Map<String,String> preferences = new HashMap<>();
-        preferences.put("weatherpreference", weatherPreference);
+        preferences.put("weatherPreference", weatherPreference);
         preferences.put("conditionPreference", conditionPreference);
-        preferences.put("maintenancepreference", maintenancePreference);
-        preferences.put("locationpreference", locationPreference);
+        preferences.put("maintenancePreference", maintenancePreference);
+        preferences.put("locationPreference", locationPreference);
         savedDataLogic.writePreferences(fileName, preferences);
     }
 
@@ -344,10 +355,10 @@ public class SessionData {
      */
     public void loadPreferencesFromJSON(String fileName) throws IOException {
         Map<String,String> preferences = savedDataLogic.readPreferences(fileName);
-        weatherPreference = preferences.get("weatherpreference");
+        weatherPreference = preferences.get("weatherPreference");
         conditionPreference = preferences.get("conditionPreference");
-        maintenancePreference = preferences.get("maintenancepreference");
-        locationPreference = preferences.get("locationpreference");
+        maintenancePreference = preferences.get("maintenancePreference");
+        locationPreference = preferences.get("locationPreference");
     }
 
     public ArrayList<String> getDataClassTypesAsList(){
