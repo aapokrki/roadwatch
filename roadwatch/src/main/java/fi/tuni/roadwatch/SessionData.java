@@ -91,7 +91,7 @@ public class SessionData {
                 minLatitude = Double.parseDouble(df.format(minLatitude).replace(',','.'));
 
                 coordinateConstraints = new CoordinateConstraints(minLongtitude, minLatitude, maxLongtitude, maxLatitude);
-                System.out.println(coordinateConstraints.getAsString('/'));
+
             }
         }
     }
@@ -106,15 +106,12 @@ public class SessionData {
 
         maintenancesInTimeLine = new ArrayList<>();
 
-        System.out.println(startDate + " -- " + endDate);
         for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
-            System.out.println(date);
             Date dayIndex = helperFunctions.convertToDateViaInstant(date);
             Maintenance maintenance = roadAPILogic.getMaintenances(taskId,coordinateConstraints.getAsMaintenanceString(), helperFunctions.trimToStart(dayIndex,0), helperFunctions.trimToEnd(dayIndex,0));
             maintenance.setTasksAndDate(dayIndex);
             maintenancesInTimeLine.add(maintenance);
         }
-        System.out.println(getMaintenanceAverages());
     }
 
     /**
@@ -135,7 +132,7 @@ public class SessionData {
         String endTimeString = helperFunctions.timeAndDateToIso8601Format(endTime);
 
         String urlstring = weatherAPILogic.createAVGMINMAXurlString(coordinateConstraints,  startTimeString, endTimeString);
-        System.out.println(urlstring);
+
         this.wantedWeatherAVGMinMax = weatherAPILogic.creatingAvgMinMax(weatherAPILogic.GetApiDocument(urlstring));
 
         // If the created arraylist is empty, the API call failed, needs bigger bbox area
@@ -159,7 +156,7 @@ public class SessionData {
         String startTimeString = helperFunctions.timeAndDateToIso8601Format(startTime);
         String endTimeString = helperFunctions.timeAndDateToIso8601Format(endTime);
         String urlstring = weatherAPILogic.createURLString(coordinateConstraints,  startTimeString, endTimeString);
-        System.out.println(urlstring);
+
         // Compares current date to starTime to know if we want to create a weatherforecast or weather
         // observation
         if(startTime.after(dateAndTime)){
@@ -339,4 +336,28 @@ public class SessionData {
                 }
         return true;
     }
+
+    /**
+     * Saves the preferences to a JSON file
+     * @param fileName the name of the file to write to
+     */
+    public void savePreferencesToJSON(String fileName) throws IOException {
+        Map<String,String> preferences = new HashMap<>();
+        preferences.put("weatherpreference", weatherPreference);
+        preferences.put("conditionPreference", conditionPreference);
+        preferences.put("maintenancepreference", maintenancePreference);
+        savedDataLogic.writePreferences(fileName, preferences);
+    }
+
+    /**
+     * Reads the preferences from a JSON file
+     * @param fileName the name of the file to read from
+     */
+    public void loadPreferencesFromJSON(String fileName) throws IOException {
+        Map<String,String> preferences = savedDataLogic.readPreferences(fileName);
+        weatherPreference = preferences.get("weatherpreference");
+        conditionPreference = preferences.get("conditionPreference");
+        maintenancePreference = preferences.get("maintenancepreference");
+    }
+
 }

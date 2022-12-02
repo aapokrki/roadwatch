@@ -188,7 +188,7 @@ public class MapController {
     public Coordinate getPolygonMiddle(ArrayList<Coordinate> coordinates){
         Double lat  = coordinates.stream().map(Coordinate::getLatitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
         Double lon  = coordinates.stream().map(Coordinate::getLongitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
-        System.out.println(lat + "," + lon);
+
         return new Coordinate(lat,lon);
     }
 
@@ -362,7 +362,6 @@ public class MapController {
             event.consume();
             final Coordinate newPosition = event.getCoordinate().normalize();
             // Set new current coordinate
-            System.out.println("["+newPosition.getLatitude() + ", " + newPosition.getLongitude()+"]");
 
             if (checkDrawPolygon.isSelected()) {
                 handlePolygonClick(event);
@@ -437,7 +436,6 @@ public class MapController {
             .setClosed(true);
         mapView.addCoordinateLine(polygonLine);
         polygonLine.setVisible(true);
-        //System.out.println(coordinates);
         sessionData.helperFunctions.setPolygonCoordinates(coordinates);
     }
 
