@@ -8,12 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +35,6 @@ public class CombineController {
     String taskType = "ALL";
     int timeFrame = 0;
     String conditionType = "OVERALL";
-
     @FXML
     public ComboBox<String> timeFrameComboBox;
     @FXML
@@ -84,20 +81,12 @@ public class CombineController {
     private Button windButton;
     @FXML
     private Button visibilityButton;
-
     @FXML
     public ComboBox<String> dataTypeCombobox;
 
-    // Mutual actions.
     /**
      * Initializes all components and data.
-     * @param sessionData
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws ParserConfigurationException
-     * @throws ParseException
-     * @throws InterruptedException
-     * @throws SAXException
+     * @param sessionData SessionData object
      */
     public void initializeController(SessionData sessionData) throws IOException, URISyntaxException, ParserConfigurationException, ParseException, InterruptedException, SAXException {
         this.sessionData = sessionData;
@@ -125,19 +114,12 @@ public class CombineController {
         conditionChart.setVisible(false);
         conditionInputPane.setVisible(false);
 
-
         dataTypeCombobox.setItems(FXCollections.observableArrayList(sessionData.getDataClassTypesAsList()));
 
     }
 
     /**
      * Creates charts according to new data.
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws InterruptedException
-     * @throws ParseException
-     * @throws ParserConfigurationException
-     * @throws SAXException
      */
     @FXML
     private void onUpdateClick() throws IOException, URISyntaxException, InterruptedException, ParseException, ParserConfigurationException, SAXException {
@@ -246,8 +228,6 @@ public class CombineController {
 
     /**
      * Creates maintenance chart according to selected timeframe.
-     * @throws IOException
-     * @throws URISyntaxException
      */
     @FXML
     private void onApplyMaintenanceClick() throws IOException, URISyntaxException, ParseException, ParserConfigurationException, InterruptedException, SAXException {
@@ -333,11 +313,6 @@ public class CombineController {
     // Weather components.
     /**
      * Checks if wind button has been clicked already or not and changes its appearance and actions according to it.
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws ParseException
-     * @throws InterruptedException
-     * @throws SAXException
      */
     @FXML
     private void onWindButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
@@ -354,6 +329,7 @@ public class CombineController {
 
     /**
      *  Calculates wind data according to start and end date to a linechart
+     * @param show if true, shows wind chart, if false, hides it.
      */
     @FXML
     private void calculateWindData(boolean show) throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
@@ -387,11 +363,6 @@ public class CombineController {
 
     /**
      * Checks if visibility button has been clicked already or not and changes its appearance and actions according to it.
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws ParseException
-     * @throws InterruptedException
-     * @throws SAXException
      */
     @FXML
     private void onVisibilityButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
@@ -408,6 +379,7 @@ public class CombineController {
 
     /**
      * Calculates visibility data according to start and end date to a lineChart.
+     * @param show if true, shows visibility chart, if false, hides it.
      */
     @FXML
     private void calculateVisibilityData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
@@ -438,13 +410,9 @@ public class CombineController {
             }
         }
     }
+
     /**
      * Checks if temperature button has been clicked already or not and changes its appearance and actions according to it.
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws ParseException
-     * @throws InterruptedException
-     * @throws SAXException
      */
     @FXML
     private void onTemperatureButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
@@ -459,8 +427,10 @@ public class CombineController {
 
         }
     }
+
     /**
      * Calculates temperature data according to start and end date to a lineChart.
+     * @param show if true, shows temperature chart, if false, hides it.
      */
     @FXML
     private void calculateTemperatureData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
@@ -494,7 +464,6 @@ public class CombineController {
 
     /**
      * Saves data to json/xml
-     * @throws IOException
      */
     public void onSaveButtonClick() throws IOException {
         String dataToSave = dataTypeCombobox.getValue();
@@ -503,8 +472,6 @@ public class CombineController {
 
     /**
      * Loads Data from json/xml
-     * @throws URISyntaxException
-     * @throws IOException
      */
     public void onLoadButtonClick() throws URISyntaxException, IOException {
         Stage fileChooserStage = new Stage();

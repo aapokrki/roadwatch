@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Class for handling file operations
+ */
 public class SavedDataLogic {
 
     private static final ObjectMapper jsonMapper = new ObjectMapper();
-
 
     /**
     * Constructor for SavedDataLogic, used for setting up jsonMapper
@@ -26,6 +28,7 @@ public class SavedDataLogic {
 
 
     /**
+     * Writes WeatherData to a file with the given name
      * @param fileName name of the file to be written to
      * @param weatherData WeatherData object
      */
@@ -34,6 +37,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Writes WeatherDataMinMaxAvg to a file with the given name
      * @param fileName name of the file to be read from
      * @param weatherDataMinMaxAvg WeatherDataMinMaxAvg object
      */
@@ -42,6 +46,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Writes MaintenanceData to a file with the given name
      * @param fileName name of the file to be written to
      * @param maintenance Maintenance object
      */
@@ -50,6 +55,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Writes RoadData to a file with the given name
      * @param fileName name of the file to be written to
      * @param roadData RoadData object
      */
@@ -58,6 +64,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Writes TrafficMessages to a file with the given name
      * @param fileName       name of the file to be written to
      * @param trafficMessage TrafficMessage object
      */
@@ -66,6 +73,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Reads WeatherData from a file with the given name
      * @param file name of the file to be read from
      * @return WeatherData object     * @return WeatherData object
      */
@@ -79,6 +87,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Reads WeatherDataMinMaxAvg from a file with the given name
      * @param file name of the file to be read from
      * @return WeatherDataMinMaxAvg object, null if file read fails
      */
@@ -93,6 +102,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Reads RoadData from a file with the given name
      * @param file name of the file to be read from
      * @return Maintenance object, null if file read fails
      */
@@ -106,6 +116,7 @@ public class SavedDataLogic {
     }
 
     /**
+     * Reads TrafficMessages from a file with the given name
      * @param file name of the file to be read from
      * @return TrafficMessage object, null if file read fails
      */
@@ -119,10 +130,10 @@ public class SavedDataLogic {
     }
 
     /**
+     * Reads MaintenanceData from a file with the given name
      * @param file name of the file to be read from
      * @return Maintenance object, null if file read fails
      */
-
     public Maintenance readMaintenance(File file) throws IOException {
         return jsonMapper.readValue(file, Maintenance.class);
     }
@@ -153,38 +164,74 @@ public class SavedDataLogic {
         private String maintenancePreference;
         private String locationPreference;
 
+        /**
+         * Getter for weatherPreference
+         * @return weatherPreference as String
+         */
         @JsonProperty("weatherPreference")
         public String getWeatherPreference() {
             return weatherPreference;
         }
+        /**
+         * Setter for weatherPreference
+         * @param weatherPreference weatherPreference as String
+         */
         public void setWeatherPreference(String weatherPreference) {
             this.weatherPreference = weatherPreference;
         }
 
+        /**
+         * Getter for conditionPreference
+         * @return conditionPreference as String
+         */
         @JsonProperty("conditionPreference")
         public String getConditionPreference() {
             return conditionPreference;
         }
+        /**
+         * Setter for conditionPreference
+         * @param conditionPreference conditionPreference as String
+         */
         public void setConditionPreference(String conditionPreference) {
             this.conditionPreference = conditionPreference;
         }
 
+        /**
+         * Getter for maintenancePreference
+         * @return maintenancePreference as String
+         */
         @JsonProperty("maintenancePreference")
         public String getMaintenancePreference() {
             return maintenancePreference;
         }
+        /**
+         * Setter for maintenancePreference
+         * @param maintenancePreference maintenancePreference as String
+         */
         public void setMaintenancePreference(String maintenancePreference) {
             this.maintenancePreference = maintenancePreference;
         }
 
+        /**
+         * Getter for locationPreference
+         * @return locationPreference as String
+         */
         @JsonProperty("locationPreference")
         public String getLocationPreference() {
             return locationPreference;
         }
+        /**
+         * Setter for locationPreference
+         * @param locationPreference locationPreference as String
+         */
         public void setLocationPreference(String locationPreference) {
             this.locationPreference = locationPreference;
         }
 
+        /**
+         * Getter for the preferences as a Map
+         * @return Map of preferences
+         */
         public Map<String, String> getPreferencesAsMap() {
             return Map.of("weatherPreference", weatherPreference,
                     "conditionPreference", conditionPreference,

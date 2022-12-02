@@ -1,10 +1,10 @@
 package fi.tuni.roadwatch;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,11 +14,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Class for handling the weather API calls and data.
+ */
 public class WeatherAPILogic {
     private double currentTemp;
     private double currentWind;
     private double currentCloud;
-
     private double tempAverage;
     private double tempMIN;
     private double tempMAX;
@@ -26,7 +28,6 @@ public class WeatherAPILogic {
     private Date dateAndTime = Calendar.getInstance().getTime();
     private final ArrayList<WeatherData> weatherData = new ArrayList<>();
     private final ArrayList<WeatherDataMinMaxAvg> weatherAVGMinMax = new ArrayList<>();
-
 
     /**
      * Creates URL String based on given parameters to be used in creating API document
@@ -129,7 +130,6 @@ public class WeatherAPILogic {
         return doc;
     }
 
-
     /**
      * Creates observations weather data. Has to be different function due to different parameter names versus forecast
      * @param doc wanted API document
@@ -148,7 +148,6 @@ public class WeatherAPILogic {
 
             String currentCoordinates = eElement.getElementsByTagName("gml:pos")
                     .item(0).getTextContent();
-
 
             if(nNode.getNodeType() == Node.ELEMENT_NODE){
                 if (currentTime.equals(eElement.getElementsByTagName("BsWfs:Time")
@@ -177,7 +176,6 @@ public class WeatherAPILogic {
                         }
                     }
 
-
                 }
 
             }
@@ -204,7 +202,6 @@ public class WeatherAPILogic {
             String currentCoordinates = eElement.getElementsByTagName("gml:pos")
                     .item(0).getTextContent();
 
-
             if(nNode.getNodeType() == Node.ELEMENT_NODE){
                 if (currentTime.equals(eElement.getElementsByTagName("BsWfs:Time")
                         .item(0).getTextContent()) ){
@@ -227,7 +224,6 @@ public class WeatherAPILogic {
                         }
                     }
 
-
                 }
 
             }
@@ -239,10 +235,8 @@ public class WeatherAPILogic {
      * Transforms string in ISO8601 format to Date object
      * @param datestring string in ISO8601 format
      * @return Date object of datestring
-     * @throws ParseException
      */
     public Date timeAndDateAsDate(String datestring) throws ParseException {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
     }
-
 }

@@ -6,11 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -18,9 +16,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Class containing calculation functions for the program.
+ * SessionData is also used to store data that is used in the controllers.
+ */
 public class SessionData {
     private static final DecimalFormat df = new DecimalFormat("0.000");
-
     public List<Coordinate> polyCoordinates = new ArrayList<>();
     public Date dateAndTime = Calendar.getInstance().getTime();
     public ArrayList<String> presetLocations;
@@ -42,18 +43,19 @@ public class SessionData {
     public CoordinateConstraints coordinateConstraints;
 
     public HelperFunctions helperFunctions;
-
     public static RoadAPILogic roadAPILogic;
     public static WeatherAPILogic weatherAPILogic;
-
     public SavedDataLogic savedDataLogic;
 
+    /**
+     * Data class types for file handling.
+     */
     public enum DataClassType {
         WEATHER, WEATHERMINMAXAVG, ROAD, TRAFFIC, MAINTENANCE
     }
 
     /**
-     * Constructor for SessionData
+     * Constructor for SessionData, used for initializations and loading preferences.
      */
     public SessionData() throws URISyntaxException, IOException {
         roadAPILogic = new RoadAPILogic();
@@ -71,9 +73,6 @@ public class SessionData {
             maintenancePreference = "ALL";
             locationPreference = "Tampere";
         }
-
-
-
     }
 
     /**
@@ -83,7 +82,6 @@ public class SessionData {
     public void setHelperFunctions(HelperFunctions helperFunctions){
         this.helperFunctions = helperFunctions;
     }
-
 
     /**
      * Calculates the bbox of saved coordinates in map
@@ -120,9 +118,9 @@ public class SessionData {
 
     /**
      * Creates Maintenance class to SessionData based on task type between given timeline
-     * @param taskId
-     * @param startDate
-     * @param endDate
+     * @param taskId Task type id
+     * @param startDate Start date of timeline
+     * @param endDate End date of timeline
      */
     public void createMaintenance(String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
 
@@ -180,7 +178,11 @@ public class SessionData {
     }
 
 
-    // Tää siirretään jotenki roaddataan
+    /**
+     * Generates the PieChart for road conditions
+     * @param conditionMap Map containing the road condition data points
+     * @return ObservableList of PieChart.Data for the PieChart
+     */
     public ObservableList<PieChart.Data> createRoadConditionChart(Map<String, Double> conditionMap) {
         ArrayList<PieChart.Data> pieChartData = new ArrayList<>();
         for(Map.Entry<String, Double> cond : conditionMap.entrySet()){
@@ -189,6 +191,11 @@ public class SessionData {
         }
         return FXCollections.observableArrayList(pieChartData);
     }
+
+    /**
+     * Generates the PieChart for maintenance tasks
+     * @return ObservableList of PieChart.Data for the PieChart
+     */
     public ObservableList<PieChart.Data> createMaintenanceChart() {
         ArrayList<PieChart.Data> pieChartData = new ArrayList<>();
         for(Map.Entry<String, Double> cond : getMaintenanceAverages().entrySet()){
@@ -373,5 +380,4 @@ public class SessionData {
         }
         return classTypes;
     }
-
 }

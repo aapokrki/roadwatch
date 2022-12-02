@@ -1,17 +1,14 @@
 package fi.tuni.roadwatch;
 
 import javafx.fxml.FXML;
-
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -27,9 +24,6 @@ import java.util.*;
  * data of all the weather types from the past as well.
  */
 public class WeatherController {
-
-
-
     enum Datatype {
         TEMPERATURE,
         CHARTS
@@ -103,7 +97,7 @@ public class WeatherController {
     // Mutual actions.
     /**
      * Initializes all components and data.
-     * @param sessionData
+     * @param sessionData SessionData object
      */
     public void initializeController(SessionData sessionData) {
         this.sessionData = sessionData;
@@ -392,6 +386,7 @@ public class WeatherController {
 
     /**
      *  Calculates wind data according to start and end date to a lineChart.
+     * @param show if true, shows the wind data on the lineChart
      */
     @FXML
     private void calculateWindData(boolean show) throws ParserConfigurationException, IOException, ParseException, SAXException, InterruptedException {
@@ -442,6 +437,7 @@ public class WeatherController {
 
     /**
      * Calculates visibility data according to start and end date to a lineChart.
+     * @param show if true, shows the visibility data on the lineChart
      */
     @FXML
     private void calculateVisibilityData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {
@@ -473,11 +469,10 @@ public class WeatherController {
         }
     }
 
-
-    @FXML
     /**
      * Calculates temperature data according to start and end date to a lineChart.
      */
+    @FXML
     private void onTemperatureButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
         if(temperatureButton.getStyleClass().contains("basicButtonGreen")){
             temperatureButton.getStyleClass().remove("basicButtonGreen");
@@ -493,6 +488,7 @@ public class WeatherController {
 
     /**
      * Calculates temperature data according to start and end date to a lineChart.
+     * @param show if true, shows the temperature data on the lineChart
      */
     @FXML
     private void calculateTemperatureData(boolean show) throws ParseException, ParserConfigurationException, IOException, SAXException, InterruptedException {

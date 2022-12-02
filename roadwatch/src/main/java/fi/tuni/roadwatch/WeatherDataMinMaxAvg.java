@@ -2,15 +2,14 @@ package fi.tuni.roadwatch;
 
 import java.util.Date;
 
+/**
+ * Data class for weatherDataMinMaxAvg
+ */
 public class WeatherDataMinMaxAvg {
     private Date dateAndTime;
-
     private String coordinates;
-
     private double tempAverage;
-
     private double tempMIN;
-
     private double tempMAX;
 
     /**

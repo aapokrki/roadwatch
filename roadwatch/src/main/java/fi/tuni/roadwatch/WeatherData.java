@@ -1,20 +1,18 @@
 package fi.tuni.roadwatch;
+
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Data class for weatherData
+ */
 public class WeatherData {
-
     private Date dateAndTime;
-
     private String coordinates;
-
     private double temperature;
-
     private double cloudiness;
-
     private double wind;
-
 
     /**
      * Constructor of WeatherData
@@ -34,8 +32,6 @@ public class WeatherData {
         this.dateAndTime = dateAndTime;
     }
 
-
-
     /**
      * Getter for date
      * @return Date object
@@ -47,7 +43,6 @@ public class WeatherData {
      * @param date given date
      */
     public void setDate(Date date){this.dateAndTime = date;}
-
 
     /**
      * Getter for coordinates
