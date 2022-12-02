@@ -5,7 +5,7 @@ Build instructions:
 1. Clone repository
 2. Open "roadwatch"-project in IntellJ IDE
 3. Make sure you don't see any errors, use JDK18
-4. Install all old depencies from maven
+4. Install all dependencies from maven
 5. Run RoadWatchApplication.java
 6. The application should start
 
