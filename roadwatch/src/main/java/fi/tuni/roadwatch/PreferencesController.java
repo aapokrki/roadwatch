@@ -11,8 +11,12 @@ import java.util.Objects;
 
 public class PreferencesController {
     private String locationPreference;
+
     private String weatherPreference;
+
     private String roadDataPreference;
+
+
     private String maintenancePreference;
 
     // TODO: Aapo linkkaa karttaan tai sit poistan.
@@ -39,4 +43,26 @@ public class PreferencesController {
         roadDataPreference = conditionTypeComboBox.getValue();
         maintenancePreference = maintenanceTaskCombobox.getValue();
     }
+
+    public String getMaintenancePreference() {
+        return maintenancePreference;
+    }
+
+    public String getLocationPreference() {
+        return locationPreference;
+    }
+
+    public String getRoadDataPreference() {
+        return roadDataPreference;
+    }
+
+    public String getWeatherPreference() {
+        return weatherPreference;
+    }
+
+
+
+
+
+
 }
