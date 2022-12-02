@@ -11,7 +11,7 @@
    <children>
       <Label layoutX="58.0" layoutY="50.0" styleClass="smallHeading" text="LOCATION" />
       <Label layoutX="58.0" layoutY="140.0" styleClass="smallHeading" text="WEATHER DATA" />
-      <ComboBox fx:id="weatherComboBox" layoutX="284.0" layoutY="140.0" onAction="#changeWeatherType" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">
+      <ComboBox fx:id="weatherComboBox" layoutX="284.0" layoutY="140.0" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:id="temperatureItem" fx:value="TEMPERATURE" />
@@ -20,7 +20,7 @@
          </items>
       </ComboBox>
       <Label layoutX="58.0" layoutY="222.0" styleClass="smallHeading" text="ROAD DATA" />
-      <ComboBox fx:id="conditionTypeComboBox" layoutX="284.0" layoutY="222.0" maxWidth="150.0" onAction="#changeConditionType" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">
+      <ComboBox fx:id="conditionTypeComboBox" layoutX="284.0" layoutY="222.0" maxWidth="150.0" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="OVERALL" />
@@ -30,6 +30,18 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <Button layoutX="134.0" layoutY="448.0" mnemonicParsing="false" styleClass="basicButton" text="Save preferences" />
+
+      <ComboBox fx:id="maintenanceTaskCombobox" layoutX="282.0" layoutY="314.0" maxWidth="150.0" minWidth="130.0" prefHeight="35.0" prefWidth="150.0" styleClass="combo-box">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="OVERALL" />
+               <String fx:value="FRICTION" />
+               <String fx:value="SLIPPERINESS" />
+               <String fx:value="PRECIPICATION" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <Button layoutX="134.0" layoutY="448.0" mnemonicParsing="false" onAction="#setPreferences" styleClass="basicButton" text="Save preferences" />
+      <Label layoutX="58.0" layoutY="314.0" styleClass="smallHeading" text="MAINTENANCE" />
    </children>
 </AnchorPane>
