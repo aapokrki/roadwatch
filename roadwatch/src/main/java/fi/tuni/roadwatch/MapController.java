@@ -30,7 +30,6 @@ import javafx.util.Duration;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -45,6 +44,7 @@ import java.util.stream.Stream;
 public class MapController {
 
 
+
     private SessionData sessionData;
 
     /** Coordinates to border Finland */
@@ -54,33 +54,7 @@ public class MapController {
     private static final Coordinate coordSouthWest = new Coordinate(59.26658753324523, 16.352667758380154);
     private static final Extent extentFinland = Extent.forCoordinates(coordNorhWest, coordNorthEast, coordSouthEast, coordSouthWest);
 
-
-    private static final ArrayList<Coordinate> coordSmallRoadSegment = new ArrayList<Coordinate>(
-            Arrays.asList(  new Coordinate(60.87613246629303, 25.582678576744584),
-                            new Coordinate(60.87704865972839, 25.576224325490955),
-                            new Coordinate(60.89857163657564, 25.596931714929674),
-                            new Coordinate(60.89817925024559, 25.600831158395405))
-    );
-
-    private static final ArrayList<Coordinate> coordMediumRoadSegment = new ArrayList<Coordinate>(
-            Arrays.asList(  new Coordinate(60.50156645624125, 26.847317797691495),
-                    new Coordinate(60.50429554964796, 26.81313801316007),
-                    new Coordinate(60.50838875892538, 26.765101559224036),
-                    new Coordinate(60.50429554964796, 26.69027554443904),
-                    new Coordinate(60.49747238526555, 26.629306199058682),
-                    new Coordinate(60.488827648425996, 26.58958374676542))
-    );
-
-
-    private static final ArrayList<Coordinate> coordLargeRoadSegment = new ArrayList<Coordinate>(
-            Arrays.asList(  new Coordinate(65.04267096153495, 25.65218096901351),
-                    new Coordinate(65.34545645158161, 27.160031899047087),
-                    new Coordinate(65.59691857097374, 28.435905762921653),
-                    new Coordinate(65.91969438346197, 29.118949346612077),
-                    new Coordinate(65.51158585366903, 27.31468327648643),
-                    new Coordinate(65.14037262699148, 25.613518124653677))
-    );
-
+    // Preset city locations
     private static final ArrayList<Coordinate> coordTampere = new ArrayList<Coordinate>(
             Arrays.asList(  new Coordinate(61.523, 23.645),
                     new Coordinate(61.523, 23.903),
@@ -88,28 +62,74 @@ public class MapController {
                     new Coordinate(61.42, 23.645))
 
     );
-
     private static final ArrayList<Coordinate> coordLahti = new ArrayList<Coordinate>(
             Arrays.asList( new Coordinate(60.922, 25.57),
                     new Coordinate(60.922, 25.805),
                     new Coordinate(61.036, 25.805),
                     new Coordinate(61.036, 25.57))
     );
-
     private static final ArrayList<Coordinate> coordKotka = new ArrayList<Coordinate>(
             Arrays.asList( new Coordinate(60.411, 26.776),
                     new Coordinate(60.411, 27.047),
                     new Coordinate(60.592, 27.047),
                     new Coordinate(60.592, 26.776))
     );
+    private static final ArrayList<Coordinate> coordTurku = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(60.3335222, 22.0661599),
+                    new Coordinate(60.3335222, 22.4581649),
+                    new Coordinate(60.7372962, 22.4581649),
+                    new Coordinate(60.7372962, 22.0661599))
+    );
+    private static final ArrayList<Coordinate> coordHyvinkaa = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(60.5081313, 24.5629319),
+                    new Coordinate(60.5081313, 25.1124256),
+                    new Coordinate(60.6846302, 25.1124256),
+                    new Coordinate(60.6846302, 24.5629319))
+    );
+    private static final ArrayList<Coordinate> coordPorvoo = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(60.11, 25.3290779),
+                    new Coordinate(60.11, 26.2712854),
+                    new Coordinate(60.5510037, 26.2712854),
+                    new Coordinate(60.5510037, 25.3290779))
+    );
+    private static final ArrayList<Coordinate> coordHelsinki = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(60.11, 24.552),
+                    new Coordinate(60.11, 25.218),
+                    new Coordinate(60.345, 25.218),
+                    new Coordinate(60.345, 24.552))
+    );
+    private static final ArrayList<Coordinate> coordJyvaskyla = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(61.8392056, 25.2607866),
+                    new Coordinate(61.8392056, 26.051348),
+                    new Coordinate(62.428747, 26.051348),
+                    new Coordinate(62.428747, 25.2607866))
+    );
+    private static final ArrayList<Coordinate> coordOulu = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(64.844412, 24.1149326),
+                    new Coordinate(64.844412, 26.7715283),
+                    new Coordinate(65.5643522, 26.7715283),
+                    new Coordinate(65.5643522, 24.1149326))
+    );
+    private static final ArrayList<Coordinate> coordRovaniemi = new ArrayList<Coordinate>(
+            Arrays.asList(  new Coordinate(66.1555137, 24.73658),
+                    new Coordinate(66.1555137, 27.3266437),
+                    new Coordinate(67.1794991, 27.3266437),
+                    new Coordinate(67.1794991, 24.73658))
+    );
 
-    /** default zoom value. */
-    private static final int ZOOM_DEFAULT = 14;
 
     /** the markers. */
     private final Marker markerKotka;
     private final Marker markerTampere;
     private final Marker markerClick;
+    private final Marker markerLahti;
+    private final Marker markerTurku;
+    private final Marker markerHyvinkaa;
+    private final Marker markerPorvoo;
+    private final Marker markerHelsinki;
+    private final Marker markerJyvaskyla;
+    private final Marker markerOulu;
+    private final Marker markerRovaniemi ;
 
     /** the MapView containing the map */
     @FXML
@@ -138,16 +158,26 @@ public class MapController {
     @FXML
     private Button buttonLahti;
 
-
+    @FXML
+    private Button buttonTurku;
 
     @FXML
-    private Button buttonSmallRoad;
+    private Button buttonHyvinkaa;
 
     @FXML
-    private Button buttonMediumRoad;
+    private Button buttonPorvoo;
 
     @FXML
-    private Button buttonLargeRoad;
+    private Button buttonHelsinki;
+
+    @FXML
+    public Button buttonJyvaskyla;
+
+    @FXML
+    public Button buttonOulu;
+
+    @FXML
+    public Button buttonRovaniemi;
 
     /** Check button for harbour marker */
     @FXML
@@ -155,11 +185,26 @@ public class MapController {
 
     /** Check button for castle marker */
     @FXML
-    private CheckBox checkHervantaMarker;
+    private CheckBox checkTampereMarker;
 
     /** Check button for Lahti marker */
     @FXML
     private CheckBox checkLahtiMarker;
+
+    @FXML
+    public CheckBox checkTurkuMarker;
+    @FXML
+    public CheckBox checkHyvinkaaMarker;
+    @FXML
+    public CheckBox checkPorvooMarker;
+    @FXML
+    public CheckBox checkHelsinkiMarker;
+    @FXML
+    public CheckBox checkJyvaskylaMarker;
+    @FXML
+    public CheckBox checkOuluMarker;
+    @FXML
+    public CheckBox checkRovaniemiMarker;
 
     /** Check button for click marker */
     @FXML
@@ -181,11 +226,11 @@ public class MapController {
     public Coordinate getPolygonMiddle(ArrayList<Coordinate> coordinates){
         Double lat  = coordinates.stream().map(Coordinate::getLatitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
         Double lon  = coordinates.stream().map(Coordinate::getLongitude).mapToDouble(Double::doubleValue).sum() / coordinates.size();
-        System.out.println(lat + "," + lon);
+
         return new Coordinate(lat,lon);
     }
 
-    public MapController() throws MalformedURLException {
+    public MapController(){
 
         // a couple of markers using the provided ones
         markerKotka = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
@@ -194,7 +239,32 @@ public class MapController {
 
         markerTampere = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
                 .setPosition(getPolygonMiddle(coordTampere))
+                .setVisible(true);
+        markerLahti = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordLahti))
+                .setVisible(true);
+        markerTurku = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordTurku))
                 .setVisible(false);
+        markerHyvinkaa = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordHyvinkaa))
+                .setVisible(false);
+        markerPorvoo = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordPorvoo))
+                .setVisible(false);
+        markerHelsinki = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordHelsinki))
+                .setVisible(false);
+        markerJyvaskyla = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordJyvaskyla))
+                .setVisible(false);
+        markerOulu = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordOulu))
+                .setVisible(false);
+        markerRovaniemi = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-icon.png")),-11,-11)
+                .setPosition(getPolygonMiddle(coordRovaniemi))
+                .setVisible(false);
+
 
         // no position for click marker yet
         markerClick = new Marker(Objects.requireNonNull(getClass().getResource("/pictures/map-click-icon.png")),-5,-5).setVisible(false);
@@ -219,135 +289,16 @@ public class MapController {
         setControlsDisable(true);
 
         // wire up the location buttons
-
-        buttonKotka.setOnAction(event -> {
-            buttonClearPolygon.fire(); //Clear any previous polygons from map
-
-
-            // Draw new polygon for said location
-            polygonLine = new CoordinateLine(coordKotka)
-                    .setColor(Color.DODGERBLUE)
-                    .setFillColor(Color.web("lawngreen", 0.4))
-                    .setClosed(true);
-            mapView.addCoordinateLine(polygonLine);
-            polygonLine.setVisible(true);
-
-            // Set polygon data to sessiondata for weather and roaddata
-            sessionData.helperFunctions.setPolygonCoordinates(coordKotka);
-            buttonAddPolygon.fire();
-
-            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
-            mapView.setExtent(extent);// Set mapview to location
-        });
-
-        buttonTampere.setOnAction(event -> {
-            buttonClearPolygon.fire(); //Clear any previous polygons from map
-
-
-            // Draw new polygon for said location
-            polygonLine = new CoordinateLine(coordTampere)
-                    .setColor(Color.DODGERBLUE)
-                    .setFillColor(Color.web("lawngreen", 0.4))
-                    .setClosed(true);
-            mapView.addCoordinateLine(polygonLine);
-            polygonLine.setVisible(true);
-
-            // Set polygon data to sessiondata for weather and roaddata
-            sessionData.helperFunctions.setPolygonCoordinates(coordTampere);
-            buttonAddPolygon.fire();
-
-            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
-            mapView.setExtent(extent);// Set mapview to location
-
-        });
-        buttonLahti.setOnAction(event -> {
-            buttonClearPolygon.fire(); //Clear any previous polygons from map
-
-            // Draw new polygon for said location
-            polygonLine = new CoordinateLine(coordLahti)
-                    .setColor(Color.DODGERBLUE)
-                    .setFillColor(Color.web("lawngreen", 0.4))
-                    .setClosed(true);
-            mapView.addCoordinateLine(polygonLine);
-            polygonLine.setVisible(true);
-
-            // Set polygon data to sessiondata for weather and roaddata
-            sessionData.helperFunctions.setPolygonCoordinates(coordLahti);
-            buttonAddPolygon.fire();
-
-            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
-            mapView.setExtent(extent);// Set mapview to location
-        });
-
-        // Small segment preset
-        buttonSmallRoad.setOnAction(event -> {
-
-            buttonClearPolygon.fire(); //Clear any previous polygons from map
-
-
-            // Draw new polygon for said location
-            polygonLine = new CoordinateLine(coordSmallRoadSegment)
-                    .setColor(Color.DODGERBLUE)
-                    .setFillColor(Color.web("lawngreen", 0.4))
-                    .setClosed(true);
-            mapView.addCoordinateLine(polygonLine);
-            polygonLine.setVisible(true);
-
-            // Set polygon data to sessiondata for weather and roaddata
-            sessionData.helperFunctions.setPolygonCoordinates(coordSmallRoadSegment);
-            buttonAddPolygon.fire();
-
-            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
-            mapView.setExtent(extent);// Set mapview to location
-
-        });
-        // Medium segment preset
-        buttonMediumRoad.setOnAction(event -> {
-
-            buttonClearPolygon.fire(); //Clear any previous polygons from map
-
-
-            // Draw new polygon for said location
-
-            polygonLine = new CoordinateLine(coordMediumRoadSegment)
-                    .setColor(Color.DODGERBLUE)
-                    .setFillColor(Color.web("lawngreen", 0.4))
-                    .setClosed(true);
-            mapView.addCoordinateLine(polygonLine);
-            polygonLine.setVisible(true);
-
-            // Set polygon data to sessiondata for weather and roaddata
-            sessionData.helperFunctions.setPolygonCoordinates(coordMediumRoadSegment);
-            buttonAddPolygon.fire();
-
-            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates); // Set mapview to location
-            mapView.setExtent(extent);// Set mapview to location
-
-        });
-
-        // Large segment preset
-        buttonLargeRoad.setOnAction(event -> {
-
-            buttonClearPolygon.fire(); //Clear any previous polygons from map
-
-            // Draw new polygon for said location
-
-            polygonLine = new CoordinateLine(coordLargeRoadSegment)
-                    .setColor(Color.DODGERBLUE)
-                    .setFillColor(Color.web("lawngreen", 0.4))
-                    .setClosed(true);
-            mapView.addCoordinateLine(polygonLine);
-            polygonLine.setVisible(true);
-
-            // Set polygon data to sessiondata for weather and roaddata
-            sessionData.helperFunctions.setPolygonCoordinates(coordLargeRoadSegment);
-            buttonAddPolygon.fire();
-
-            // Set mapview to location
-            Extent extent = Extent.forCoordinates(sessionData.polyCoordinates);
-            mapView.setExtent(extent);// Set mapview to location
-
-        });
+        buttonKotka.setOnAction(event -> setLocationTo(coordKotka));
+        buttonTampere.setOnAction(event -> setLocationTo(coordTampere));
+        buttonLahti.setOnAction(event -> setLocationTo(coordLahti));
+        buttonTurku.setOnAction(event -> setLocationTo(coordTurku));
+        buttonHyvinkaa.setOnAction(event -> setLocationTo(coordHyvinkaa));
+        buttonPorvoo.setOnAction(event -> setLocationTo(coordPorvoo));
+        buttonHelsinki.setOnAction(event -> setLocationTo(coordHelsinki));
+        buttonJyvaskyla.setOnAction(event -> setLocationTo(coordJyvaskyla));
+        buttonOulu.setOnAction(event -> setLocationTo(coordOulu));
+        buttonRovaniemi.setOnAction(event -> setLocationTo(coordRovaniemi));
 
         // wire the zoomout button
         buttonZoomOut.setOnAction(event -> mapView.setExtent(extentFinland));
@@ -378,17 +329,21 @@ public class MapController {
         setupEventHandlers();
 
         // add the graphics to the checkboxes
-        checkKotkaMarker.setGraphic(
-            new ImageView(new Image(markerKotka.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
-        checkHervantaMarker.setGraphic(
-            new ImageView(new Image(markerTampere.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
-
         checkClickMarker.setGraphic(
             new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
 
         // bind the checkboxes to the markers visibility
         checkKotkaMarker.selectedProperty().bindBidirectional(markerKotka.visibleProperty());
-        checkHervantaMarker.selectedProperty().bindBidirectional(markerTampere.visibleProperty());
+        checkTampereMarker.selectedProperty().bindBidirectional(markerTampere.visibleProperty());
+        checkLahtiMarker.selectedProperty().bindBidirectional(markerLahti.visibleProperty());
+        checkTurkuMarker.selectedProperty().bindBidirectional(markerTurku.visibleProperty());
+        checkHyvinkaaMarker.selectedProperty().bindBidirectional(markerHyvinkaa.visibleProperty());
+        checkPorvooMarker.selectedProperty().bindBidirectional(markerPorvoo.visibleProperty());
+        checkHelsinkiMarker.selectedProperty().bindBidirectional(markerHelsinki.visibleProperty());
+        checkJyvaskylaMarker.selectedProperty().bindBidirectional(markerJyvaskyla.visibleProperty());
+        checkOuluMarker.selectedProperty().bindBidirectional(markerOulu.visibleProperty());
+        checkRovaniemiMarker.selectedProperty().bindBidirectional(markerRovaniemi.visibleProperty());
+
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
         checkClickMarker.setSelected(true);
 
@@ -415,6 +370,26 @@ public class MapController {
 
     }
 
+    private void setLocationTo(ArrayList<Coordinate> location){
+        buttonClearPolygon.fire(); //Clear any previous polygons from map
+
+        // Draw new polygon for said location
+        polygonLine = new CoordinateLine(location)
+                .setColor(Color.DODGERBLUE)
+                .setFillColor(Color.web("lawngreen", 0.4))
+                .setClosed(true);
+        mapView.addCoordinateLine(polygonLine);
+        polygonLine.setVisible(true);
+
+        // Set polygon data to sessiondata for weather and roaddata
+        sessionData.helperFunctions.setPolygonCoordinates(location);
+        buttonAddPolygon.fire();
+
+        // Set mapview to location
+        Extent extent = Extent.forCoordinates(sessionData.polyCoordinates);
+        mapView.setExtent(extent);// Set mapview to location
+    }
+
     /**
      * initializes the event handlers.
      */
@@ -424,7 +399,6 @@ public class MapController {
             event.consume();
             final Coordinate newPosition = event.getCoordinate().normalize();
             // Set new current coordinate
-            System.out.println("["+newPosition.getLatitude() + ", " + newPosition.getLongitude()+"]");
 
             if (checkDrawPolygon.isSelected()) {
                 handlePolygonClick(event);
@@ -494,7 +468,6 @@ public class MapController {
             .setClosed(true);
         mapView.addCoordinateLine(polygonLine);
         polygonLine.setVisible(true);
-        //System.out.println(coordinates);
         sessionData.helperFunctions.setPolygonCoordinates(coordinates);
     }
 
@@ -521,9 +494,18 @@ public class MapController {
         // start at the kotka with default zoom
         mapView.setZoom(0.0);
         mapView.setExtent(extentFinland);
+
         // add the markers to the map - they are still invisible
         mapView.addMarker(markerKotka);
         mapView.addMarker(markerTampere);
+        mapView.addMarker(markerLahti);
+        mapView.addMarker(markerTurku);
+        mapView.addMarker(markerHyvinkaa);
+        mapView.addMarker(markerPorvoo);
+        mapView.addMarker(markerHelsinki);
+        mapView.addMarker(markerJyvaskyla);
+        mapView.addMarker(markerOulu);
+        mapView.addMarker(markerRovaniemi);
         // can't add the markerClick at this moment, it has no position, so it would not be added to the map
 
         // now enable the controls

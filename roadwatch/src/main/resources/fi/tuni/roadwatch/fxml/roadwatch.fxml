@@ -17,8 +17,8 @@
             <Line endX="1089.5" startX="-386.0" stroke="#78c2e2" strokeWidth="3.0" styleClass="backgroundBlue" GridPane.columnSpan="3" GridPane.rowIndex="1" />
             <Label fx:id="siteLabel" styleClass="bigHeading" text="HOME" GridPane.rowIndex="2" />
             <Label fx:id="logo" maxHeight="93.0" maxWidth="371.0" prefHeight="93.0" prefWidth="250.0" styleClass="logo" />
-            <BorderPane fx:id="mapPane" maxHeight="620.0" maxWidth="440.0" minHeight="620.0" minWidth="500.0" prefHeight="501.0" prefWidth="440.0" style="-fx-border-color: blue; -fx-border-width: 5;" GridPane.rowIndex="3" />
-            <BorderPane fx:id="infoPane" minHeight="620.0" minWidth="950.0" prefHeight="620.0" prefWidth="1108.0" style="-fx-border-color: orange; -fx-border-width: 5;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <BorderPane fx:id="mapPane" maxHeight="620.0" maxWidth="440.0" minHeight="620.0" minWidth="500.0" prefHeight="501.0" prefWidth="440.0" style="-fx-border-color: #78C2E2; -fx-border-width: 5;" GridPane.rowIndex="3" />
+            <BorderPane fx:id="infoPane" minHeight="620.0" minWidth="950.0" prefHeight="620.0" prefWidth="1108.0" style="-fx-border-color: #78C2E2; -fx-border-width: 5;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             <ButtonBar fx:id="buttonBar" buttonMinWidth="0.0" maxHeight="70.0" maxWidth="504.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="70.0" prefWidth="504.0" GridPane.columnIndex="1">
                <buttons>
                   <Button fx:id="homeButton" minHeight="-Infinity" minWidth="26.0" mnemonicParsing="false" onAction="#loadHome" prefHeight="25.0" styleClass="homeIcon" translateX="-50.0" ButtonBar.buttonData="LEFT" />

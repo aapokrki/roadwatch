@@ -13,54 +13,45 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * This class contains the visualization aspects of all road data. The user can select what data they want to see
+ * in the charts.
+ */
 public class RoadController {
-    private final ArrayList<Label> RCLabels = new ArrayList<>();
-
-
     int timeFrame = 0;
     String conditionType;
     String taskType;
-
-    @FXML
-    public Label alertsLabel;
-
-    @FXML
-    private Label infoLabel;
-    // Road condition labels aka RC labels.
-
-    @FXML
-    public Button applyMaintenanceButton;
-
-
-    @FXML
-    public ComboBox<String> timeFrameComboBox;
-
-    @FXML
-    public ComboBox<String> conditionTypeComboBox;
-
-    @FXML
-    public ComboBox<String> maintenanceTaskCombobox;
-
-    @FXML
-    private PieChart conditionChart;
-
-    @FXML
-    private PieChart maintenanceChart;
-
-    @FXML
-    public AnchorPane datePickerPane;
-
-    @FXML
-    public DatePicker startDatePicker;
-
-    @FXML
-    public DatePicker endDatePicker;
-
     private SessionData sessionData;
 
+    @FXML
+    private Label alertsLabel;
+    @FXML
+    private Button applyMaintenanceButton;
+    @FXML
+    private ComboBox<String> timeFrameComboBox;
+    @FXML
+    private ComboBox<String> conditionTypeComboBox;
+    @FXML
+    private ComboBox<String> maintenanceTaskCombobox;
+    @FXML
+    private PieChart conditionChart;
+    @FXML
+    private PieChart maintenanceChart;
+    @FXML
+    private AnchorPane datePickerPane;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+
+    /**
+     * Initializes all roadData data and components.
+     * @param sessionData
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public void initializeController(SessionData sessionData) throws IOException, URISyntaxException {
         this.sessionData = sessionData;
         ObservableList<String> taskTypesObservable= FXCollections.observableArrayList(sessionData.taskTypes);
@@ -81,25 +72,20 @@ public class RoadController {
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now());
 
-        // INITALIZATION OF DEFAULT VALUES IN ROADWINDOW
-
-        //ROAD CONDITION
         sessionData.createRoadData();
         changeTimeFrame();
-        //sessionData.roadData.setForecastConditions(timeFrame);
         alertsLabel.setText(sessionData.roadData.trafficMessageAmount + " ALERTS");
-
-        //MAINTENANCE
-        //sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
-        //conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
-
-
     }
 
 
+    /**
+     * Updates data in needed components.
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     */
     @FXML
     private void onUpdateClick() throws IOException, URISyntaxException, InterruptedException {
-
         //ROAD CONDITION
         sessionData.createRoadData();
         sessionData.roadData.setForecastConditions(timeFrame);
@@ -110,8 +96,11 @@ public class RoadController {
         onApplyMaintenanceClick();
     }
 
+    /**
+     * Changes the time frame.
+     */
     @FXML
-    public void changeTimeFrame() {
+    private void changeTimeFrame() {
         String str = timeFrameComboBox.getValue();
         if(Objects.equals(str, "CURRENT")){
             timeFrame = 0;
@@ -120,15 +109,15 @@ public class RoadController {
             timeFrame = Integer.parseInt(subs);
         }
         sessionData.roadData.setForecastConditions(timeFrame);
-        System.out.println(str);
         changeConditionType();
     }
 
+    /**
+     * Changes road condition type in condition chart.
+     */
     @FXML
-    public void changeConditionType() {
+    private void changeConditionType() {
         this.conditionType = conditionTypeComboBox.getValue();
-        System.out.println(conditionType);
-        // Nää iffit on rumaa koodia don't look ;D
         if(Objects.equals(conditionType, "OVERALL")){
             conditionChart.setData(sessionData.createRoadConditionChart(sessionData.roadData.overallCondition));
 
@@ -150,18 +139,24 @@ public class RoadController {
 
         }else{
             conditionChart.setTitle(conditionType + " CONDITION IN AREA");
-
         }
-
     }
+
+    /**
+     * Changes maintenance task type according to selected value.
+     */
     @FXML
-    public void changeTaskType() {
+    private void changeTaskType() {
         this.taskType = maintenanceTaskCombobox.getValue();
     }
 
+    /**
+     * Creates maintenance chart according to selected timeframe.
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     @FXML
-    public void onApplyMaintenanceClick() throws IOException, URISyntaxException {
-
+    private void onApplyMaintenanceClick() throws IOException, URISyntaxException {
         if(Objects.equals(taskType, "ALL")){
             sessionData.createMaintenance("",startDatePicker.getValue(),endDatePicker.getValue());
         }else{
