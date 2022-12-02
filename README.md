@@ -10,7 +10,7 @@ Build instructions:
 6. The application should start
 
 
-![image.png](./image.png)
+![roadwatchHomeScreen.png](./roadwatchHomeScreen.png)
 
 ROADWATCH
 
@@ -22,20 +22,27 @@ The application contains a preferences page that allows to choose preferences an
 efficiently with app startup see desired data instantly. 
 
 
+
 How to use:
 
 The app is simple. First of all it is important to choose a desired location. You can choose a certain area from the map or choose a area
 predefined to the map. After choosen location remember to press add on map. After that you will notice icons on the top of the page. 
 Icon order: home, weatherData, combinePage, preferences, roadData. 
 
+![roadwatchWeatherScreen.png](./roadwatchWeatherScreen.png)
+
 In weatherData if you want to see the temperatures of today, tomorrow and day after tomorrow
 you simply click the labels. Average temp and min max of a certain day can be calculated by choosing date from calendar and simply pressing button. Changing datatype
 allows you to see temperature, wind and visibility in a chart form. Simply choose the dates and click on all the data wanted to see. 
+
+![roadwatchCombinePage.png](./roadwatchCombinePage.png)
 
 In combinePage charts work the same way as in weatherData charts. You can also choose to see condition or maintenance data and have the option to choose condition type and timeframe.
 Simply choose wanted dates and data types and enjoy after pressing apply ofcourse. From this page you can save desired data to a file form and load data.
 
 PreferencesPage simply choose your preferences and after restarting the application your saved preferences will be saved. Remember to save them!
+
+![roadwatchRoadConditionPage.png](./roadwatchRoadConditionPage.png)
 
 RoadCondition page works by choosing desired roadcondition and maintenance types and timeline and simply pressing apply.
 
