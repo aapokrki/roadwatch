@@ -495,6 +495,9 @@ public class WeatherController {
 
 
     @FXML
+    /**
+     * Calculates temperature data according to start and end date to a lineChart.
+     */
     private void onTemperatureButtonClicked() throws ParserConfigurationException, IOException, ParseException, InterruptedException, SAXException {
         if(temperatureButton.getStyleClass().contains("basicButtonGreen")){
             temperatureButton.getStyleClass().remove("basicButtonGreen");
