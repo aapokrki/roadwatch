@@ -13,6 +13,9 @@ import java.net.URISyntaxException;
 public class RoadWatchApplication extends Application {
 
     @Override
+    /**
+     * Starts the application
+     */
     public void start(Stage stage) throws IOException, URISyntaxException {
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();

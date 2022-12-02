@@ -1,5 +1,8 @@
 package fi.tuni.roadwatch;
 
+/**
+ * Holds the current bbox and helper functions
+ */
 public class CoordinateConstraints {
 
     public CoordinateConstraints(Double minLon, Double minLat, Double maxLon, Double maxLat) {
@@ -18,9 +21,9 @@ public class CoordinateConstraints {
     public final Double maxLat;
 
     /**
-     * Generates a string of the bbos with given parameter
-     * @param c
-     * @return
+     * Generates a string of the bbox with given parameter to divide bbox
+     * @param c charachet parameter
+     * @return String of bbox
      */
     public String getAsString(Character c) {
         return "" + minLon + c + minLat + c + maxLon + c + maxLat;
@@ -28,7 +31,7 @@ public class CoordinateConstraints {
 
     /**
      * Generates a string in the style needed for Maintenance API calls
-     * @return
+     * @return String of bbox in MaintenanceAPI call format
      */
     public String getAsMaintenanceString(){
         return  "xMin="+minLon+"&"+
