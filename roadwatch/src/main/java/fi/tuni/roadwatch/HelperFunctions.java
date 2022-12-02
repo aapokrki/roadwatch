@@ -1,5 +1,9 @@
 package fi.tuni.roadwatch;
 
+import com.sothawo.mapjfx.Coordinate;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -156,6 +160,25 @@ public class HelperFunctions {
     }
 
 
+    /**
+     * Helper function for converting a date to a specific string
+     * @return String of the date in the format yyyy-MM-dd
+     */
+    public String dateAsDayString(Date date){
+        return new SimpleDateFormat("EEEE").format(date);
+    }
 
+    /**
+     * Setter for PolygonCoordinates in SessionData
+     */
+    public void setPolygonCoordinates(List<Coordinate> polyCoordinates){
+        sessionData.polyCoordinates.addAll(polyCoordinates);
+    }
 
+    /**
+     * Constructor for maintenance task types in SessionData
+     */
+    public void createTaskTypes(RoadAPILogic roadAPILogic) throws URISyntaxException, IOException {
+        sessionData.taskTypes = roadAPILogic.getTaskTypes();
+    }
 }

@@ -48,13 +48,15 @@ public class SessionData {
         WEATHER, WEATHERMINMAXAVG, ROAD, TRAFFIC, MAINTENANCE
     }
 
-
+    /**
+     * Constructor for SessionData
+     */
     public SessionData() throws URISyntaxException, IOException {
         roadAPILogic = new RoadAPILogic();
         weatherAPILogic = new WeatherAPILogic();
         trafficMessage = roadAPILogic.getTrafficMessages();
         savedDataLogic = new SavedDataLogic();
-        createTaskTypes();
+        helperFunctions.createTaskTypes(roadAPILogic);
         helperFunctions = new HelperFunctions();
 
     }
@@ -67,9 +69,7 @@ public class SessionData {
         this.helperFunctions = helperFunctions;
     }
 
-    public void setPolygonCoordinates(List<Coordinate> polyCoordinates){
-        this.polyCoordinates.addAll(polyCoordinates);
-    }
+
 
     public void calculateMinMaxCoordinates() {
         // TODO: Make more efficient
@@ -165,9 +165,6 @@ public class SessionData {
         this.wantedWeatherData = weatherAPILogic.creatingWeatherObservations(weatherAPILogic.GetApiDocument(urlstring));
     }
 
-    public void createTaskTypes() throws URISyntaxException, IOException {
-        taskTypes = roadAPILogic.getTaskTypes();
-    }
 
     // Tää siirretään jotenki roaddataan
     public ObservableList<PieChart.Data> createRoadConditionChart(Map<String, Double> conditionMap) {
@@ -238,8 +235,10 @@ public class SessionData {
         return series;
     }
 
-
-    // Returns the average amount of tasks per day based on set timeline
+    /**
+     * Calculates the average amount of maintenance tasks
+     * @return Average amount of maintenance tasks by task type
+     */
     public Map<String, Double> getMaintenanceAverages(){
         Map<String, Double> averageMaintenanceAmount = new TreeMap<>();
         for(Maintenance maintenance : maintenancesInTimeLine){
@@ -303,7 +302,7 @@ public class SessionData {
                     }
                 case MAINTENANCE:
                     for (Maintenance maintenance : this.maintenancesInTimeLine) {
-                        savedDataLogic.writeMaintenance(fileName + dateAsDayString(maintenance.date), maintenance);
+                        savedDataLogic.writeMaintenance(fileName + helperFunctions.dateAsDayString(maintenance.date), maintenance);
                     }
                 case ROAD:
                     savedDataLogic.writeRoadData(fileName, this.roadData);
@@ -346,12 +345,5 @@ public class SessionData {
                 return false;
         }
     }
-    
-    /**
-     * Helper function for converting a date to a string
-     * @return String of the date in the format yyyy-MM-dd
-     */
-    public String dateAsDayString(Date date){
-        return new SimpleDateFormat("EEEE").format(date);
-    }
+
 }
