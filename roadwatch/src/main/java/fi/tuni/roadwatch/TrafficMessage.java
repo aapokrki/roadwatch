@@ -33,7 +33,6 @@ public class TrafficMessage {
                 }
             }
         }
-        System.out.println(amount + " Traffic messages in the area");
         return amount;
     }
 
@@ -66,7 +65,6 @@ public class TrafficMessage {
                 }
             }
         }
-        System.out.println(amount + " Traffic messages in the area within timeframe");
         return amount;
     }
 

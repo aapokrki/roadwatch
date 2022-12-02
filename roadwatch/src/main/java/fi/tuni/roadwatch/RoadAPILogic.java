@@ -61,7 +61,6 @@ public class RoadAPILogic {
      * @return TrafficMessage data object
      */
     public TrafficMessage getTrafficMessages() throws IOException{
-        System.out.println("TRAFFIC-MESSAGES API-LINK: \n"+uriTrafficMessage.toString());
         JsonNode trafficMessageNode = retrieveData(uriTrafficMessage);
         return RoadAPImapper.treeToValue(trafficMessageNode, TrafficMessage.class);
     }
@@ -74,7 +73,6 @@ public class RoadAPILogic {
     public RoadData getRoadData(String bbox) throws IOException, URISyntaxException {
         URI uriRoadCondition = new URI("https://tie.digitraffic.fi/api/v3/data/road-conditions/" +
                 bbox);
-        System.out.println("ROAD-CONDITION API-LINK: \n"+uriRoadCondition.toString());
 
         JsonNode roadConditionNode = retrieveData(uriRoadCondition);
         return RoadAPImapper.treeToValue(roadConditionNode, RoadData.class);
@@ -99,7 +97,6 @@ public class RoadAPILogic {
                 "taskId="+ taskId + "&" +
                 "&domain=state-roads");
 
-        System.out.println("MAINTENANCE API-LINK: \n"+uriMaintenance.toString());
         JsonNode roadMaintenanceNode = retrieveData(uriMaintenance);
         return RoadAPImapper.treeToValue(roadMaintenanceNode, Maintenance.class);
     }
