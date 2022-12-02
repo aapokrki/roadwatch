@@ -1,8 +1,4 @@
 package fi.tuni.roadwatch;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
 import java.util.Date;
 
 public class WeatherData {

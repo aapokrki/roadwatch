@@ -85,9 +85,10 @@ public class SessionData {
     }
 
 
-
+    /**
+     * Calculates the bbox of saved coordinates in map
+     */
     public void calculateMinMaxCoordinates() {
-        // TODO: Make more efficient
         if(polyCoordinates != null){
             if(!polyCoordinates.isEmpty()){
                 Double maxLongtitude = polyCoordinates.stream().max(Comparator.comparing(Coordinate::getLongitude)).get().getLongitude();
@@ -108,12 +109,25 @@ public class SessionData {
         }
     }
 
+    /**
+     * Creates a RoadData class to SessionData
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public void createRoadData() throws IOException, URISyntaxException {
         roadData = roadAPILogic.getRoadData(coordinateConstraints.getAsString('/'));
         //TODO: ADD TIMEFRAME FILTERING OF TRAFFICMESSAGES
         roadData.trafficMessageAmount = trafficMessage.messagesInArea(coordinateConstraints);
     }
 
+    /**
+     * Creates Maintenance class to SessionData based on task type between given timeline
+     * @param taskId
+     * @param startDate
+     * @param endDate
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public void createMaintenance(String taskId,LocalDate startDate, LocalDate endDate) throws IOException, URISyntaxException {
 
         maintenancesInTimeLine = new ArrayList<>();
@@ -361,6 +375,10 @@ public class SessionData {
         locationPreference = preferences.get("locationPreference");
     }
 
+    /**
+     * Returns all dataClassTypes as list To combinepage for saving data
+     * @return
+     */
     public ArrayList<String> getDataClassTypesAsList(){
         ArrayList<String> classTypes = new ArrayList<>();
         for (DataClassType value : DataClassType.values()) {

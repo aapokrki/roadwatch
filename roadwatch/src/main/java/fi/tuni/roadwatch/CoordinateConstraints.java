@@ -17,10 +17,19 @@ public class CoordinateConstraints {
     public final Double maxLon;
     public final Double maxLat;
 
+    /**
+     * Generates a string of the bbos with given parameter
+     * @param c
+     * @return
+     */
     public String getAsString(Character c) {
         return "" + minLon + c + minLat + c + maxLon + c + maxLat;
     }
 
+    /**
+     * Generates a string in the style needed for Maintenance API calls
+     * @return
+     */
     public String getAsMaintenanceString(){
         return  "xMin="+minLon+"&"+
                 "yMin="+minLat+"&"+

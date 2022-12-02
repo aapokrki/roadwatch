@@ -33,7 +33,10 @@ public class RoadData {
     public void setroadWeatherData(ArrayList<RoadWeatherData> roadWeatherData) {
         this.roadWeatherData = roadWeatherData; }
 
-    // Counts the amount of different condition statuses in the area to their corresponding maps
+    /**
+     * Counts the amount of different condition statuses in the area to their corresponding maps
+     * @param time
+     */
     public void setForecastConditions(int time){
 
         overallCondition = new HashMap<>();

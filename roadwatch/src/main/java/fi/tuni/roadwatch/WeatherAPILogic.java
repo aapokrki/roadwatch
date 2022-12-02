@@ -24,7 +24,6 @@ public class WeatherAPILogic {
     private double tempMAX;
 
     private Date dateAndTime = Calendar.getInstance().getTime();
-
     private final ArrayList<WeatherData> weatherData = new ArrayList<>();
     private final ArrayList<WeatherDataMinMaxAvg> weatherAVGMinMax = new ArrayList<>();
 

@@ -13,6 +13,11 @@ public class TrafficMessage {
     Date dataUpdatedTime;
     ArrayList<Feature> features;
 
+    /**
+     * Calculates the traffic messages in given area
+     * @param c bbox constraints
+     * @return amount of messages in area
+     */
     public Integer messagesInArea(CoordinateConstraints c){
         int amount = 0;
         for (TrafficMessage.Feature feature : features){

@@ -13,10 +13,6 @@ import java.io.IOException;
  * The preferences saved in the UX are stored in sessionData.
  */
 public class PreferencesController {
-
-    // TODO: Aapo linkkaa karttaan tai sit poistan.
-    @FXML
-    private Label locationLabel;
     @FXML
     private ComboBox<String> locationCombobox;
     @FXML
