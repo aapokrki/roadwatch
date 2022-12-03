@@ -1,4 +1,4 @@
-Figma link attached. The .fig project displays the current prototype idea for the application.
+The project made during my Software design course. Done in a group with three other students.
 
 Build instructions:
 
